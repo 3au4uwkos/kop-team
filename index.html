@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Копейкин П.С. — Мастер спорта по самбо</title>
+    <meta name="description" content="Тренировки по самбо, боевому самбо и ударной технике. Мастер спорта, КМС по рукопашному бою.">
+
+    <!-- Шрифты: Oswald — наклонный плакатный акцент, Manrope — нейтральный корпус -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================================================================
+           ДИЗАЙН-ТОКЕНЫ
+           ================================================================ */
+        :root {
+            /* Цвета — палитра премиум-минимализма под самбо */
+            --ink:       #0E0E10;   /* графитовый (почти чёрный) */
+            --paper:     #F7F7F8;   /* почти белый */
+            --paper-alt: #EDEDEF;   /* светло-серая подложка */
+            --muted:     #8A8A8E;   /* вспомогательный текст */
+            --line:      #DADADE;   /* тонкие разделители */
+            --accent-red:  #E4002B; /* алый ФИАС — CTA, ключевые акценты */
+            --accent-blue: #0033A0; /* глубокий лазурный — вторичный акцент */
+
+            /* Типографика */
+            --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+            --font-body:    'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            /* Ритм */
+            --section-pad: clamp(60px, 10vh, 140px);
+            --gutter:      clamp(20px, 5vw, 80px);
+
+            /* Анимации */
+            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        /* ================================================================
+           БАЗА
+           ================================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y proximity; /* soft-snap: цепляется, но не душит */
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        img, video { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+        /* Утилиты */
+        .display {
+            font-family: var(--font-display);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            line-height: 0.95;
+        }
+
+        .display--skew {
+            display: inline-block;
+            transform: skewX(-6deg);
+        }
+
+        .kicker {
+            font-family: var(--font-display);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.25em;
+            color: var(--muted);
+        }
+
+        .kicker::before {
+            content: '';
+            display: inline-block;
+            width: 32px;
+            height: 1px;
+            background: currentColor;
+            vertical-align: middle;
+            margin-right: 14px;
+            margin-bottom: 3px;
+        }
+
+        /* Каждая секция — soft snap target */
+        section {
+            scroll-snap-align: start;
+            scroll-snap-stop: normal;
+            position: relative;
+        }
+
+        /* ================================================================
+           ПРЕЛОАДЕР (каркас грузится → оверлей уходит → AJAX-блоки оживают)
+           ================================================================ */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--ink);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s var(--ease-out-quart), visibility 0.8s;
+        }
+
+        .preloader.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader__mark {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(40px, 8vw, 88px);
+            color: var(--paper);
+            letter-spacing: 0.05em;
+            transform: skewX(-6deg);
+            position: relative;
+        }
+
+        .preloader__mark::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            height: 4px;
+            background: var(--accent-red);
+            width: 0;
+            animation: preload-bar 1.4s var(--ease-out-quart) forwards;
+        }
+
+        @keyframes preload-bar {
+            to { width: 100%; }
+        }
+
+        /* ================================================================
+           NAVBAR (desktop: sticky top с автоскрытием; mobile: боковой drawer)
+           ================================================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 18px var(--gutter);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(247, 247, 248, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid transparent;
+            transition: transform 0.5s var(--ease-out-quart),
+                        border-color 0.3s ease,
+                        background 0.3s ease;
+        }
+
+        .nav.is-scrolled {
+            border-bottom-color: var(--line);
+        }
+
+        .nav.is-hidden {
+            transform: translateY(-100%);
+        }
+
+        .nav__brand {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 0.04em;
+            transform: skewX(-6deg);
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+
+        .nav__brand-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            transform: skewX(6deg);
+            margin-left: 4px;
+            align-self: center;
+        }
+
+        .nav__list {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav__link {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            position: relative;
+            padding: 6px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav__link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-red);
+            transition: width 0.4s var(--ease-out-quart);
+        }
+
+        .nav__link:hover::after,
+        .nav__link.is-active::after {
+            width: 100%;
+        }
+
+        .nav__cta {
+            font-family: var(--font-display);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            padding: 12px 24px;
+            background: var(--ink);
+            color: var(--paper);
+            transition: background 0.3s ease, transform 0.3s var(--ease-out-quart);
+        }
+
+        .nav__cta:hover {
+            background: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        .nav__burger {
+            display: none;
+            width: 32px;
+            height: 24px;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 101;
+        }
+
+        .nav__burger span {
+            display: block;
+            height: 2px;
+            background: var(--ink);
+            transition: transform 0.4s var(--ease-out-quart), opacity 0.2s;
+        }
+
+        .nav__burger span:nth-child(1) { width: 100%; }
+        .nav__burger span:nth-child(2) { width: 70%; align-self: flex-end; }
+        .nav__burger span:nth-child(3) { width: 100%; }
+
+        .nav__burger.is-open span:nth-child(1) { transform: translateY(11px) rotate(45deg); width: 100%; }
+        .nav__burger.is-open span:nth-child(2) { opacity: 0; }
+        .nav__burger.is-open span:nth-child(3) { transform: translateY(-11px) rotate(-45deg); width: 100%; }
+
+        /* Мобильный drawer справа */
+        .nav__drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: min(380px, 88vw);
+            height: 100vh;
+            background: var(--ink);
+            color: var(--paper);
+            padding: 110px 40px 40px;
+            transform: translateX(100%);
+            transition: transform 0.5s var(--ease-in-out-expo);
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav__drawer.is-open { transform: translateX(0); }
+
+        .nav__drawer-link {
+            font-family: var(--font-display);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: color 0.3s ease, padding-left 0.4s var(--ease-out-quart);
+        }
+
+        .nav__drawer-link:hover {
+            color: var(--accent-red);
+            padding-left: 12px;
+        }
+
+        .nav__drawer-foot {
+            margin-top: auto;
+            font-size: 13px;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* ================================================================
+           СЕКЦИЯ 1: HERO — тренер + регалии
+           ================================================================ */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            align-items: stretch;
+            padding: 120px var(--gutter) 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero__bg-word {
+            position: absolute;
+            right: -4vw;
+            bottom: -5vh;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(200px, 32vw, 460px);
+            color: var(--paper-alt);
+            line-height: 0.8;
+            letter-spacing: -0.02em;
+            user-select: none;
+            pointer-events: none;
+            z-index: 0;
+            transform: skewX(-6deg);
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 36px;
+        }
+
+        .hero__kicker { margin-bottom: 8px; }
+
+        .hero__quote {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: clamp(14px, 1.3vw, 18px);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-red);
+            padding-left: 20px;
+            border-left: 2px solid var(--accent-red);
+            max-width: 420px;
+            line-height: 1.4;
+        }
+
+        .hero__name {
+            font-size: clamp(56px, 8vw, 120px);
+            letter-spacing: -0.02em;
+        }
+
+        .hero__name-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero__name-line span {
+            display: inline-block;
+            transform: skewX(-6deg);
+        }
+
+        .hero__name-accent {
+            color: var(--accent-red);
+        }
+
+        .hero__regalia {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 480px;
+        }
+
+        .hero__regalia-item {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            padding: 14px 0;
+            border-top: 1px solid var(--line);
+            font-size: 15px;
+            transition: padding-left 0.4s var(--ease-out-quart);
+        }
+
+        .hero__regalia-item:last-child { border-bottom: 1px solid var(--line); }
+
+        .hero__regalia-item:hover {
+            padding-left: 12px;
+        }
+
+        .hero__regalia-num {
+            font-family: var(--font-display);
+            font-size: 13px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            min-width: 24px;
+        }
+
+        .hero__regalia-text { font-weight: 500; }
+
+        .hero__scroll {
+            position: absolute;
+            left: var(--gutter);
+            bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--font-display);
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            z-index: 2;
+        }
+
+        .hero__scroll-line {
+            width: 48px;
+            height: 1px;
+            background: var(--muted);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero__scroll-line::after {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--ink);
+            animation: scroll-line 2.4s infinite var(--ease-in-out-expo);
+        }
+
+        @keyframes scroll-line {
+            0% { left: -100%; }
+            60%, 100% { left: 100%; }
+        }
+
+        /* Фото-плейсхолдер тренера */
+        .hero__photo {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .hero__photo-frame {
+            position: relative;
+            width: 100%;
+            max-width: 520px;
+            aspect-ratio: 3 / 4;
+        }
+
+        .hero__photo-frame::before {
+            /* Полутень позади */
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: 40px;
+            right: 20px;
+            bottom: -20px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--ink));
+            z-index: 0;
+        }
+
+        .hero__photo-placeholder {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, transparent 40%, rgba(14, 14, 16, 0.55) 100%),
+                linear-gradient(135deg, #2a2a2e 0%, #0E0E10 100%);
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        /* Абстрактный силуэт */
+        .hero__silhouette {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 85%;
+            opacity: 0.35;
+        }
+
+        .hero__photo-tag {
+            position: relative;
+            z-index: 2;
+            font-family: var(--font-display);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: rgba(247, 247, 248, 0.6);
+            padding: 8px 14px;
+            border: 1px solid rgba(247, 247, 248, 0.2);
+            align-self: flex-start;
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+        }
+
+        /* ================================================================
+           СЕКЦИЯ ДОСТИЖЕНИЙ — компактная полоса
+           ================================================================ */
+        .stats {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 60px var(--gutter);
+        }
+
+        .stats__grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .stat {
+            border-left: 1px solid rgba(247, 247, 248, 0.15);
+            padding-left: 20px;
+        }
+
+        .stat__num {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(48px, 5vw, 72px);
+            line-height: 1;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .stat__suffix {
+            color: var(--accent-red);
+            font-size: 0.5em;
+        }
+
+        .stat__label {
+            font-family: var(--font-display);
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(247, 247, 248, 0.55);
+            margin-top: 10px;
+        }
+
+        /* ================================================================
+           СЕКЦИЯ 2: ЛЕГЕНДЫ
+           ================================================================ */
+        .legends {
+            min-height: 100vh;
+            padding: var(--section-pad) var(--gutter);
+            position: relative;
+            background: var(--paper-alt);
+            overflow: hidden;
+        }
+
+        .legends__video-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, rgba(247, 247, 248, 0.55) 0%, rgba(247, 247, 248, 0.95) 100%),
+                linear-gradient(135deg, #2a2a2e 0%, #0E0E10 100%);
+            z-index: 0;
+        }
+
+        .legends__video-tag {
+            position: absolute;
+            top: calc(var(--section-pad) - 20px);
+            right: var(--gutter);
+            font-family: var(--font-display);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            z-index: 5;
+        }
+
+        .legends__video-tag::before {
+            content: '●';
+            color: var(--accent-red);
+            margin-right: 8px;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .legends__head {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: end;
+            margin-bottom: 60px;
+        }
+
+        .legends__title {
+            font-size: clamp(48px, 7vw, 110px);
+            letter-spacing: -0.02em;
+        }
+
+        .legends__intro {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 440px;
+            line-height: 1.6;
+        }
+
+        .legends__carousel {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            padding-bottom: 20px;
+        }
+
+        .legends__carousel::-webkit-scrollbar { display: none; }
+
+        .legend-card {
+            flex: 0 0 clamp(240px, 28vw, 360px);
+            aspect-ratio: 3 / 4;
+            position: relative;
+            scroll-snap-align: start;
+            overflow: hidden;
+            background: var(--ink);
+            transition: transform 0.5s var(--ease-out-quart);
+            cursor: grab;
+        }
+
+        .legend-card:hover { transform: translateY(-8px); }
+        .legend-card:active { cursor: grabbing; }
+
+        .legend-card__ph {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, transparent 35%, rgba(14, 14, 16, 0.95) 100%),
+                linear-gradient(135deg, var(--accent-blue) 0%, #0E0E10 100%);
+        }
+
+        .legend-card:nth-child(2n) .legend-card__ph {
+            background:
+                linear-gradient(180deg, transparent 35%, rgba(14, 14, 16, 0.95) 100%),
+                linear-gradient(135deg, var(--accent-red) 0%, #0E0E10 100%);
+        }
+
+        .legend-card:nth-child(3n) .legend-card__ph {
+            background:
+                linear-gradient(180deg, transparent 35%, rgba(14, 14, 16, 0.95) 100%),
+                linear-gradient(135deg, #444 0%, #0E0E10 100%);
+        }
+
+        .legend-card__info {
+            position: absolute;
+            left: 24px;
+            right: 24px;
+            bottom: 24px;
+            color: var(--paper);
+            z-index: 2;
+        }
+
+        .legend-card__num {
+            font-family: var(--font-display);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: rgba(247, 247, 248, 0.5);
+            margin-bottom: 12px;
+        }
+
+        .legend-card__name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+            transform: skewX(-6deg);
+            display: inline-block;
+        }
+
+        .legend-card__title {
+            font-size: 13px;
+            color: rgba(247, 247, 248, 0.7);
+            line-height: 1.4;
+        }
+
+        .legends__controls {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 28px;
+        }
+
+        .legends__btn {
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .legends__btn:hover {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .legends__count {
+            font-family: var(--font-display);
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+        }
+
+        /* ================================================================
+           СЕКЦИЯ 3: НАПРАВЛЕНИЯ — круг 360° разбит на три сектора по 120°
+           ================================================================ */
+        .directions {
+            min-height: 100vh;
+            padding: var(--section-pad) var(--gutter);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .directions__head {
+            text-align: center;
+            margin-bottom: 60px;
+            z-index: 2;
+        }
+
+        .directions__title {
+            font-size: clamp(40px, 6vw, 88px);
+            margin-top: 12px;
+        }
+
+        .directions__wheel {
+            position: relative;
+            width: min(640px, 82vw);
+            aspect-ratio: 1;
+        }
+
+        .directions__svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .direction-sector {
+            cursor: pointer;
+            transition: transform 0.5s var(--ease-out-quart);
+            transform-origin: 50% 50%;
+        }
+
+        .direction-sector__path {
+            fill: var(--paper-alt);
+            stroke: var(--paper);
+            stroke-width: 4;
+            transition: fill 0.5s var(--ease-out-quart);
+        }
+
+        .direction-sector:hover .direction-sector__path {
+            fill: var(--ink);
+        }
+
+        .direction-sector:nth-child(2):hover .direction-sector__path { fill: var(--accent-red); }
+        .direction-sector:nth-child(3):hover .direction-sector__path { fill: var(--accent-blue); }
+
+        .direction-sector__label {
+            position: absolute;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(14px, 1.5vw, 20px);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.4s ease;
+            text-align: center;
+            pointer-events: none;
+            transform: skewX(-6deg);
+        }
+
+        .direction-sector:hover + .direction-sector__label,
+        .direction-sector.is-hot .direction-sector__label {
+            color: var(--paper);
+        }
+
+        .directions__center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28%;
+            aspect-ratio: 1;
+            background: var(--paper);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4px;
+            pointer-events: none;
+            z-index: 2;
+            box-shadow: 0 0 0 1px var(--line);
+        }
+
+        .directions__center-num {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(36px, 4vw, 56px);
+            color: var(--accent-red);
+            transform: skewX(-6deg);
+        }
+
+        .directions__center-lbl {
+            font-family: var(--font-display);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .directions__hint {
+            margin-top: 40px;
+            font-family: var(--font-display);
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ================================================================
+           СЕКЦИИ 4-7: ДИАГОНАЛЬНЫЕ СПЛИТЫ (направления + зарядка)
+           ================================================================ */
+        .split {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .split__media {
+            position: relative;
+            background: var(--ink);
+            overflow: hidden;
+        }
+
+        .split__media-inner {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
+                linear-gradient(135deg, var(--accent-blue) 0%, #0E0E10 100%);
+            transition: transform 1.2s var(--ease-out-quart);
+        }
+
+        .split:hover .split__media-inner { transform: scale(1.05); }
+
+        /* Диагональная граница */
+        .split__media {
+            clip-path: polygon(0 0, 100% 0, calc(100% - 80px) 100%, 0 100%);
+        }
+
+        /* Чередуем направление разреза для ритма */
+        .split--reverse {
+            grid-template-columns: 1fr 1fr;
+        }
+        .split--reverse .split__media {
+            grid-column: 2;
+            clip-path: polygon(80px 0, 100% 0, 100% 100%, 0 100%);
+        }
+        .split--reverse .split__content {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .split__play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 96px;
+            height: 96px;
+            border: 2px solid var(--paper);
+            border-radius: 50%;
+            color: var(--paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease, transform 0.3s var(--ease-out-quart);
+            z-index: 2;
+        }
+
+        .split__play:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .split__play svg { margin-left: 4px; }
+
+        .split__media-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            display: flex;
+            gap: 8px;
+            z-index: 3;
+        }
+
+        .split__media-dot {
+            width: 28px;
+            height: 3px;
+            background: rgba(247, 247, 248, 0.3);
+            transition: background 0.3s ease;
+        }
+
+        .split__media-dot.is-active { background: var(--paper); }
+
+        .split__media-tag {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-family: var(--font-display);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(247, 247, 248, 0.6);
+            z-index: 3;
+        }
+
+        .split__content {
+            padding: var(--section-pad) var(--gutter);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 28px;
+        }
+
+        .split__num {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(80px, 12vw, 180px);
+            line-height: 0.85;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--line);
+            text-stroke: 1.5px var(--line);
+            transform: skewX(-6deg);
+        }
+
+        .split__title {
+            font-size: clamp(36px, 5vw, 72px);
+            letter-spacing: -0.01em;
+        }
+
+        .split__desc {
+            font-size: 16px;
+            color: var(--muted);
+            line-height: 1.65;
+            max-width: 480px;
+        }
+
+        .split__specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 520px;
+            margin-top: 12px;
+        }
+
+        .spec {
+            border-top: 1px solid var(--line);
+            padding-top: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .spec:hover { border-top-color: var(--accent-red); }
+
+        .spec__label {
+            font-family: var(--font-display);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .spec__value {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Цветные акценты для разных видов */
+        .split--sambo .split__media-inner {
+            background:
+                linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
+                linear-gradient(135deg, var(--accent-red) 0%, #0E0E10 100%);
+        }
+
+        .split--striking .split__media-inner {
+            background:
+                linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
+                linear-gradient(135deg, #444 0%, #0E0E10 100%);
+        }
+
+        .split--morning .split__media-inner {
+            background:
+                linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
+                linear-gradient(135deg, #F59E0B 0%, #7C2D12 100%);
+        }
+
+        /* ================================================================
+           СЕКЦИЯ 9: ПОДРОСТКОВАЯ ГРУППА + ВЫЕЗДЫ
+           ================================================================ */
+        .youth {
+            min-height: 100vh;
+            padding: var(--section-pad) var(--gutter);
+            background: var(--ink);
+            color: var(--paper);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youth__bg-word {
+            position: absolute;
+            left: -2vw;
+            top: -2vh;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(140px, 20vw, 320px);
+            line-height: 0.8;
+            color: rgba(247, 247, 248, 0.04);
+            user-select: none;
+            pointer-events: none;
+            transform: skewX(-6deg);
+        }
+
+        .youth__head {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: end;
+            margin-bottom: 80px;
+        }
+
+        .youth__title {
+            font-size: clamp(44px, 6vw, 96px);
+        }
+
+        .youth__title-accent { color: var(--accent-red); }
+
+        .youth__intro {
+            font-size: 16px;
+            color: rgba(247, 247, 248, 0.65);
+            line-height: 1.65;
+            max-width: 440px;
+        }
+
+        .youth__grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .youth-card {
+            border: 1px solid rgba(247, 247, 248, 0.1);
+            padding: 36px;
+            transition: border-color 0.4s ease, background 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youth-card:hover {
+            border-color: var(--accent-red);
+        }
+
+        .youth-card__num {
+            font-family: var(--font-display);
+            font-size: 12px;
+            letter-spacing: 0.25em;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        .youth-card__num::before {
+            content: '';
+            display: inline-block;
+            width: 40px;
+            height: 1px;
+            background: currentColor;
+            vertical-align: middle;
+            margin-right: 14px;
+            margin-bottom: 3px;
+        }
+
+        .youth-card__title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(26px, 3vw, 40px);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            transform: skewX(-6deg);
+            display: inline-block;
+        }
+
+        .youth-card__desc {
+            font-size: 15px;
+            color: rgba(247, 247, 248, 0.7);
+            line-height: 1.65;
+            margin-bottom: 28px;
+        }
+
+        .youth-card__list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .youth-card__list li {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            font-size: 14px;
+            color: rgba(247, 247, 248, 0.85);
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(247, 247, 248, 0.08);
+        }
+
+        .youth-card__list li::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 1px;
+            background: var(--accent-red);
+            flex-shrink: 0;
+            transform: translateY(-3px);
+        }
+
+        /* ================================================================
+           СЕКЦИЯ 10: КОНТАКТЫ
+           ================================================================ */
+        .contacts {
+            min-height: 80vh;
+            padding: var(--section-pad) var(--gutter);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 80px;
+        }
+
+        .contacts__head {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: end;
+        }
+
+        .contacts__title {
+            font-size: clamp(56px, 9vw, 160px);
+            line-height: 0.9;
+        }
+
+        .contacts__title-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .contacts__title-line span { display: inline-block; transform: skewX(-6deg); }
+
+        .contacts__lead {
+            color: var(--muted);
+            font-size: 15px;
+            max-width: 340px;
+            line-height: 1.65;
+        }
+
+        .socials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .social {
+            padding: 30px 24px;
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            transition: background 0.3s ease, color 0.3s ease, padding-left 0.4s var(--ease-out-quart);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social:last-child { border-right: none; }
+
+        .social:hover {
+            background: var(--ink);
+            color: var(--paper);
+            padding-left: 36px;
+        }
+
+        .social__name {
+            font-family: var(--font-display);
+            font-size: 14px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .social__handle {
+            font-size: 13px;
+            color: var(--muted);
+            transition: color 0.3s ease;
+        }
+
+        .social:hover .social__handle { color: rgba(247, 247, 248, 0.55); }
+
+        .social__arrow {
+            margin-left: auto;
+            transition: transform 0.4s var(--ease-out-quart);
+        }
+
+        .social:hover .social__arrow { transform: translateX(6px) rotate(-45deg); }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--line);
+            font-family: var(--font-display);
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ================================================================
+           АДАПТИВ
+           ================================================================ */
+        @media (max-width: 960px) {
+            .nav__list { display: none; }
+            .nav__cta { display: none; }
+            .nav__burger { display: flex; }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding-top: 100px;
+            }
+
+            .hero__photo-frame { max-width: 380px; margin: 0 auto; }
+            .hero__scroll { display: none; }
+
+            .stats__grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .legends__head,
+            .youth__head,
+            .contacts__head {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .split {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .split__media {
+                clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0 100%);
+                min-height: 50vh;
+            }
+
+            .split--reverse .split__media {
+                grid-column: 1;
+                grid-row: 1;
+                clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0 100%);
+            }
+
+            .split--reverse .split__content {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .youth__grid { grid-template-columns: 1fr; }
+
+            .socials { grid-template-columns: 1fr; }
+            .social { border-right: none; }
+        }
+
+        @media (max-width: 560px) {
+            .stats__grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .split__specs { grid-template-columns: 1fr; }
+            .footer { flex-direction: column; gap: 12px; text-align: center; }
+        }
+
+        /* ================================================================
+           АНИМАЦИИ ПОЯВЛЕНИЯ (IntersectionObserver)
+           ================================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s var(--ease-out-quart), transform 1s var(--ease-out-quart);
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal[data-delay="1"] { transition-delay: 0.1s; }
+        .reveal[data-delay="2"] { transition-delay: 0.2s; }
+        .reveal[data-delay="3"] { transition-delay: 0.3s; }
+        .reveal[data-delay="4"] { transition-delay: 0.4s; }
+
+        /* Уважаем настройки пользователя */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ====================== ПРЕЛОАДЕР ====================== -->
+<div class="preloader" id="preloader">
+    <div class="preloader__mark">КОПЕЙКИН</div>
+</div>
+
+<!-- ====================== NAVBAR ====================== -->
+<header class="nav" id="nav">
+    <a href="#hero" class="nav__brand">
+        КОПЕЙКИН<span class="nav__brand-dot"></span>
+    </a>
+    <nav>
+        <ul class="nav__list">
+            <li><a href="#legends" class="nav__link">Легенды</a></li>
+            <li><a href="#directions" class="nav__link">Направления</a></li>
+            <li><a href="#combat" class="nav__link">Боевое самбо</a></li>
+            <li><a href="#sambo" class="nav__link">Самбо</a></li>
+            <li><a href="#striking" class="nav__link">Ударка</a></li>
+            <li><a href="#youth" class="nav__link">Подростки</a></li>
+        </ul>
+    </nav>
+    <a href="#contacts" class="nav__cta">Записаться</a>
+    <button class="nav__burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<aside class="nav__drawer" id="drawer">
+    <a href="#legends" class="nav__drawer-link">Легенды</a>
+    <a href="#directions" class="nav__drawer-link">Направления</a>
+    <a href="#combat" class="nav__drawer-link">Боевое самбо</a>
+    <a href="#sambo" class="nav__drawer-link">Самбо</a>
+    <a href="#striking" class="nav__drawer-link">Ударная техника</a>
+    <a href="#morning" class="nav__drawer-link">Утренняя зарядка</a>
+    <a href="#youth" class="nav__drawer-link">Подростки</a>
+    <a href="#contacts" class="nav__drawer-link">Контакты</a>
+    <div class="nav__drawer-foot">Москва · 2026</div>
+</aside>
+
+<!-- ====================== СЕКЦИЯ 1 — HERO ====================== -->
+<section class="hero" id="hero">
+    <div class="hero__bg-word">САМБО</div>
+
+    <div class="hero__content">
+        <div class="kicker hero__kicker reveal">Мастер спорта · Тренер</div>
+
+        <blockquote class="hero__quote reveal" data-delay="1">
+            «Дисциплина — это мост между целью и результатом»
+        </blockquote>
+
+        <h1 class="display hero__name reveal" data-delay="2">
+            <span class="hero__name-line"><span>Копейкин</span></span>
+            <span class="hero__name-line"><span>Павел</span></span>
+            <span class="hero__name-line"><span class="hero__name-accent">Сергеевич</span></span>
+        </h1>
+
+        <ul class="hero__regalia reveal" data-delay="3">
+            <li class="hero__regalia-item">
+                <span class="hero__regalia-num">01</span>
+                <span class="hero__regalia-text">Мастер спорта по самбо</span>
+            </li>
+            <li class="hero__regalia-item">
+                <span class="hero__regalia-num">02</span>
+                <span class="hero__regalia-text">КМС по рукопашному бою</span>
+            </li>
+            <li class="hero__regalia-item">
+                <span class="hero__regalia-num">03</span>
+                <span class="hero__regalia-text">Заслуженный тренер</span>
+            </li>
+            <li class="hero__regalia-item">
+                <span class="hero__regalia-num">04</span>
+                <span class="hero__regalia-text">Судья всероссийской категории</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="hero__photo">
+        <div class="hero__photo-frame reveal" data-delay="2">
+            <div class="hero__photo-placeholder">
+                <!-- Абстрактный силуэт как плейсхолдер -->
+                <svg class="hero__silhouette" viewBox="0 0 200 300" preserveAspectRatio="xMidYEnd meet">
+                    <!-- Голова -->
+                    <circle cx="100" cy="50" r="28" fill="#F7F7F8"/>
+                    <!-- Торс (трапеция) -->
+                    <path d="M 60 85 L 140 85 L 155 180 L 45 180 Z" fill="#F7F7F8"/>
+                    <!-- Плечи/руки -->
+                    <path d="M 45 95 L 25 170 L 45 175 L 60 105 Z" fill="#F7F7F8"/>
+                    <path d="M 155 95 L 175 170 L 155 175 L 140 105 Z" fill="#F7F7F8"/>
+                </svg>
+                <div class="hero__photo-tag">[ФОТО: Тренер по пояс, полутень]</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero__scroll">
+        <span>Листай вниз</span>
+        <span class="hero__scroll-line"></span>
+    </div>
+</section>
+
+<!-- ====================== ПОЛОСА ДОСТИЖЕНИЙ ====================== -->
+<section class="stats" id="stats">
+    <div class="stats__grid">
+        <div class="stat reveal">
+            <div class="stat__num"><span class="stat-count" data-target="25">0</span><span class="stat__suffix">+</span></div>
+            <div class="stat__label">Лет тренерского опыта</div>
+        </div>
+        <div class="stat reveal" data-delay="1">
+            <div class="stat__num"><span class="stat-count" data-target="500">0</span><span class="stat__suffix">+</span></div>
+            <div class="stat__label">Воспитанников</div>
+        </div>
+        <div class="stat reveal" data-delay="2">
+            <div class="stat__num"><span class="stat-count" data-target="180">0</span><span class="stat__suffix">+</span></div>
+            <div class="stat__label">Медалей учеников</div>
+        </div>
+        <div class="stat reveal" data-delay="3">
+            <div class="stat__num"><span class="stat-count" data-target="12">0</span><span class="stat__suffix">+</span></div>
+            <div class="stat__label">Мастеров спорта</div>
+        </div>
+    </div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 2 — ЛЕГЕНДЫ ====================== -->
+<section class="legends" id="legends">
+    <div class="legends__video-bg"></div>
+    <div class="legends__video-tag">[ВИДЕО-ФОН: нарезка схваток]</div>
+
+    <div class="legends__head">
+        <h2 class="display legends__title reveal">
+            <span class="display--skew">Легенды</span><br>
+            <span class="display--skew" style="color: var(--accent-red);">ковра</span>
+        </h2>
+        <p class="legends__intro reveal" data-delay="1">
+            Ученики, которые прошли путь от первой тренировки до пьедестала.
+            Смахните карточки в сторону, чтобы увидеть всех.
+        </p>
+    </div>
+
+    <div class="legends__carousel" id="legendsCarousel">
+        <article class="legend-card">
+            <div class="legend-card__ph"></div>
+            <div class="legend-card__info">
+                <div class="legend-card__num">01 / 06</div>
+                <div class="legend-card__name">Иванов А.</div>
+                <div class="legend-card__title">МС по самбо<br>Призёр чемпионата России</div>
+            </div>
+        </article>
+        <article class="legend-card">
+            <div class="legend-card__ph"></div>
+            <div class="legend-card__info">
+                <div class="legend-card__num">02 / 06</div>
+                <div class="legend-card__name">Петров Д.</div>
+                <div class="legend-card__title">КМС по боевому самбо<br>Чемпион ЦФО</div>
+            </div>
+        </article>
+        <article class="legend-card">
+            <div class="legend-card__ph"></div>
+            <div class="legend-card__info">
+                <div class="legend-card__num">03 / 06</div>
+                <div class="legend-card__name">Сидоров М.</div>
+                <div class="legend-card__title">МСМК<br>Призёр Кубка мира</div>
+            </div>
+        </article>
+        <article class="legend-card">
+            <div class="legend-card__ph"></div>
+            <div class="legend-card__info">
+                <div class="legend-card__num">04 / 06</div>
+                <div class="legend-card__name">Смирнов Р.</div>
+                <div class="legend-card__title">МС<br>Чемпион Москвы</div>
+            </div>
+        </article>
+        <article class="legend-card">
+            <div class="legend-card__ph"></div>
+            <div class="legend-card__info">
+                <div class="legend-card__num">05 / 06</div>
+                <div class="legend-card__name">Козлов И.</div>
+                <div class="legend-card__title">КМС<br>Победитель первенства</div>
+            </div>
+        </article>
+        <article class="legend-card">
+            <div class="legend-card__ph"></div>
+            <div class="legend-card__info">
+                <div class="legend-card__num">06 / 06</div>
+                <div class="legend-card__name">Новиков В.</div>
+                <div class="legend-card__title">МС<br>Финалист Спартакиады</div>
+            </div>
+        </article>
+    </div>
+
+    <div class="legends__controls">
+        <button class="legends__btn" id="legPrev" aria-label="Назад">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M17 6H1M1 6L6 1M1 6L6 11"/>
+            </svg>
+        </button>
+        <button class="legends__btn" id="legNext" aria-label="Вперёд">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 6H17M17 6L12 1M17 6L12 11"/>
+            </svg>
+        </button>
+        <div class="legends__count" id="legCount">01 / 06</div>
+    </div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 3 — НАПРАВЛЕНИЯ ====================== -->
+<section class="directions" id="directions">
+    <div class="directions__head reveal">
+        <div class="kicker">Выбери свой путь</div>
+        <h2 class="display directions__title">
+            <span class="display--skew">Направления</span><br>
+            <span class="display--skew" style="color: var(--accent-blue);">подготовки</span>
+        </h2>
+    </div>
+
+    <div class="directions__wheel reveal" data-delay="1">
+        <svg class="directions__svg" viewBox="-10 -10 220 220">
+            <!-- Три сектора по 120°.
+                 Центр: 100,100, радиус: 100
+                 Сектор 1: верх (от -90° до 30°)
+                 Сектор 2: правый низ (от 30° до 150°)
+                 Сектор 3: левый низ (от 150° до 270°/-90°) -->
+
+            <!-- Сектор 1: Боевое самбо (верх) -->
+            <a href="#combat" class="direction-sector" data-label="Боевое самбо">
+                <path class="direction-sector__path"
+                      d="M 100 100 L 100 0 A 100 100 0 0 1 186.6 150 Z"/>
+            </a>
+
+            <!-- Сектор 2: Самбо (правый низ / низ) -->
+            <a href="#sambo" class="direction-sector" data-label="Самбо">
+                <path class="direction-sector__path"
+                      d="M 100 100 L 186.6 150 A 100 100 0 0 1 13.4 150 Z"/>
+            </a>
+
+            <!-- Сектор 3: Ударная техника (левый верх) -->
+            <a href="#striking" class="direction-sector" data-label="Ударка">
+                <path class="direction-sector__path"
+                      d="M 100 100 L 13.4 150 A 100 100 0 0 1 100 0 Z"/>
+            </a>
+        </svg>
+
+        <!-- Лейблы секторов (позиционируются абсолютно) -->
+        <div class="direction-sector__label" style="top: 18%; left: 50%; transform: translate(-50%, 0) skewX(-6deg);">Боевое<br>самбо</div>
+        <div class="direction-sector__label" style="bottom: 20%; right: 12%;">Самбо</div>
+        <div class="direction-sector__label" style="bottom: 20%; left: 12%;">Ударка</div>
+
+        <div class="directions__center">
+            <div class="directions__center-num">3</div>
+            <div class="directions__center-lbl">Дисциплины</div>
+        </div>
+    </div>
+
+    <div class="directions__hint reveal" data-delay="2">Нажмите на сектор →</div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 4 — БОЕВОЕ САМБО ====================== -->
+<section class="split split--combat" id="combat">
+    <div class="split__media">
+        <div class="split__media-inner"></div>
+        <div class="split__media-tag">[Видео / фото · свайп]</div>
+        <button class="split__play" aria-label="Воспроизвести">
+            <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor">
+                <path d="M22 13L0 26V0L22 13Z"/>
+            </svg>
+        </button>
+        <div class="split__media-dots">
+            <span class="split__media-dot is-active"></span>
+            <span class="split__media-dot"></span>
+            <span class="split__media-dot"></span>
+            <span class="split__media-dot"></span>
+        </div>
+    </div>
+    <div class="split__content">
+        <div class="split__num reveal">04</div>
+        <div class="kicker reveal" data-delay="1">Направление подготовки</div>
+        <h2 class="display split__title reveal" data-delay="2">
+            <span class="display--skew">Боевое</span><br>
+            <span class="display--skew">самбо</span>
+        </h2>
+        <p class="split__desc reveal" data-delay="3">
+            Прикладной раздел самбо — полный арсенал: броски, удержания, удары руками и ногами, болевые и удушающие приёмы. Подготовка к соревнованиям и самозащите.
+        </p>
+        <div class="split__specs reveal" data-delay="4">
+            <div class="spec">
+                <div class="spec__label">Уровень</div>
+                <div class="spec__value">От среднего до профи</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Длительность</div>
+                <div class="spec__value">90 минут</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Расписание</div>
+                <div class="spec__value">Пн, Ср, Пт · 19:00</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Группа</div>
+                <div class="spec__value">До 12 человек</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 5 — САМБО ====================== -->
+<section class="split split--reverse split--sambo" id="sambo">
+    <div class="split__media">
+        <div class="split__media-inner"></div>
+        <div class="split__media-tag">[Видео / фото · свайп]</div>
+        <button class="split__play" aria-label="Воспроизвести">
+            <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor">
+                <path d="M22 13L0 26V0L22 13Z"/>
+            </svg>
+        </button>
+        <div class="split__media-dots">
+            <span class="split__media-dot is-active"></span>
+            <span class="split__media-dot"></span>
+            <span class="split__media-dot"></span>
+        </div>
+    </div>
+    <div class="split__content">
+        <div class="split__num reveal">05</div>
+        <div class="kicker reveal" data-delay="1">Направление подготовки</div>
+        <h2 class="display split__title reveal" data-delay="2">
+            <span class="display--skew">Спортивное</span><br>
+            <span class="display--skew">самбо</span>
+        </h2>
+        <p class="split__desc reveal" data-delay="3">
+            Классическая борьба в куртке. Броски, удержания, болевые приёмы на ноги. Фундамент, с которого начинается путь каждого самбиста — от любителя до мастера спорта.
+        </p>
+        <div class="split__specs reveal" data-delay="4">
+            <div class="spec">
+                <div class="spec__label">Уровень</div>
+                <div class="spec__value">Любой, с нуля</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Длительность</div>
+                <div class="spec__value">80 минут</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Расписание</div>
+                <div class="spec__value">Вт, Чт, Сб · 18:30</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Группа</div>
+                <div class="spec__value">До 16 человек</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 6 — УДАРНАЯ ТЕХНИКА ====================== -->
+<section class="split split--striking" id="striking">
+    <div class="split__media">
+        <div class="split__media-inner"></div>
+        <div class="split__media-tag">[Видео / фото · свайп]</div>
+        <button class="split__play" aria-label="Воспроизвести">
+            <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor">
+                <path d="M22 13L0 26V0L22 13Z"/>
+            </svg>
+        </button>
+        <div class="split__media-dots">
+            <span class="split__media-dot is-active"></span>
+            <span class="split__media-dot"></span>
+            <span class="split__media-dot"></span>
+        </div>
+    </div>
+    <div class="split__content">
+        <div class="split__num reveal">06</div>
+        <div class="kicker reveal" data-delay="1">Направление подготовки</div>
+        <h2 class="display split__title reveal" data-delay="2">
+            <span class="display--skew">Ударная</span><br>
+            <span class="display--skew">техника</span>
+        </h2>
+        <p class="split__desc reveal" data-delay="3">
+            Работа руками и ногами, связки, защита, тактика поединка в стойке. Работа по мешкам, лапам, спарринги с контролируемой интенсивностью — от основ до соревновательного уровня.
+        </p>
+        <div class="split__specs reveal" data-delay="4">
+            <div class="spec">
+                <div class="spec__label">Уровень</div>
+                <div class="spec__value">От новичка</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Длительность</div>
+                <div class="spec__value">75 минут</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Расписание</div>
+                <div class="spec__value">Пн, Ср · 20:30</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Группа</div>
+                <div class="spec__value">До 14 человек</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 7 — УТРЕННЯЯ ЗАРЯДКА ====================== -->
+<section class="split split--reverse split--morning" id="morning">
+    <div class="split__media">
+        <div class="split__media-inner"></div>
+        <div class="split__media-tag">[Видео / фото · свайп]</div>
+        <button class="split__play" aria-label="Воспроизвести">
+            <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor">
+                <path d="M22 13L0 26V0L22 13Z"/>
+            </svg>
+        </button>
+        <div class="split__media-dots">
+            <span class="split__media-dot is-active"></span>
+            <span class="split__media-dot"></span>
+            <span class="split__media-dot"></span>
+        </div>
+    </div>
+    <div class="split__content">
+        <div class="split__num reveal">07</div>
+        <div class="kicker reveal" data-delay="1">Общая физическая подготовка</div>
+        <h2 class="display split__title reveal" data-delay="2">
+            <span class="display--skew">Утренняя</span><br>
+            <span class="display--skew">зарядка</span>
+        </h2>
+        <p class="split__desc reveal" data-delay="3">
+            Мягкий старт дня для всех возрастов. Суставная гимнастика, кардио, базовая растяжка и элементы техники в щадящем режиме. Без боёв и жёстких нагрузок — только заряд на весь день.
+        </p>
+        <div class="split__specs reveal" data-delay="4">
+            <div class="spec">
+                <div class="spec__label">Уровень</div>
+                <div class="spec__value">Для всех, любой возраст</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Длительность</div>
+                <div class="spec__value">45 минут</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Расписание</div>
+                <div class="spec__value">Ежедневно · 07:30</div>
+            </div>
+            <div class="spec">
+                <div class="spec__label">Группа</div>
+                <div class="spec__value">Открытая</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 9 — ПОДРОСТКИ + ВЫЕЗДЫ ====================== -->
+<section class="youth" id="youth">
+    <div class="youth__bg-word">ГРУППА</div>
+
+    <div class="youth__head">
+        <h2 class="display youth__title reveal">
+            <span class="display--skew">Подростковая</span><br>
+            <span class="display--skew youth__title-accent">группа</span>
+        </h2>
+        <p class="youth__intro reveal" data-delay="1">
+            Отдельные программы для подростков 12–17 лет: круглогодичные тренировки в зале и выездные сборы до 14 дней на спортивно-тренировочных базах — идеальное сочетание дисциплины, отдыха и прогресса.
+        </p>
+    </div>
+
+    <div class="youth__grid">
+        <article class="youth-card reveal" data-delay="1">
+            <div class="youth-card__num">01 — В зале</div>
+            <h3 class="youth-card__title">Регулярные тренировки</h3>
+            <p class="youth-card__desc">
+                Трёхразовые занятия с индивидуальным подходом к каждому подростку. Безопасная нагрузка, постепенный рост мастерства.
+            </p>
+            <ul class="youth-card__list">
+                <li>Техника самбо и боевого самбо</li>
+                <li>Общая и специальная физическая подготовка</li>
+                <li>Психология поединка и дисциплина</li>
+                <li>Подготовка к первенствам и турнирам</li>
+                <li>Регулярные контрольные схватки</li>
+            </ul>
+        </article>
+
+        <article class="youth-card reveal" data-delay="2">
+            <div class="youth-card__num">02 — Выездные сборы</div>
+            <h3 class="youth-card__title">Летние лагеря</h3>
+            <p class="youth-card__desc">
+                Выездные сборы до двух недель на спортивно-тренировочных базах. Рекреация и интенсивные тренировки в одном формате под постоянным контролем тренера.
+            </p>
+            <ul class="youth-card__list">
+                <li>Проживание на базах Подмосковья и юга</li>
+                <li>Две тренировки в день + теория</li>
+                <li>Спортивные игры, бассейн, природа</li>
+                <li>Полное питание и медицинский контроль</li>
+                <li>Длительность — от 7 до 14 дней</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
+<!-- ====================== СЕКЦИЯ 10 — КОНТАКТЫ ====================== -->
+<section class="contacts" id="contacts">
+    <div class="contacts__head">
+        <h2 class="display contacts__title">
+            <span class="contacts__title-line"><span>Готов</span></span>
+            <span class="contacts__title-line"><span>начать?</span></span>
+        </h2>
+        <p class="contacts__lead reveal" data-delay="1">
+            Напишите в любой удобный мессенджер — отвечу в течение дня.
+        </p>
+    </div>
+
+    <div class="socials">
+        <a href="https://t.me/kopeikin_taem" class="social">
+            <div>
+                <div class="social__name">Telegram</div>
+                <div class="social__handle">@kopeykin_sambo</div>
+            </div>
+            <svg class="social__arrow" width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 7h18M13 1l6 6-6 6"/>
+            </svg>
+        </a>
+        <a href="#" class="social">
+            <div>
+                <div class="social__name">WhatsApp</div>
+                <div class="social__handle">+7 (9XX) XXX-XX-XX</div>
+            </div>
+            <svg class="social__arrow" width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 7h18M13 1l6 6-6 6"/>
+            </svg>
+        </a>
+        <a href="https://vk.com/id142009977" class="social">
+            <div>
+                <div class="social__name">VK</div>
+                <div class="social__handle">Павел Копейкин</div>
+            </div>
+            <svg class="social__arrow" width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 7h18M13 1l6 6-6 6"/>
+            </svg>
+        </a>
+        <a href="https://www.instagram.com/pavel_kopeikin/" class="social">
+            <div>
+                <div class="social__name">Instagram</div>
+                <div class="social__handle">@pavel_kopeikin</div>
+            </div>
+            <svg class="social__arrow" width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 7h18M13 1l6 6-6 6"/>
+            </svg>
+        </a>
+    </div>
+
+    <div class="footer">
+        <div>© 2026 Копейкин Павел Сергеевич</div>
+        <div>Тула · Тренировочный зал</div>
+    </div>
+</section>
+
+<script>
+/* ================================================================
+   СКРИПТЫ: минимальный vanilla JS, без зависимостей
+   ================================================================ */
+
+// 1. Преалодер → уходит после полной загрузки
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('preloader').classList.add('is-hidden');
+    }, 1200);
+});
+
+// 2. Navbar: автоскрытие при скролле вниз, показ вверх + "is-scrolled" тень
+const nav = document.getElementById('nav');
+let lastScroll = 0;
+let ticking = false;
+
+function onScroll() {
+    const y = window.scrollY;
+
+    if (y > 20) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+
+    if (y > lastScroll && y > 120) {
+        nav.classList.add('is-hidden');
+    } else {
+        nav.classList.remove('is-hidden');
+    }
+    lastScroll = y;
+    ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(onScroll);
+        ticking = true;
+    }
+});
+
+// 3. Бургер и боковой drawer
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('drawer');
+
+burger.addEventListener('click', () => {
+    burger.classList.toggle('is-open');
+    drawer.classList.toggle('is-open');
+    document.body.style.overflow = drawer.classList.contains('is-open') ? 'hidden' : '';
+});
+
+drawer.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        burger.classList.remove('is-open');
+        drawer.classList.remove('is-open');
+        document.body.style.overflow = '';
+    });
+});
+
+// 4. IntersectionObserver для .reveal-анимаций
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// 5. Счётчики в блоке "Достижения" — анимируются при появлении
+const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.target, 10);
+            const duration = 1600;
+            const start = performance.now();
+
+            function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                // easeOutQuart
+                const eased = 1 - Math.pow(1 - progress, 4);
+                el.textContent = Math.round(eased * target);
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+            countObserver.unobserve(el);
+        }
+    });
+}, { threshold: 0.6 });
+
+document.querySelectorAll('.stat-count').forEach(el => countObserver.observe(el));
+
+// 6. Карусель "Легенды" — свайп + кнопки + счётчик
+const carousel = document.getElementById('legendsCarousel');
+const legPrev = document.getElementById('legPrev');
+const legNext = document.getElementById('legNext');
+const legCount = document.getElementById('legCount');
+const cards = carousel.querySelectorAll('.legend-card');
+const total = cards.length;
+
+function getCurrentCardIndex() {
+    const cardWidth = cards[0].offsetWidth + 24; // + gap
+    return Math.round(carousel.scrollLeft / cardWidth);
+}
+
+function updateCount() {
+    const idx = Math.min(getCurrentCardIndex() + 1, total);
+    legCount.textContent = String(idx).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+}
+
+legPrev.addEventListener('click', () => {
+    const cardWidth = cards[0].offsetWidth + 24;
+    carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+});
+
+legNext.addEventListener('click', () => {
+    const cardWidth = cards[0].offsetWidth + 24;
+    carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+});
+
+carousel.addEventListener('scroll', () => {
+    window.requestAnimationFrame(updateCount);
+});
+
+// 7. Активная ссылка навбара по текущей секции
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav__link');
+
+const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const id = entry.target.id;
+            navLinks.forEach(link => {
+                link.classList.toggle('is-active', link.getAttribute('href') === '#' + id);
+            });
+        }
+    });
+}, { threshold: 0.5 });
+
+sections.forEach(sec => navObserver.observe(sec));
+
+// 8. Ховер на секторе "Направления" — зажигает соответствующий label
+document.querySelectorAll('.direction-sector').forEach((sector, idx) => {
+    const labels = document.querySelectorAll('.direction-sector__label');
+    sector.addEventListener('mouseenter', () => {
+        if (labels[idx]) {
+            labels[idx].style.color = 'var(--paper)';
+            labels[idx].style.zIndex = 3;
+        }
+    });
+    sector.addEventListener('mouseleave', () => {
+        if (labels[idx]) labels[idx].style.color = '';
+    });
+});
+</script>
+
+</body>
+</html>
