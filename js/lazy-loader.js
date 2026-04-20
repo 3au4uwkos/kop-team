@@ -14,7 +14,9 @@ const SECTION_CONFIG = {
     sambo:      { styles: ['css/sections/split.css'] },
     striking:   { styles: ['css/sections/split.css'] },
     morning:    { styles: ['css/sections/split.css'] },
+    'fp-kids':  { styles: ['css/sections/split.css'] },
     youth:      { styles: ['css/sections/youth.css'] },
+    merch:      { styles: ['css/sections/merch.css'] },
     contacts:   { styles: ['css/sections/contacts.css'] },
 };
 

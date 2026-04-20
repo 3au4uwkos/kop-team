@@ -207,6 +207,19 @@
     background: var(--paper);
 }
 
+/* #fp-kids — ink media / paper content, тёплый охристый акцент для детской секции */
+.split--fp-kids .split__media {
+    background: var(--ink);
+}
+.split--fp-kids .split__media-inner {
+    background:
+        linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
+        linear-gradient(135deg, #C08457 0%, #2A1F18 100%);
+}
+.split--fp-kids .split__content {
+    background: var(--paper);
+}
+
 /* #morning — paper-alt media / paper content (PRD: remove orange, use warm muted) */
 .split--morning .split__media {
     background: var(--paper-alt);

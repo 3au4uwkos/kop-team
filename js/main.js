@@ -9,6 +9,7 @@ import { initCounters } from './counters.js';
 import { initLegendsCarousel } from './legends-carousel.js';
 import { initDirections } from './directions.js';
 import { initSplitGallery } from './split-gallery.js';
+import { initYouthCamps } from './youth-camps.js';
 
 // 1. Preloader — уходит после полной загрузки
 window.addEventListener('load', () => {
@@ -31,6 +32,8 @@ onSectionReady('combat', (el) => initSplitGallery(el));
 onSectionReady('sambo', (el) => initSplitGallery(el));
 onSectionReady('striking', (el) => initSplitGallery(el));
 onSectionReady('morning', (el) => initSplitGallery(el));
+onSectionReady('fp-kids', (el) => initSplitGallery(el));
+onSectionReady('youth', (el) => initYouthCamps(el));
 
 // 4. Lazy-loader запускает AJAX-подгрузку всех секций
 initLazyLoader();
