@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#0E0E10"/>
+  <text x="16" y="22" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="18" fill="#F7F7F8" text-anchor="middle" transform="skewX(-6)" transform-origin="16 16">К</text>
+  <circle cx="25" cy="25" r="2.5" fill="#E4002B"/>
+</svg>

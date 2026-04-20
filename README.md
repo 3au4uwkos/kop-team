@@ -1,105 +1,124 @@
-# Kopeykin — RDP сайта тренера по самбо
+# Копейкин Самбо — сайт-визитка
 
-Rapid Design Prototype для сайта Копейкина Павла Сергеевича.
+Single-page application для тренера по самбо Копейкина П. С.
+Реализация по PRD.md (версия 1.0).
 
-## Что это
+## Стек
 
-Одностраничный HTML-прототип с плейсхолдерами. Все 10 секций, soft-snap скролл, адаптив, анимации на чистом CSS + vanilla JS. Тяжёлых зависимостей нет, шрифты — с Google Fonts (без роялти).
+- HTML5 (семантические теги, ARIA)
+- CSS3 (custom properties, Grid, Flexbox, clip-path)
+- JavaScript ES6+ modules (vanilla, без транспиляции)
+- Lenis (~3KB gzip) — плавная soft-snap прокрутка (CDN)
+- Swiper (~40KB gzip) — карусели (CDN)
+- Шрифты Oswald + Manrope (Google Fonts)
 
-## Архитектура
+Сборка не требуется — проект работает открытием `index.html`.
 
-**Стек:**
-- HTML5 семантический
-- CSS (custom properties, grid, clip-path, intersection-observer-driven animations)
-- Vanilla JS (без фреймворков)
-- Google Fonts: Oswald (display) + Manrope (body)
+## Структура
 
-**Дизайн-токены** — в `:root`:
-- Палитра: графит `#0E0E10` / бумага `#F7F7F8` / алый `#E4002B` / лазурь `#0033A0`
-- Типографика: Oswald со skew(-6deg) для плакатного эффекта
-- Ритм: `--section-pad: clamp(60px, 10vh, 140px)`
+```
+kopeykin-sambo/
+├── index.html             # Каркас: preloader, nav, hero, плейсхолдеры секций
+├── robots.txt             # SEO
+├── sitemap.xml            # SEO
+├── PRD.md                 # Product Requirements
+├── README.md              # Этот файл
+│
+├── /sections/             # HTML-партиалы для AJAX-подгрузки
+│   ├── stats.html
+│   ├── legends.html
+│   ├── directions.html    # ✅ PRD 6.1 исправлено: SVG-текст в центроидах, увеличенный круг, декор
+│   ├── combat.html
+│   ├── sambo.html
+│   ├── striking.html
+│   ├── morning.html       # ✅ PRD 6.2 исправлено: muted палитра вместо оранжевого
+│   ├── youth.html
+│   └── contacts.html
+│
+├── /css/
+│   ├── tokens.css         # :root CSS-переменные
+│   ├── base.css           # Reset + утилиты + preloader
+│   ├── nav.css            # Navbar + drawer
+│   ├── animations.css     # reveal + keyframes + reduced-motion
+│   └── /sections/         # Стили для каждой секции, подгружаются lazy
+│
+├── /js/                   # ES6-модули
+│   ├── main.js            # Точка входа
+│   ├── utils.js
+│   ├── lazy-loader.js     # IntersectionObserver → fetch('/sections/*.html')
+│   ├── smooth-scroll.js   # Lenis init
+│   ├── nav.js             # Автоскрытие, drawer, scroll-spy
+│   ├── reveal.js
+│   ├── counters.js
+│   ├── legends-carousel.js # Swiper + fallback
+│   ├── directions.js      # Hover на сектор + видео через foreignObject
+│   └── split-gallery.js   # Swiper в split-секциях
+│
+└── /assets/
+    ├── /img/              # WebP/AVIF/JPEG фото (по папкам секций)
+    ├── /video/            # MP4/WebM короткие ролики
+    └── /icons/            # Favicon (SVG/PNG), social icons
+```
 
-## Секции
+## Исправления по PRD
 
-1. **Hero** — тренер, цитата, ФИО, регалии, полутень за фото
-2. **Stats** (добавлена) — 25+ / 500+ / 180+ / 12+ с анимированными счётчиками
-3. **Legends** — карусель учеников с видео-фоном (плейсхолдер)
-4. **Directions** — круг 120°×3 (SVG), ховер окрашивает сектор
-5. **Combat** — боевое самбо (диагональный разрез →)
-6. **Sambo** — спортивное самбо (диагональ ←, reverse)
-7. **Striking** — ударная техника (диагональ →)
-8. **Morning** — утренняя зарядка (диагональ ←, reverse)
-9. **Youth** — подростки + выездные сборы (две карточки на тёмном фоне)
-10. **Contacts** — четыре соцсети + футер
+### 6.1 — Секция «Направления подготовки»
 
-## Интерактив
+- Текстовые подписи размещены SVG-элементами `<text>` в геометрических центроидах секторов — не съезжают при любом размере экрана.
+- Круг увеличен до `min(720px, 78vh)` на desktop.
+- Добавлена декоративная пунктирная окружность, радиальные линии-оси на границах секторов, нумерация 01/02/03, фоновое слово «ВЫБОР».
 
-- **Navbar** скрывается при скролле вниз, возвращается при скролле вверх
-- **Burger** открывает правый drawer на мобильных
-- **Reveal** — появление блоков через IntersectionObserver
-- **Stat-counters** — easeOutQuart анимация от 0 до таргета
-- **Legends carousel** — нативный scroll-snap + кнопки + счётчик
-- **Directions** — ховер на SVG-сектор подсвечивает его и label
+### 6.2 — Цветовой ритм
 
-## Где подменить контент
+Применена рекомендованная последовательность:
 
-| Элемент | Где в коде | Что подставить |
-|---|---|---|
-| Фото тренера | `.hero__photo-placeholder` с `<svg class="hero__silhouette">` | `<img src="...">` вырезанного фото |
-| Видео-фон легенд | `.legends__video-bg` | `<video autoplay muted loop>` с нарезкой схваток |
-| Фото учеников | `.legend-card__ph` | `<img>` или `background-image` на div |
-| Видео секторов в "Направлениях" | внутри `<path>` SVG | `<foreignObject>` с `<video>` или mask-image |
-| Фото/видео split-секций | `.split__media-inner` | `<img>` или `<video>` с object-fit: cover |
-| Контакты | `.social` href="#" | Реальные ссылки Telegram / WhatsApp / VK / Instagram |
-| Регалии/числа | `.hero__regalia`, `.stat[data-target]` | Реальные цифры тренера |
-| Имена учеников | `.legend-card__name`, `.legend-card__title` | Реальные ФИО и регалии |
+```
+#hero       → paper
+#stats      → ink
+#legends    → paper-alt
+#directions → paper
+#combat     → ink media / paper content
+#sambo      → paper-alt media / paper content
+#striking   → ink media / paper content
+#morning    → paper-alt media / paper content (muted палитра вместо оранжевого)
+#youth      → ink
+#contacts   → paper
+```
 
-## Что дописать в продакшн-версии (для следующего чата)
+## Доступность
 
-1. **AJAX lazy-loading** — сейчас весь HTML в одном файле. В продакшн:
-    - Каркас (Hero + nav + preloader) inline
-    - Секции 2–10 подгружать через `fetch()` с IntersectionObserver (rootMargin: 200px)
-    - Критический CSS inline, остальное через `<link rel="preload">`
+- Клавиатурная навигация по всему сайту
+- Фокус-кольца (`outline 2px` алый с offset 3px)
+- ARIA-атрибуты (aria-label, aria-current, aria-expanded)
+- Семантика: `<main>`, `<h1>` только в Hero, `<h2>` на секциях
+- `prefers-reduced-motion: reduce` — все анимации 0.01ms
 
-2. **Разбить на модули:**
-   ```
-   /
-   ├── index.html          (каркас + Hero)
-   ├── /sections/
-   │   ├── legends.html
-   │   ├── directions.html
-   │   ├── combat.html
-   │   └── ...
-   ├── /css/
-   │   ├── tokens.css
-   │   ├── base.css
-   │   ├── nav.css
-   │   └── sections/*.css
-   ├── /js/
-   │   ├── main.js
-   │   ├── lazy-loader.js
-   │   ├── nav.js
-   │   ├── carousel.js
-   │   └── counters.js
-   └── /assets/
-       ├── /img/
-       ├── /video/
-       └── /fonts/
-   ```
+## Запуск
 
-3. **Доработки:**
-    - Lenis для ультра-плавной прокрутки (вместо `scroll-behavior: smooth`)
-    - Swiper.js для тач-свайпов карусели (сейчас нативный scroll-snap)
-    - Настоящее видео в секторах "Направлений" через `<foreignObject>` в SVG
-    - Форма записи (пока CTA "Записаться" ведёт на #contacts)
-    - SEO-теги, OpenGraph, schema.org Person/SportsClub
-    - Оптимизация изображений: AVIF/WebP + responsive `<picture>`
+1. Открыть `index.html` в современном браузере, ИЛИ
+2. Запустить локальный сервер (требуется для работы AJAX-подгрузки секций):
 
-4. **Дизайн-решения на утверждение:**
-    - Проверить читаемость цитаты на hero (сейчас красная, крупная)
-    - Возможно увеличить интерактивность секторов: реально встроить видео в SVG-сектор при ховере
-    - Решить, нужен ли блок "Расписание" отдельной секцией или достаточно spec-полей
+```bash
+# Python 3
+python -m http.server 8000
 
-## Как запустить
+# Node (http-server)
+npx http-server -p 8000
 
-Открыть `index.html` в любом современном браузере. Никакой сборки, никакого npm. Шрифты грузятся с Google Fonts — нужен интернет для первого запуска.
+# PHP
+php -S localhost:8000
+```
+
+Затем перейти по адресу `http://localhost:8000`.
+
+> ⚠️ Открытие `index.html` напрямую (file://) в Chrome работать НЕ будет — браузер заблокирует `fetch()` для локальных файлов (CORS). В Firefox можно, в Chrome — только через локальный сервер.
+
+## Что осталось дополнить для продакшна
+
+- Заменить плейсхолдеры фото/видео на реальные ассеты
+- Оптимизация изображений: WebP + AVIF через `<picture>` + адаптивные размеры
+- Реальные контакты в `sections/contacts.html`
+- Favicon PNG-версии 16/32/180
+- Превью для OG-тегов
+- Минификация CSS/JS (опционально, через terser + csso) — см. `/dist/`
+- Форма записи с валидацией (модальное окно)

@@ -1,0 +1,140 @@
+/* ================================================================
+   СЕКЦИЯ 9: ПОДРОСТКОВАЯ ГРУППА + ВЫЕЗДЫ
+   ================================================================ */
+.youth {
+    min-height: 100vh;
+    padding: var(--section-pad) var(--gutter);
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+}
+
+.youth__bg-word {
+    position: absolute;
+    left: -2vw;
+    top: -2vh;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(140px, 20vw, 320px);
+    line-height: 0.8;
+    color: rgba(247, 247, 248, 0.04);
+    user-select: none;
+    pointer-events: none;
+    transform: skewX(-6deg);
+}
+
+.youth__head {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 80px;
+}
+
+.youth__title {
+    font-size: clamp(44px, 6vw, 96px);
+}
+
+.youth__title-accent { color: var(--accent-red); }
+
+.youth__intro {
+    font-size: 16px;
+    color: rgba(247, 247, 248, 0.65);
+    line-height: 1.65;
+    max-width: 440px;
+}
+
+.youth__grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.youth-card {
+    border: 1px solid rgba(247, 247, 248, 0.1);
+    padding: 36px;
+    transition: border-color 0.4s ease, background 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.youth-card:hover {
+    border-color: var(--accent-red);
+}
+
+.youth-card__num {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    margin-bottom: 24px;
+}
+
+.youth-card__num::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: currentColor;
+    vertical-align: middle;
+    margin-right: 14px;
+    margin-bottom: 3px;
+}
+
+.youth-card__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(26px, 3vw, 40px);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 20px;
+    transform: skewX(-6deg);
+    display: inline-block;
+}
+
+.youth-card__desc {
+    font-size: 15px;
+    color: rgba(247, 247, 248, 0.7);
+    line-height: 1.65;
+    margin-bottom: 28px;
+}
+
+.youth-card__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.youth-card__list li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 14px;
+    color: rgba(247, 247, 248, 0.85);
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(247, 247, 248, 0.08);
+}
+
+.youth-card__list li::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 1px;
+    background: var(--accent-red);
+    flex-shrink: 0;
+    transform: translateY(-3px);
+}
+
+@media (max-width: 960px) {
+    .youth__head {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .youth__grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,114 @@
+/* ================================================================
+   СЕКЦИЯ 10: КОНТАКТЫ
+   ================================================================ */
+.contacts {
+    min-height: 80vh;
+    padding: var(--section-pad) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 80px;
+    background: var(--paper);
+}
+
+.contacts__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+}
+
+.contacts__title {
+    font-size: clamp(56px, 9vw, 160px);
+    line-height: 0.9;
+}
+
+.contacts__title-line {
+    display: block;
+    overflow: hidden;
+}
+
+.contacts__title-line span { display: inline-block; transform: skewX(-6deg); }
+
+.contacts__lead {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 340px;
+    line-height: 1.65;
+}
+
+.socials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line);
+}
+
+.social {
+    padding: 30px 24px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: background 0.3s ease, color 0.3s ease, padding-left 0.4s var(--ease-out-quart);
+    position: relative;
+    overflow: hidden;
+}
+
+.social:last-child { border-right: none; }
+
+.social:hover {
+    background: var(--ink);
+    color: var(--paper);
+    padding-left: 36px;
+}
+
+.social__name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.social__handle {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color 0.3s ease;
+}
+
+.social:hover .social__handle { color: rgba(247, 247, 248, 0.55); }
+
+.social__arrow {
+    margin-left: auto;
+    transition: transform 0.4s var(--ease-out-quart);
+}
+
+.social:hover .social__arrow { transform: translateX(6px) rotate(-45deg); }
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+@media (max-width: 960px) {
+    .contacts__head {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .socials { grid-template-columns: 1fr; }
+    .social { border-right: none; }
+}
+
+@media (max-width: 560px) {
+    .footer { flex-direction: column; gap: 12px; text-align: center; }
+}
