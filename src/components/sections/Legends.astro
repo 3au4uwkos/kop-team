@@ -1,0 +1,66 @@
+---
+// ================================================================
+// Legends.astro — карусель учеников на scroll-snap (без Swiper).
+//
+// TODO(владелец): заменить карточки на реальных воспитанников
+// (ФИО, звание, титул) и их фото. Ниже — плейсхолдеры.
+// ================================================================
+const LEGENDS = [
+    { name: 'Иванов А.', title: 'МС по самбо', sub: 'Призёр чемпионата России' },
+    { name: 'Петров Д.', title: 'КМС по боевому самбо', sub: 'Чемпион ЦФО' },
+    { name: 'Сидоров М.', title: 'МСМК', sub: 'Призёр Кубка мира' },
+    { name: 'Смирнов Р.', title: 'МС', sub: 'Чемпион Тульской области' },
+    { name: 'Козлов И.', title: 'КМС', sub: 'Победитель первенства' },
+    { name: 'Новиков В.', title: 'МС', sub: 'Финалист Спартакиады' },
+];
+const total = String(LEGENDS.length).padStart(2, '0');
+import '../../styles/sections/legends.css';
+
+---
+<section class="legends" id="legends" aria-labelledby="legends-title" data-carousel>
+    <div class="legends__video-bg" aria-hidden="true"></div>
+    <div class="legends__video-tag">Архив · Нарезка схваток</div>
+
+    <div class="legends__head">
+        <h2 class="display legends__title reveal" id="legends-title">
+            <span class="display--skew">Легенды</span><br>
+            <span class="display--skew legends__title-accent">ковра</span>
+        </h2>
+        <p class="legends__intro reveal" data-delay="1">
+            Ученики, которые прошли путь от первой тренировки до пьедестала.
+            Смахните карточки в сторону, чтобы увидеть всех.
+        </p>
+    </div>
+
+    <div class="legends__carousel-wrap">
+        <div class="legends__carousel" data-carousel-track
+             tabindex="0" role="group" aria-label="Карточки воспитанников">
+            {LEGENDS.map((l, i) => (
+                <article class="legend-card">
+                    <div class="legend-card__ph" aria-hidden="true"></div>
+                    <div class="legend-card__info">
+                        <div class="legend-card__num">{String(i + 1).padStart(2, '0')} / {total}</div>
+                        <h3 class="legend-card__name">{l.name}</h3>
+                        <p class="legend-card__title">{l.title}<br>{l.sub}</p>
+                    </div>
+                </article>
+            ))}
+        </div>
+
+        <div class="legends__controls">
+            <button class="legends__btn" type="button" data-carousel-prev aria-label="Предыдущая карточка">
+                <svg width="18" height="12" viewBox="0 0 18 12" fill="none"
+                     stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M17 6H1M1 6L6 1M1 6L6 11" />
+                </svg>
+            </button>
+            <button class="legends__btn" type="button" data-carousel-next aria-label="Следующая карточка">
+                <svg width="18" height="12" viewBox="0 0 18 12" fill="none"
+                     stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M1 6H17M17 6L12 1M17 6L12 11" />
+                </svg>
+            </button>
+            <div class="legends__count" data-carousel-count aria-live="polite">01 / {total}</div>
+        </div>
+    </div>
+</section>

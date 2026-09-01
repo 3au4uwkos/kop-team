@@ -1,0 +1,17 @@
+{
+  "name": "kopeykin-sambo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Сайт тренера по самбо Копейкина П. С. (Тула) — Astro SSG",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.16.0"
+  }
+}

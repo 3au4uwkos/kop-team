@@ -1,0 +1,17 @@
+---
+// ================================================================
+// Preloader.astro — титр «КОПЕЙКИН»: line-wipe + уход вверх, ≤ 400 мс.
+// Анимация чисто CSS, поэтому без JS сайт тоже открывается.
+// JS лишь убирает слой раньше, если страница загрузилась быстрее.
+// ================================================================
+---
+<div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader__mark"><span>КОПЕЙКИН</span></div>
+</div>
+
+<script>
+    // Ранний выход: как только load — снимаем слой, не дожидаясь конца анимации.
+    const hide = () => document.getElementById('preloader')?.classList.add('is-hidden');
+    if (document.readyState === 'complete') hide();
+    else window.addEventListener('load', hide, { once: true });
+</script>

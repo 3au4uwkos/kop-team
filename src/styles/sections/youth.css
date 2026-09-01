@@ -1,0 +1,253 @@
+/* ================================================================
+   СЕКЦИЯ: ПОДРОСТКОВЫЕ ЛАГЕРНЫЕ СМЕНЫ
+   Слева — описание, справа — лента смен на scroll-snap.
+   ================================================================ */
+.youth {
+    min-height: 100vh;   /* fallback */
+    min-height: 100svh;
+    padding: clamp(60px, 8vh, 110px) var(--gutter);
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.youth__layout {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) minmax(0, 1.35fr);
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+}
+
+.youth__about {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 460px;
+}
+
+.youth__title-main {
+    display: block;
+    font-size: clamp(36px, 5vw, 80px);
+    margin-top: 4px;
+}
+
+.youth__title-sub {
+    display: block;
+    margin-top: 14px;
+    max-width: 32ch;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(13px, 1.5vw, 16px);
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(247, 247, 248, 0.55);
+}
+
+.youth__title-accent { color: var(--accent-red); }
+
+.youth__intro {
+    font-size: 15px;
+    color: rgba(247, 247, 248, 0.78);
+    line-height: 1.65;
+}
+
+.youth__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.youth__list li {
+    position: relative;
+    padding: 10px 0 10px 22px;
+    font-size: 14px;
+    color: rgba(247, 247, 248, 0.85);
+    border-top: 1px solid rgba(247, 247, 248, 0.08);
+}
+
+.youth__list li:last-child { border-bottom: 1px solid rgba(247, 247, 248, 0.08); }
+
+.youth__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.35em;
+    width: 12px;
+    height: 1px;
+    background: var(--accent-red);
+}
+
+/* ---------- Лента смен ---------- */
+.youth-camps { position: relative; min-width: 0; }
+
+.youth-camps__track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding-bottom: 6px;
+}
+
+.youth-camps__track::-webkit-scrollbar { display: none; }
+
+.camp-card {
+    flex: 0 0 clamp(260px, 26vw, 360px);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    background: rgba(247, 247, 248, 0.02);
+    border: 1px solid rgba(247, 247, 248, 0.08);
+    transition: border-color var(--dur-base) ease, transform var(--dur-slow) var(--ease-out);
+}
+
+.camp-card__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+}
+
+/* Градиенты-плейсхолдеры вместо инлайн-стилей (CSP style-src 'self'). */
+.camp-card__media--1 { background: linear-gradient(160deg, #1F2937 0%, #0E0E10 100%); }
+.camp-card__media--2 { background: linear-gradient(160deg, #E4002B 0%, #4A0010 100%); }
+.camp-card__media--3 { background: linear-gradient(160deg, #0033A0 0%, #0E0E10 100%); }
+.camp-card__media--4 { background: linear-gradient(160deg, #6B7280 0%, #1F2937 100%); }
+.camp-card__media--5 { background: linear-gradient(160deg, #2a2a2e 0%, #0E0E10 100%); }
+
+.camp-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(14, 14, 16, 0.85) 100%);
+}
+
+.camp-card__tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--paper);
+    padding: 5px 9px;
+    background: rgba(14, 14, 16, 0.55);
+    border: 1px solid rgba(247, 247, 248, 0.25);
+}
+
+.camp-card__body {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.camp-card__place {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(247, 247, 248, 0.55);
+}
+
+.camp-card__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transform: skewX(-6deg);
+    display: inline-block;
+}
+
+/* ---------- Управление ---------- */
+.youth-camps__controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.youth-camps__btn {
+    width: var(--tap);
+    height: var(--tap);
+    border: 1px solid rgba(247, 247, 248, 0.25);
+    color: var(--paper);
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--dur-base) ease, border-color var(--dur-base) ease,
+                color var(--dur-base) ease, opacity var(--dur-base) ease;
+}
+
+.youth-camps__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.youth-camps__dots {
+    display: flex;
+    gap: 4px;
+    margin-left: 4px;
+}
+
+/* Полоска 22x2, кликабельная зона — 44x44. */
+.youth-camps__dot {
+    width: 30px;
+    height: var(--tap);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.youth-camps__dot::before {
+    content: '';
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: rgba(247, 247, 248, 0.25);
+    transition: background var(--dur-base) ease, width var(--dur-base) var(--ease-out);
+}
+
+.youth-camps__dot.is-active::before {
+    background: var(--accent-red);
+    width: 30px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .camp-card:hover { border-color: var(--accent-red); transform: translateY(-6px); }
+    .youth-camps__btn:hover:not(:disabled) {
+        background: var(--paper);
+        color: var(--ink);
+        border-color: var(--paper);
+    }
+}
+
+/* ---------- Адаптив ---------- */
+@media (max-width: 960px) {
+    .youth {
+        min-height: 0;
+        padding: var(--section-pad) var(--gutter);
+        align-items: flex-start;
+    }
+    .youth__layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        align-items: start;
+    }
+    .youth__about { max-width: none; }
+    .camp-card { flex-basis: min(76vw, 320px); }
+}

@@ -1,0 +1,75 @@
+---
+// ================================================================
+// Youth.astro — подростковые лагерные смены.
+// Лента смен — scroll-snap (без Swiper); градиенты карточек в CSS.
+// TODO(владелец): фото со сборов вместо градиентов-плейсхолдеров.
+// ================================================================
+const CAMPS = [
+    { tag: 'Лето · 2025', place: 'Подмосковье · база «Волга»', title: 'Летняя смена' },
+    { tag: 'Осень · 2025', place: 'Сочи · Красная поляна', title: 'Горный сбор' },
+    { tag: 'Зима · 2026', place: 'Карелия · база «Онего»', title: 'Зимний интенсив' },
+    { tag: 'Весна · 2026', place: 'Крым · Алушта', title: 'Весенняя смена' },
+    { tag: 'Лето · 2024', place: 'Подмосковье · база «Сосны»', title: 'Классика' },
+];
+import '../../styles/sections/youth.css';
+
+---
+<section class="youth" id="youth" aria-labelledby="youth-title">
+    <div class="bg-word bg-word--youth" aria-hidden="true">СБОРЫ</div>
+
+    <div class="youth__layout">
+        <div class="youth__about">
+            <div class="kicker reveal">Подростковая группа · 12–17 лет</div>
+            <h2 class="youth__title reveal" data-delay="1" id="youth-title">
+                <span class="display youth__title-main">
+                    <span class="display--skew">Лагерные</span><br>
+                    <span class="display--skew youth__title-accent">смены</span>
+                </span>
+                <span class="youth__title-sub">Выездные сборы по самбо для подростков 12–17 лет</span>
+            </h2>
+            <p class="youth__intro reveal" data-delay="2">
+                Выездные сборы до двух недель на спортивно-тренировочных базах:
+                две тренировки в день, разбор техники, полное питание и медицинский
+                контроль — интенсив и отдых в одном формате.
+            </p>
+            <ul class="youth__list reveal" data-delay="2">
+                <li>Длительность — от 7 до 14 дней</li>
+                <li>Проживание на базах Подмосковья, Кавказа и юга</li>
+                <li>Две тренировки в день + теория и видеоразбор</li>
+                <li>Спортивные игры, бассейн, природа</li>
+                <li>Полное питание и медицинский контроль</li>
+            </ul>
+        </div>
+
+        <div class="youth-camps reveal" data-delay="2" data-carousel>
+            <div class="youth-camps__track" data-carousel-track
+                 tabindex="0" role="group" aria-label="Фотолента лагерных смен">
+                {CAMPS.map((c, i) => (
+                    <article class="camp-card">
+                        <div class:list={['camp-card__media', 'camp-card__media--' + (i + 1)]}>
+                            <div class="camp-card__tag">{c.tag}</div>
+                        </div>
+                        <div class="camp-card__body">
+                            <div class="camp-card__place">{c.place}</div>
+                            <h3 class="camp-card__title">{c.title}</h3>
+                        </div>
+                    </article>
+                ))}
+            </div>
+
+            <div class="youth-camps__controls">
+                <button class="youth-camps__btn" type="button" data-carousel-prev
+                        aria-label="Предыдущая смена">←</button>
+                <button class="youth-camps__btn" type="button" data-carousel-next
+                        aria-label="Следующая смена">→</button>
+                <div class="youth-camps__dots">
+                    {CAMPS.map((c, i) => (
+                        <button class:list={['youth-camps__dot', i === 0 && 'is-active']}
+                                type="button" data-carousel-dot
+                                aria-label={'Смена: ' + c.title}></button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,44 @@
+---
+// ================================================================
+// Nav.astro — шапка с автоскрытием + мобильный drawer.
+// На главной пункты — якоря (#combat), на служебных — /#combat.
+// ================================================================
+import { NAV_LINKS } from '../data/site';
+
+interface Props { home?: boolean }
+const { home = false } = Astro.props;
+
+const href = (h: string) => (home ? h : `/${h}`);
+const desktop = NAV_LINKS.filter((l) => l.desktop);
+---
+<header class="nav" id="nav">
+    <a href={home ? '#hero' : '/'} class="nav__brand" aria-label="Копейкин — на главную">
+        КОПЕЙКИН<span class="nav__brand-dot" aria-hidden="true"></span>
+    </a>
+    <nav aria-label="Основная навигация">
+        <ul class="nav__list">
+            {desktop.map((l) => (
+                <li><a href={href(l.href)} class="nav__link">{l.label}</a></li>
+            ))}
+        </ul>
+    </nav>
+    <a href={href('#contacts')} class="nav__cta">Записаться</a>
+    <button class="nav__burger" id="burger" type="button"
+            aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<div class="nav__scrim" id="drawerScrim" hidden></div>
+
+<aside class="nav__drawer" id="drawer" aria-label="Мобильное меню" inert>
+    {NAV_LINKS.map((l) => (
+        <a href={href(l.href)} class="nav__drawer-link">{l.label}</a>
+    ))}
+    <div class="nav__drawer-foot">Тула · 2026</div>
+</aside>
+
+<script>
+    import { initNav } from '../scripts/nav.js';
+    initNav();
+</script>

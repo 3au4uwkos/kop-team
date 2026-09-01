@@ -1,0 +1,37 @@
+---
+import Split from '../Split.astro';
+---
+<Split
+    id="morning"
+    num="04"
+    ariaLabel="Утренняя зарядка"
+    modifier="morning"
+    reverse
+    titleLines={['Зарядка', 'в парке']}
+    titleSub="Бесплатная утренняя зарядка в Туле — ЦПКиО им. Белоусова"
+    slides={3}
+    bgWord="УТРО"
+>
+    <p class="split__desc reveal" data-delay="3">
+        Открытая утренняя зарядка на свежем воздухе для всех желающих прикоснуться
+        к спорту. Занятие бесплатное, предварительная запись обязательна.
+    </p>
+    <div class="split__specs reveal" data-delay="4">
+        <div class="spec">
+            <div class="spec__label">Длительность</div>
+            <div class="spec__value">1 час</div>
+        </div>
+        <div class="spec">
+            <div class="spec__label">Расписание</div>
+            <div class="spec__value">Каждый вторник</div>
+        </div>
+        <div class="spec">
+            <div class="spec__label">Место</div>
+            <div class="spec__value">ЦПКиО им. Белоусова</div>
+        </div>
+        <div class="spec">
+            <div class="spec__label">Стоимость</div>
+            <div class="spec__value">Бесплатно · по записи</div>
+        </div>
+    </div>
+</Split>

@@ -1,0 +1,42 @@
+---
+import Split from '../Split.astro';
+---
+<Split
+    id="combat"
+    num="01"
+    ariaLabel="Боевое самбо"
+    modifier="combat"
+    titleLines={['Боевое', 'самбо']}
+    titleSub="Боевое самбо в Туле для взрослых и детей с 10 лет"
+    slides={4}
+    bgWord="БОЙ"
+>
+    <div class="split__offers reveal" data-delay="3">
+        <div class="offer">
+            <div class="offer__kind">Группа выходного дня</div>
+            <div class="offer__for">Для взрослых</div>
+            <ul class="offer__list">
+                <li>длительность занятия до 1,5 часа</li>
+                <li>тренировки проходят по субботам или воскресеньям</li>
+                <li>точное расписание — в личных сообщениях</li>
+            </ul>
+        </div>
+        <div class="offer">
+            <div class="offer__kind">Персональные тренировки</div>
+            <div class="offer__for">По боевому самбо для детей с 10 лет</div>
+            <ul class="offer__list">
+                <li>длительность занятия 1 час</li>
+                <li>время тренировок подбирается индивидуально</li>
+                <li>плавное введение ударной техники под контролем</li>
+            </ul>
+        </div>
+        <div class="offer">
+            <div class="offer__kind">Персональные тренировки</div>
+            <div class="offer__for">По боевому самбо для взрослых</div>
+            <ul class="offer__list">
+                <li>длительность занятия 1 час</li>
+                <li>время тренировок подбирается индивидуально</li>
+            </ul>
+        </div>
+    </div>
+</Split>

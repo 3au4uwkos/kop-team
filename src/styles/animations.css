@@ -1,0 +1,57 @@
+/* ================================================================
+   АНИМАЦИИ ПОЯВЛЕНИЯ (IntersectionObserver) + Keyframes
+   Всё движение — только transform/opacity, длительности — из токенов.
+   ================================================================ */
+
+/* Reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity var(--dur-reveal) var(--ease-out),
+                transform var(--dur-reveal) var(--ease-out);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal[data-delay="1"] { transition-delay: 80ms; }
+.reveal[data-delay="2"] { transition-delay: 160ms; }
+.reveal[data-delay="3"] { transition-delay: 240ms; }
+.reveal[data-delay="4"] { transition-delay: 320ms; }
+
+/* Бегущий штрих у подписи «Листай вниз» (hero) */
+@keyframes scroll-line {
+    0%        { transform: translateX(-100%); }
+    60%, 100% { transform: translateX(100%); }
+}
+
+/* Пульсирующая точка у тега архива (legends) */
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+}
+
+/* Штрих-анимация стрелок у соц-ссылок */
+@keyframes stroke-draw {
+    from { stroke-dashoffset: 1; }
+    to   { stroke-dashoffset: 0; }
+}
+
+/* Уважаем настройки пользователя */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    html { scroll-behavior: auto; }
+
+    /* Блоки должны быть видны сразу, а не ждать наблюдателя. */
+    .reveal { opacity: 1; transform: none; }
+}

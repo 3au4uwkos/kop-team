@@ -1,0 +1,107 @@
+---
+// ================================================================
+// Split.astro — каркас диагональной split-секции (направления).
+// Медиа-колонка — нативная scroll-snap галерея: свайп даёт браузер,
+// JS только синхронизирует точки.
+//
+// Кнопка play рендерится только если передан `video`: мёртвых
+// контролов на странице быть не должно. Файлы видео/фото готовит
+// владелец (вне скоупа кода) — разметка <picture>/poster уже здесь.
+// ================================================================
+interface Props {
+    id: string;
+    num: string;
+    ariaLabel: string;
+    /** Модификатор темы: combat | sambo | striking | morning | fp-kids */
+    modifier: string;
+    reverse?: boolean;
+    /** Крупные строки заголовка (display-типографика). */
+    titleLines: string[];
+    /** Продолжение h2 — сюда идёт поисковый запрос целиком. */
+    titleSub: string;
+    /** Сколько кадров в галерее (пока — плейсхолдеры под фото владельца). */
+    slides?: number;
+    /** Путь к видео, когда владелец его добавит. */
+    video?: string;
+    poster?: string;
+    /** Фоновое слово-декорация для параллакса. */
+    bgWord?: string;
+}
+
+const {
+    id, num, ariaLabel, modifier, reverse = false,
+    titleLines, titleSub, slides = 3, video, poster, bgWord,
+} = Astro.props;
+
+const frames = Array.from({ length: slides }, (_, i) => i);
+import '../styles/sections/split.css';
+
+---
+<section
+    class:list={['split', `split--${modifier}`, reverse && 'split--reverse']}
+    id={id}
+    aria-labelledby={`${id}-title`}
+>
+    {bgWord && <div class="bg-word bg-word--split" aria-hidden="true">{bgWord}</div>}
+
+    <div class="split__media" data-carousel>
+        <div class="split__media-track" data-carousel-track
+             tabindex="0" role="group" aria-label={`Галерея: ${ariaLabel}`}>
+            {frames.map(() => (
+                <div class="split__slide">
+                    <div class="split__slide-inner"></div>
+                    <!--
+                      TODO(владелец): заменить плейсхолдер на фото.
+                      <picture>
+                        <source srcset="/assets/img/SECTION/frame-N.avif" type="image/avif" />
+                        <source srcset="/assets/img/SECTION/frame-N.webp" type="image/webp" />
+                        <img src="/assets/img/SECTION/frame-N.jpg" alt="" width="1200" height="1600"
+                             loading="lazy" decoding="async" />
+                      </picture>
+                    -->
+                </div>
+            ))}
+        </div>
+
+        <div class="split__media-tag">Фото · свайп</div>
+
+        {video && (
+            <video class="split__video" preload="none" playsinline muted loop
+                   poster={poster} src={video}></video>
+        )}
+        {video && (
+            <button class="split__play" type="button" aria-label={`Воспроизвести видео: ${ariaLabel}`}>
+                <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor" aria-hidden="true">
+                    <path d="M22 13L0 26V0L22 13Z" />
+                </svg>
+            </button>
+        )}
+
+        {slides > 1 && (
+            <div class="split__media-dots">
+                {frames.map((i) => (
+                    <button class:list={['split__media-dot', i === 0 && 'is-active']}
+                            type="button" data-carousel-dot
+                            aria-label={`Кадр ${i + 1} из ${slides}`}></button>
+                ))}
+            </div>
+        )}
+    </div>
+
+    <div class="split__content">
+        <div class="split__num reveal" aria-hidden="true">{num}</div>
+        <h2 class="split__title reveal" id={`${id}-title`} data-delay="2">
+            <span class="display split__title-main">
+                {titleLines.map((line, i) => (
+                    <>
+                        {i > 0 && <br />}
+                        <span class="display--skew">{line}</span>
+                    </>
+                ))}
+            </span>
+            <span class="split__title-sub">{titleSub}</span>
+        </h2>
+        <slot />
+        <slot name="details" />
+    </div>
+</section>

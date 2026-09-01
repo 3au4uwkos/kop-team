@@ -1,0 +1,29 @@
+---
+// ================================================================
+// Socials.astro — мессенджеры и соцсети. Instagram обязательно
+// со звёздочкой и сноской о Meta (задача 1.2).
+// ================================================================
+import { SOCIALS, META_FOOTNOTE } from '../data/site';
+
+interface Props { heading?: string }
+const { heading = 'Социальные сети и мессенджеры' } = Astro.props;
+const needsNote = SOCIALS.some((s) => s.metaMarked);
+---
+<div class="socials" aria-label={heading}>
+    {SOCIALS.map((s) => (
+        <a href={s.href} class="social" rel="noopener noreferrer" target="_blank">
+            <div>
+                <div class="social__name">
+                    {s.name}{s.metaMarked && <span class="social__mark" aria-hidden="true">*</span>}
+                </div>
+                <div class="social__handle">{s.handle}</div>
+            </div>
+            <svg class="social__arrow" width="20" height="14" viewBox="0 0 20 14"
+                 fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M1 7h18M13 1l6 6-6 6" pathLength="1" />
+            </svg>
+        </a>
+    ))}
+</div>
+
+{needsNote && <p class="socials__note">{META_FOOTNOTE}</p>}

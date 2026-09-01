@@ -1,0 +1,25 @@
+---
+// ================================================================
+// Contacts.astro — блок записи на главной.
+// ================================================================
+import Socials from '../Socials.astro';
+import '../../styles/sections/contacts.css';
+
+---
+<section class="contacts" id="contacts" aria-labelledby="contacts-title">
+    <div class="contacts__head">
+        <h2 class="contacts__title reveal" id="contacts-title">
+            <span class="display contacts__title-main">
+                <span class="contacts__title-line"><span>Готовы</span></span>
+                <span class="contacts__title-line"><span>начать?</span></span>
+            </span>
+            <span class="contacts__title-sub">Запись на тренировки по самбо в Туле</span>
+        </h2>
+        <p class="contacts__lead reveal" data-delay="1">
+            Напишите в любой удобный мессенджер — отвечу в течение дня.
+            Расписание и стоимость обсуждаем лично.
+        </p>
+    </div>
+
+    <Socials />
+</section>

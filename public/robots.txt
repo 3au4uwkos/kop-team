@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kopeykin-sambo.ru/sitemap-index.xml

@@ -1,0 +1,28 @@
+---
+// ================================================================
+// Requisites.astro — блок реквизитов исполнителя для /contacts/.
+// Пока REQUISITES не заполнены (задача 3.3) — видимая пометка
+// вместо выдуманных данных.
+// ================================================================
+import { REQUISITES, REQUISITES_READY, STATUS_LABEL, CITY } from '../data/site';
+---
+<section class="requisites" aria-labelledby="requisites-title">
+    <h2 class="requisites__title" id="requisites-title">Реквизиты</h2>
+    {REQUISITES_READY ? (
+        <address class="requisites__body">
+            <div><span class="requisites__key">ФИО</span> {REQUISITES.fullName}</div>
+            <div><span class="requisites__key">Статус</span> {STATUS_LABEL[REQUISITES.status!]}</div>
+            <div><span class="requisites__key">ИНН</span> {REQUISITES.inn}</div>
+            {REQUISITES.ogrnip && (
+                <div><span class="requisites__key">ОГРНИП</span> {REQUISITES.ogrnip}</div>
+            )}
+            <div><span class="requisites__key">Город</span> {CITY}</div>
+        </address>
+    ) : (
+        <p class="requisites__todo">
+            <!-- TODO(владелец): статус (самозанятый / ИП), ИНН, для ИП — ОГРНИП. -->
+            Реквизиты уточняются. Задать вопрос об оформлении услуг можно
+            в любом мессенджере из блока выше.
+        </p>
+    )}
+</section>

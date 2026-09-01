@@ -1,0 +1,35 @@
+---
+// ================================================================
+// Footer.astro — служебные ссылки, копирайт и реквизиты исполнителя.
+//
+// TODO(владелец) — БЛОКЕР задачи 3.3: ждём налоговый статус
+// (самозанятый / ИП), ИНН и, для ИП, ОГРНИП. Как только REQUISITES
+// в src/data/site.ts заполнены, блок реквизитов появляется здесь
+// и на /contacts/ автоматически — вёрстка уже готова.
+// ================================================================
+import {
+    FOOTER_LINKS, YEAR, COACH_NAME, CITY,
+    REQUISITES, REQUISITES_READY, STATUS_LABEL,
+} from '../data/site';
+---
+<footer class="site-footer">
+    <nav class="site-footer__nav" aria-label="Служебные страницы">
+        {FOOTER_LINKS.map((l) => (
+            <a class="site-footer__link" href={l.href}>{l.label}</a>
+        ))}
+    </nav>
+
+    <div class="site-footer__meta">
+        <div>© {YEAR} {COACH_NAME}</div>
+        <div>{CITY}</div>
+    </div>
+
+    {REQUISITES_READY && (
+        <address class="site-footer__requisites">
+            <span>{REQUISITES.fullName}</span>
+            <span>{STATUS_LABEL[REQUISITES.status!]}</span>
+            <span>ИНН {REQUISITES.inn}</span>
+            {REQUISITES.ogrnip && <span>ОГРНИП {REQUISITES.ogrnip}</span>}
+        </address>
+    )}
+</footer>

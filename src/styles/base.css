@@ -1,0 +1,151 @@
+/* ================================================================
+   БАЗА — Reset, типографика, утилиты
+   ================================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    /* Якорь не уезжает под фиксированную шапку (заменяет offset у Lenis). */
+    scroll-padding-top: calc(var(--nav-h) + 12px);
+    /* Декоративные слова за краем экрана не должны давать горизонтальный скролл. */
+    overflow-x: clip;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    overflow-wrap: break-word;
+}
+
+/* Блокировка скролла фона при открытом дровере (задача 4.2). */
+html.is-drawer-open,
+html.is-drawer-open body {
+    overflow: hidden;
+}
+
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* Утилиты */
+.display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+}
+
+.display--skew {
+    display: inline-block;
+    transform: skewX(-6deg);
+}
+
+.kicker {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+}
+
+.kicker::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: currentColor;
+    vertical-align: middle;
+    margin-right: 14px;
+    margin-bottom: 3px;
+}
+
+section {
+    position: relative;
+}
+
+/* Мягкий snap оставляем только там, где секции задумывались в высоту экрана.
+   На мобильных секции выше вьюпорта — снап там мешает, а не помогает. */
+@media (min-width: 961px) and (prefers-reduced-motion: no-preference) {
+    html { scroll-snap-type: y proximity; }
+    section { scroll-snap-align: start; }
+}
+
+/* Подзаголовок-продолжение h2: несёт поисковый запрос, не ломая афишную композицию. */
+.section-sub {
+    display: block;
+    margin-top: 14px;
+    max-width: 30ch;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(13px, 1.5vw, 17px);
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* ---------- Прелоадер-титр ----------
+   Полностью на CSS: без JS страница всё равно откроется через 400 мс.
+   JS лишь снимает слой раньше, если load случился быстрее. */
+.preloader {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: preload-out var(--dur-base) var(--ease-in-out) 220ms both;
+}
+
+.preloader.is-hidden {
+    animation: preload-out var(--dur-fast) var(--ease-in-out) both;
+}
+
+.preloader__mark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 8vw, 88px);
+    color: var(--paper);
+    letter-spacing: 0.05em;
+    transform: skewX(-6deg);
+    overflow: hidden;
+}
+
+/* Line-wipe: слово выезжает снизу вверх из-под маски. */
+.preloader__mark span {
+    display: block;
+    animation: preload-wipe 220ms var(--ease-out) both;
+}
+
+@keyframes preload-wipe {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+}
+
+@keyframes preload-out {
+    to {
+        transform: translateY(-100%);
+        visibility: hidden;
+    }
+}
+
+/* Фокус для доступности */
+:focus-visible {
+    outline: 2px solid var(--accent-red);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preloader { display: none; }
+}

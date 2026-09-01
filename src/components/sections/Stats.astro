@@ -1,0 +1,32 @@
+---
+// ================================================================
+// Stats.astro — достижения. Цифры анимируются счётчиком, но в DOM
+// сразу лежит финальное значение: без JS и для поисковиков — корректно.
+// ================================================================
+const STATS = [
+    { target: 18, label: 'Лет тренерского опыта' },
+    { target: 500, label: 'Воспитанников' },
+    { target: 16, label: 'Кандидатов в мастера спорта' },
+    { target: 12, label: 'Мастеров спорта' },
+];
+import '../../styles/sections/stats.css';
+
+---
+<section class="stats" id="stats" aria-label="Достижения тренера">
+    <div class="stats__grid">
+        {STATS.map((s, i) => (
+            <div class="stat reveal" data-delay={i || undefined}>
+                <div class="stat__num">
+                    <span class="stat-count" data-target={s.target}>{s.target}</span
+                    ><span class="stat__suffix">+</span>
+                </div>
+                <div class="stat__label">{s.label}</div>
+            </div>
+        ))}
+    </div>
+</section>
+
+<script>
+    import { initCounters } from '../../scripts/counters.js';
+    initCounters();
+</script>

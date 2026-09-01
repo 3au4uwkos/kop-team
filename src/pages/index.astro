@@ -1,0 +1,79 @@
+---
+// ================================================================
+// index.astro — главная. Все секции рендерятся статически:
+// в HTML сразу лежит весь текст, JS для его показа не нужен.
+// ================================================================
+import Base from '../layouts/Base.astro';
+import Hero from '../components/sections/Hero.astro';
+import Stats from '../components/sections/Stats.astro';
+import Legends from '../components/sections/Legends.astro';
+import Directions from '../components/sections/Directions.astro';
+import Combat from '../components/sections/Combat.astro';
+import Sambo from '../components/sections/Sambo.astro';
+import Striking from '../components/sections/Striking.astro';
+import Morning from '../components/sections/Morning.astro';
+import FpKids from '../components/sections/FpKids.astro';
+import Youth from '../components/sections/Youth.astro';
+import Merch from '../components/sections/Merch.astro';
+import Contacts from '../components/sections/Contacts.astro';
+
+import {
+    personSchema, locationSchema, exercisePlanSchemas, webSiteSchema,
+} from '../data/schema';
+
+const DIRECTIONS = [
+    {
+        name: 'Боевое самбо',
+        description: 'Прикладной раздел самбо: броски, удержания, удары, болевые и удушающие приёмы.',
+    },
+    {
+        name: 'Спортивное самбо',
+        description: 'Классическая борьба в куртке: броски, удержания, болевые приёмы.',
+    },
+    {
+        name: 'Ударная техника',
+        description: 'Работа руками и ногами, связки, защита, тактика поединка в стойке.',
+    },
+    {
+        name: 'Общая физическая подготовка для детей 4–6 лет',
+        description: 'Координация, ловкость, гибкость и базовая гимнастика в игровом формате.',
+    },
+    {
+        name: 'Утренняя зарядка',
+        description: 'Открытое бесплатное занятие на свежем воздухе в ЦПКиО им. Белоусова.',
+    },
+];
+
+const schema = [
+    webSiteSchema(),
+    personSchema(),
+    locationSchema(),
+    ...exercisePlanSchemas(DIRECTIONS),
+];
+---
+<Base
+    title="Тренер по самбо в Туле — Копейкин Павел Сергеевич | Мастер спорта"
+    description="Тренер по самбо в Туле — Копейкин Павел Сергеевич, мастер спорта России по самбо, рукопашному бою и боевому самбо. Группы: боевое самбо, спортивное самбо, ударная техника, ОФП для детей 4–6 лет, подростки, утренняя зарядка."
+    path="/"
+    schema={schema}
+    preloader
+    home
+>
+    <Hero />
+    <Stats />
+    <Legends />
+    <Directions />
+    <Combat />
+    <Sambo />
+    <Striking />
+    <Morning />
+    <FpKids />
+    <Youth />
+    <Merch />
+    <Contacts />
+</Base>
+
+<script>
+    import { initCarousels } from '../scripts/carousel.js';
+    initCarousels();
+</script>

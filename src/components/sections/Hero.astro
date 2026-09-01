@@ -1,0 +1,70 @@
+---
+// ================================================================
+// Hero.astro — первый экран: имя тренера и регалии.
+// TODO(владелец): портрет вместо силуэта-плейсхолдера (вне скоупа кода).
+// ================================================================
+import '../../styles/sections/hero.css';
+
+---
+<section class="hero" id="hero" aria-labelledby="hero-title">
+    <div class="bg-word bg-word--hero" aria-hidden="true">САМБО</div>
+
+    <div class="hero__content">
+        <blockquote class="hero__quote reveal" data-delay="1">
+            «Дисциплина — это мост между целью и результатом»
+        </blockquote>
+
+        <h1 class="hero__name reveal" data-delay="2" id="hero-title">
+            <span class="display hero__name-main">
+                <span class="hero__name-line"><span>Копейкин</span></span>
+                <span class="hero__name-line"><span>Павел</span></span>
+                <span class="hero__name-line"><span class="hero__name-accent">Сергеевич</span></span>
+            </span>
+            <span class="hero__name-sub">Тренер по самбо в Туле · мастер спорта России</span>
+        </h1>
+
+        <ul class="hero__regalia reveal" data-delay="3">
+            <li class="hero__regalia-item">
+                <span class="hero__regalia-num" aria-hidden="true">01</span>
+                <span class="hero__regalia-text">Тренер высшей категории</span>
+            </li>
+            <li class="hero__regalia-item">
+                <span class="hero__regalia-num" aria-hidden="true">02</span>
+                <span class="hero__regalia-text">Мастер спорта России по самбо, рукопашному бою, боевому самбо</span>
+            </li>
+            <li class="hero__regalia-item">
+                <span class="hero__regalia-num" aria-hidden="true">03</span>
+                <span class="hero__regalia-text">Тренерский стаж более 18 лет</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="hero__photo">
+        <div class="hero__photo-frame reveal" data-delay="2">
+            <div class="hero__photo-placeholder" role="img" aria-label="Фотография тренера">
+                <!--
+                  TODO(владелец): портрет тренера.
+                  <picture>
+                    <source srcset="/assets/img/hero/coach-portrait.avif" type="image/avif" />
+                    <source srcset="/assets/img/hero/coach-portrait.webp" type="image/webp" />
+                    <img src="/assets/img/hero/coach-portrait.jpg" width="1040" height="1387"
+                         alt="Копейкин Павел Сергеевич, тренер по самбо" fetchpriority="high" />
+                  </picture>
+                -->
+                <svg class="hero__silhouette" viewBox="0 0 200 300"
+                     preserveAspectRatio="xMidYEnd meet" aria-hidden="true">
+                    <circle cx="100" cy="50" r="28" fill="#F7F7F8" />
+                    <path d="M 60 85 L 140 85 L 155 180 L 45 180 Z" fill="#F7F7F8" />
+                    <path d="M 45 95 L 25 170 L 45 175 L 60 105 Z" fill="#F7F7F8" />
+                    <path d="M 155 95 L 175 170 L 155 175 L 140 105 Z" fill="#F7F7F8" />
+                </svg>
+                <div class="hero__photo-tag">Фото · Тренер по пояс</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+        <span>Листай вниз</span>
+        <span class="hero__scroll-line"></span>
+    </div>
+</section>

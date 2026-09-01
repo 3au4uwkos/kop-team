@@ -1,0 +1,42 @@
+/* ================================================================
+   ДИЗАЙН-ТОКЕНЫ
+   ================================================================ */
+:root {
+    /* Цвета — палитра премиум-минимализма под самбо */
+    --ink:       #0E0E10;
+    --paper:     #F7F7F8;
+    --paper-alt: #EDEDEF;
+    --muted:     #6E6E73;
+    --line:      #DADADE;
+    --accent-red:  #E4002B;
+    --accent-blue: #0033A0;
+
+    /* Типографика */
+    --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+    --font-body:    'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Ритм */
+    --section-pad: clamp(60px, 10vh, 140px);
+    --gutter:      clamp(20px, 5vw, 80px);
+    --nav-h:       72px;
+    /* Минимальная тап-цель по рекомендациям WCAG / Lighthouse */
+    --tap:         44px;
+
+    /* ---------- Моушн-токены ----------
+       Единый ритм движения: сырых длительностей в CSS быть не должно. */
+    --dur-fast:  180ms;
+    --dur-base:  320ms;
+    --dur-slow:  620ms;
+    --dur-reveal: 720ms;
+
+    --ease-out:     cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in-out:  cubic-bezier(0.87, 0, 0.13, 1);
+
+    /* Совместимость со старыми именами внутри секционных стилей */
+    --ease-out-quart:   var(--ease-out);
+    --ease-in-out-expo: var(--ease-in-out);
+}
+
+@media (max-width: 960px) {
+    :root { --nav-h: 64px; }
+}

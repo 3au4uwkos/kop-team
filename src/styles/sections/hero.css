@@ -1,0 +1,221 @@
+/* ================================================================
+   СЕКЦИЯ 1: HERO — тренер + регалии
+   ================================================================ */
+.hero {
+    min-height: 100vh;   /* fallback */
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    align-items: stretch;
+    padding: calc(var(--nav-h) + 48px) var(--gutter) 60px;
+    position: relative;
+    overflow: hidden;
+    background: var(--paper);
+}
+
+.hero__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(20px, 3vh, 36px);
+}
+
+.hero__quote {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(13px, 1.3vw, 18px);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent-red);
+    padding-left: 20px;
+    border-left: 2px solid var(--accent-red);
+    max-width: 420px;
+    line-height: 1.4;
+}
+
+.hero__name-main {
+    display: block;
+    font-size: clamp(44px, 8vw, 120px);
+    letter-spacing: -0.02em;
+}
+
+.hero__name-sub {
+    display: block;
+    margin-top: 16px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(13px, 1.5vw, 17px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    max-width: 32ch;
+    line-height: 1.4;
+}
+
+.hero__name-line {
+    display: block;
+    overflow: hidden;
+}
+
+.hero__name-line span {
+    display: inline-block;
+    transform: skewX(-6deg);
+}
+
+.hero__name-accent {
+    color: var(--accent-red);
+}
+
+.hero__regalia {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 480px;
+    list-style: none;
+}
+
+.hero__regalia-item {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+    transition: padding-left var(--dur-base) var(--ease-out);
+}
+
+.hero__regalia-item:last-child { border-bottom: 1px solid var(--line); }
+
+.hero__regalia-num {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    min-width: 24px;
+}
+
+.hero__regalia-text { font-weight: 500; }
+
+.hero__scroll {
+    position: absolute;
+    left: var(--gutter);
+    bottom: calc(32px + env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink);
+    z-index: 2;
+}
+
+.hero__scroll-line {
+    width: 72px;
+    height: 2px;
+    background: rgba(14, 14, 16, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero__scroll-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--ink);
+    animation: scroll-line 2.4s infinite var(--ease-in-out);
+}
+
+/* Фото тренера */
+.hero__photo {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.hero__photo-frame {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 3 / 4;
+}
+
+.hero__photo-frame::before {
+    content: '';
+    position: absolute;
+    left: -40px;
+    top: 40px;
+    right: 20px;
+    bottom: -20px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--ink));
+    z-index: 0;
+}
+
+.hero__photo-placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, transparent 40%, rgba(14, 14, 16, 0.55) 100%),
+        linear-gradient(135deg, #2a2a2e 0%, #0E0E10 100%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 24px;
+    overflow: hidden;
+}
+
+.hero__silhouette {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 85%;
+    opacity: 0.35;
+}
+
+.hero__photo-tag {
+    position: absolute;
+    z-index: 2;
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(247, 247, 248, 0.6);
+    padding: 8px 14px;
+    border: 1px solid rgba(247, 247, 248, 0.2);
+    bottom: 24px;
+    left: 24px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .hero__regalia-item:hover { padding-left: 12px; }
+}
+
+/* Адаптив */
+@media (max-width: 960px) {
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding-top: calc(var(--nav-h) + 36px);
+    }
+    .hero__photo-frame { max-width: 380px; margin: 0 auto; }
+    .hero__scroll { display: none; }
+}
+
+/* Альбомная ориентация на телефоне: экран низкий, hero не должен упираться. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .hero { min-height: auto; padding-bottom: 40px; }
+    .hero__photo { display: none; }
+}

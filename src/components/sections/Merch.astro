@@ -1,0 +1,69 @@
+---
+// ================================================================
+// Merch.astro — единая форма команды.
+// ================================================================
+const ITEMS = [
+    {
+        num: '01', title: 'Футболки', mod: 'tee',
+        desc: 'Базовый элемент формы — для тренировок, разминок и выездов.',
+        path: 'M30 28 L50 22 Q60 34 70 22 L90 28 L100 44 L82 50 L82 98 L38 98 L38 50 L20 44 Z',
+    },
+    {
+        num: '02', title: 'Нашивки', mod: 'patch',
+        desc: 'Нашивки на куртки самбо. Знак принадлежности к команде на соревнованиях и сборах.',
+        path: 'M60 16 L100 30 L94 78 Q78 98 60 104 Q42 98 26 78 L20 30 Z',
+        extra: 'M46 58 L56 68 L76 48',
+    },
+    {
+        num: '03', title: 'Спортивные костюмы', mod: 'suit',
+        desc: 'Парадная и выездная экипировка — для сборов и соревнований. Узнаваемый силуэт команды в одном кадре.',
+        path: 'M38 14 L60 22 L82 14 L92 38 L86 46 L86 104 L34 104 L34 46 L28 38 Z',
+        line: true,
+    },
+];
+import '../../styles/sections/merch.css';
+
+---
+<section class="merch" id="merch" aria-labelledby="merch-title">
+    <div class="bg-word bg-word--merch" aria-hidden="true">ЕДИНСТВО</div>
+
+    <div class="merch__head">
+        <div class="merch__head-left">
+            <h2 class="display merch__title reveal" data-delay="1" id="merch-title">
+                <span class="display--skew">Один ковёр.</span><br>
+                <span class="display--skew merch__title-accent">Одна форма.</span>
+            </h2>
+        </div>
+        <p class="merch__intro reveal" data-delay="2">
+            Единая экипировка — это не про моду. Это про ощущение: ты часть команды,
+            у которой общая цель и общий ритм. Футболки, нашивки на куртки и спортивные
+            костюмы с символикой команды — чтобы узнавать своих не только на татами,
+            но и за его пределами.
+        </p>
+    </div>
+
+    <div class="merch__grid">
+        {ITEMS.map((it, i) => (
+            <article class="merch-card reveal" data-delay={i + 1}>
+                <div class:list={['merch-card__media', 'merch-card__media--' + it.mod]} aria-hidden="true">
+                    <svg class="merch-card__icon" viewBox="0 0 120 120" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <path d={it.path} />
+                        {it.extra && <path d={it.extra} stroke-linecap="round" stroke-linejoin="round" />}
+                        {it.line && <line x1="60" y1="24" x2="60" y2="104" />}
+                    </svg>
+                </div>
+                <div class="merch-card__body">
+                    <div class="merch-card__num">{it.num}</div>
+                    <h3 class="merch-card__title">{it.title}</h3>
+                    <p class="merch-card__desc">{it.desc}</p>
+                </div>
+            </article>
+        ))}
+    </div>
+
+    <div class="merch__foot reveal" data-delay="3">
+        <div class="merch__foot-line" aria-hidden="true"></div>
+        <p class="merch__foot-text">Ассортимент и размеры — по запросу в мессенджерах.</p>
+    </div>
+</section>

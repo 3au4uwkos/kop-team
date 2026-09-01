@@ -1,0 +1,140 @@
+/* ================================================================
+   СЕКЦИЯ: КОНТАКТЫ / блок записи
+   ================================================================ */
+.contacts {
+    min-height: 80vh;   /* fallback */
+    min-height: 80svh;
+    padding: var(--section-pad) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 60px;
+    background: var(--paper);
+}
+
+.contacts__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+}
+
+.contacts__title-main {
+    display: block;
+    font-size: clamp(44px, 9vw, 160px);
+    line-height: 0.9;
+}
+
+.contacts__title-sub {
+    display: block;
+    margin-top: 16px;
+    max-width: 30ch;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(13px, 1.5vw, 17px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.contacts__title-line {
+    display: block;
+    overflow: hidden;
+}
+
+.contacts__title-line span { display: inline-block; transform: skewX(-6deg); }
+
+.contacts__lead {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 360px;
+    line-height: 1.65;
+}
+
+/* ---------- Мессенджеры ---------- */
+.socials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    border-top: 1px solid var(--line);
+}
+
+.social {
+    padding: 26px 24px;
+    min-height: 88px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: background var(--dur-base) ease, color var(--dur-base) ease,
+                padding-left var(--dur-base) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+}
+
+.social:last-child { border-right: none; }
+
+.social__name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.social__mark {
+    color: var(--accent-red);
+    font-size: 0.9em;
+    vertical-align: super;
+    line-height: 0;
+    margin-left: 1px;
+}
+
+.social__handle {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color var(--dur-base) ease;
+}
+
+.social__arrow {
+    margin-left: auto;
+    transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* Штрих стрелки прорисовывается при наведении/фокусе. */
+.social__arrow path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+}
+
+.socials__note {
+    margin-top: 14px;
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 720px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .social:hover {
+        background: var(--ink);
+        color: var(--paper);
+        padding-left: 36px;
+    }
+    .social:hover .social__handle { color: rgba(247, 247, 248, 0.6); }
+    .social:hover .social__arrow { transform: translateX(6px); }
+    .social:hover .social__arrow path {
+        animation: stroke-draw var(--dur-slow) var(--ease-out) both;
+    }
+}
+
+.social:focus-visible .social__arrow { transform: translateX(6px); }
+
+@media (max-width: 960px) {
+    .contacts__head {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .socials { grid-template-columns: 1fr; }
+    .social { border-right: none; }
+}

@@ -1,0 +1,252 @@
+/* ================================================================
+   СЕКЦИЯ: НАПРАВЛЕНИЯ ПОДГОТОВКИ
+   Полный экран, три клиновидных сектора по 120°.
+   Границы клиньев в CSS-координатах (Y вниз): 90° / 210° / 330°.
+   Ниже 560 px — вертикальный список из трёх карточек (задача 4.4).
+   ================================================================ */
+.directions {
+    position: relative;
+    height: 100vh;   /* fallback */
+    height: 100svh;
+    min-height: 600px;
+    width: 100%;
+    overflow: hidden;
+    background: var(--ink);
+}
+
+.direction-sector {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+    transform-origin: 50% 50%;
+}
+
+.direction-sector--combat   { clip-path: polygon(50% 50%, -123% -50%, 223% -50%); }
+.direction-sector--sambo    { clip-path: polygon(50% 50%, 223% -50%, 50% 250%); }
+.direction-sector--striking { clip-path: polygon(50% 50%, 50% 250%, -123% -50%); }
+
+/* Медиа (постер и видео) */
+.direction-sector__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+    transition: opacity var(--dur-slow) var(--ease-out),
+                transform var(--dur-slow) var(--ease-out);
+}
+
+/* Градиенты-плейсхолдеры вместо инлайн-стилей: CSP style-src 'self'. */
+.direction-sector--combat .direction-sector__media--img {
+    background-image: linear-gradient(135deg, #2a2a2e 0%, #0E0E10 100%);
+}
+.direction-sector--sambo .direction-sector__media--img {
+    background-image: linear-gradient(135deg, #E4002B 0%, #0E0E10 100%);
+}
+.direction-sector--striking .direction-sector__media--img {
+    background-image: linear-gradient(135deg, #0033A0 0%, #0E0E10 100%);
+}
+
+.direction-sector__media--img { opacity: 1; }
+.direction-sector__media--video { opacity: 0; }
+
+/* Раскрытый сектор: постер уходит, видео проявляется.
+   is-active ставится из JS (тач: первое касание). */
+.direction-sector.is-active .direction-sector__media--img,
+.direction-sector:focus-visible .direction-sector__media--img {
+    opacity: 0;
+    transform: scale(1.03);
+}
+.direction-sector.is-active .direction-sector__media--video,
+.direction-sector:focus-visible .direction-sector__media--video {
+    opacity: 1;
+}
+
+.direction-sector__veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(14, 14, 16, 0.15) 0%, rgba(14, 14, 16, 0.75) 100%);
+    z-index: 1;
+    transition: opacity var(--dur-slow) ease;
+    pointer-events: none;
+}
+
+.direction-sector.is-active .direction-sector__veil { opacity: 0.7; }
+
+/* ---------- Подпись сектора ---------- */
+.direction-sector__label {
+    position: absolute;
+    z-index: 2;
+    color: var(--paper);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.direction-sector--combat .direction-sector__label {
+    top: 14%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    align-items: center;
+}
+
+.direction-sector--sambo .direction-sector__label {
+    right: 7%;
+    bottom: 18%;
+    text-align: right;
+    align-items: flex-end;
+}
+
+.direction-sector--striking .direction-sector__label {
+    left: 7%;
+    bottom: 18%;
+    text-align: left;
+    align-items: flex-start;
+}
+
+.direction-sector__num {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: rgba(247, 247, 248, 0.65);
+    font-weight: 500;
+}
+
+.direction-sector__num::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: currentColor;
+    vertical-align: middle;
+    margin-right: 10px;
+    margin-bottom: 3px;
+}
+
+.direction-sector__name {
+    font-size: clamp(28px, 4vw, 60px);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+}
+
+.direction-sector__arrow {
+    font-size: 24px;
+    line-height: 1;
+    opacity: 0.6;
+    transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-base) ease;
+}
+
+.direction-sector.is-active .direction-sector__arrow { opacity: 1; }
+
+/* ---------- Разделительные лучи ---------- */
+.directions__dividers {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    overflow: visible;
+}
+
+.directions__divider-line {
+    stroke: var(--paper);
+    stroke-width: 0.15;
+    stroke-opacity: 0.35;
+    vector-effect: non-scaling-stroke;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .direction-sector:hover .direction-sector__media--img { opacity: 0; transform: scale(1.03); }
+    .direction-sector:hover .direction-sector__media--video { opacity: 1; }
+    .direction-sector:hover .direction-sector__veil { opacity: 0.7; }
+    .direction-sector:hover .direction-sector__arrow { opacity: 1; transform: translateX(12px); }
+    .direction-sector--combat:hover .direction-sector__arrow { transform: translateY(-8px); }
+    .direction-sector--striking:hover .direction-sector__arrow { transform: translateX(-12px); }
+}
+
+/* ---------- Планшет: три горизонтальные полосы ---------- */
+@media (max-width: 960px) and (min-width: 561px) {
+    .directions {
+        height: auto;
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+    }
+    .direction-sector {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        flex: 1 0 33.333svh;
+        min-height: 220px;
+        clip-path: none;
+    }
+    .direction-sector--combat .direction-sector__label,
+    .direction-sector--sambo .direction-sector__label,
+    .direction-sector--striking .direction-sector__label {
+        top: 50%;
+        left: 7%;
+        right: auto;
+        bottom: auto;
+        transform: translateY(-50%);
+        text-align: left;
+        align-items: flex-start;
+    }
+    .directions__dividers { display: none; }
+    .direction-sector + .direction-sector {
+        border-top: 1px solid rgba(247, 247, 248, 0.12);
+    }
+}
+
+/* ---------- Мобильный: вертикальный список карточек (задача 4.4) ----------
+   SVG-диаграмма из клиньев на 360 px нечитаема — те же три ссылки
+   с теми же данными и переходами превращаются в карточки. */
+@media (max-width: 560px) {
+    .directions {
+        height: auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: var(--section-pad) var(--gutter);
+    }
+
+    .direction-sector {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        min-height: 168px;
+        clip-path: none;
+        border: 1px solid rgba(247, 247, 248, 0.14);
+        display: flex;
+        align-items: center;
+    }
+
+    .direction-sector__media--video { display: none; }
+
+    .direction-sector__veil {
+        background: linear-gradient(90deg, rgba(14, 14, 16, 0.82) 30%, rgba(14, 14, 16, 0.25) 100%);
+    }
+
+    .direction-sector--combat .direction-sector__label,
+    .direction-sector--sambo .direction-sector__label,
+    .direction-sector--striking .direction-sector__label {
+        position: static;
+        transform: none;
+        text-align: left;
+        align-items: flex-start;
+        padding: 22px;
+        gap: 8px;
+    }
+
+    .direction-sector__name { font-size: 28px; }
+
+    .directions__dividers { display: none; }
+}
