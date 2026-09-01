@@ -67,13 +67,16 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    transition: background var(--dur-base) ease, color var(--dur-base) ease,
-                padding-left var(--dur-base) var(--ease-out);
+    transition: background var(--dur-base) ease, color var(--dur-base) ease;
     position: relative;
     overflow: hidden;
 }
 
 .social:last-child { border-right: none; }
+
+.social__text {
+    transition: transform var(--dur-base) var(--ease-out);
+}
 
 .social__name {
     font-family: var(--font-display);
@@ -119,8 +122,8 @@
     .social:hover {
         background: var(--ink);
         color: var(--paper);
-        padding-left: 36px;
     }
+    .social:hover .social__text { transform: translateX(12px); }
     .social:hover .social__handle { color: rgba(247, 247, 248, 0.6); }
     .social:hover .social__arrow { transform: translateX(6px); }
     .social:hover .social__arrow path {

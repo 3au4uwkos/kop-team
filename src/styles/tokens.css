@@ -29,6 +29,13 @@
     --dur-base:  320ms;
     --dur-slow:  620ms;
     --dur-reveal: 720ms;
+    /* Шаг лестницы появления: data-delay="N" -> N x --dur-stagger. */
+    --dur-stagger: 80ms;
+    /* Титр прелоадера: line-wipe. */
+    --dur-wipe:  220ms;
+    /* Зацикленные декорации — заметно медленнее интерфейсных переходов. */
+    --dur-loop:      2s;
+    --dur-loop-slow: 2.4s;
 
     --ease-out:     cubic-bezier(0.25, 1, 0.5, 1);
     --ease-in-out:  cubic-bezier(0.87, 0, 0.13, 1);

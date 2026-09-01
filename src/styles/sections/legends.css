@@ -35,7 +35,7 @@
     content: '\25CF';
     color: var(--accent-red);
     margin-right: 8px;
-    animation: pulse-dot 2s infinite;
+    animation: pulse-dot var(--dur-loop) infinite;
 }
 
 .legends__head {

@@ -12,7 +12,7 @@ const needsNote = SOCIALS.some((s) => s.metaMarked);
 <div class="socials" aria-label={heading}>
     {SOCIALS.map((s) => (
         <a href={s.href} class="social" rel="noopener noreferrer" target="_blank">
-            <div>
+            <div class="social__text">
                 <div class="social__name">
                     {s.name}{s.metaMarked && <span class="social__mark" aria-hidden="true">*</span>}
                 </div>

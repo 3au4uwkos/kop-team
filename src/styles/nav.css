@@ -79,18 +79,19 @@
 .nav__link::after {
     content: '';
     position: absolute;
-    left: 50%;
-    right: 50%;
+    left: 0;
+    right: 0;
     bottom: 9px;
     height: 2px;
     background: var(--accent-red);
-    transition: left var(--dur-base) var(--ease-out), right var(--dur-base) var(--ease-out);
+    /* Раскрытие от центра — scaleX, а не left/right: без пересчёта раскладки. */
+    transform: scaleX(0);
+    transition: transform var(--dur-base) var(--ease-out);
 }
 
 .nav__link.is-active::after,
 .nav__link:focus-visible::after {
-    left: 0;
-    right: 0;
+    transform: scaleX(1);
 }
 
 .nav__cta {
@@ -202,7 +203,7 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    transition: color var(--dur-base) ease, padding-left var(--dur-base) var(--ease-out);
+    transition: color var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
 }
 
 .nav__drawer-foot {
@@ -215,10 +216,10 @@
 
 /* ---------- Hover — только там, где есть настоящий курсор ---------- */
 @media (hover: hover) and (pointer: fine) {
-    .nav__link:hover::after { left: 0; right: 0; }
+    .nav__link:hover::after { transform: scaleX(1); }
     .nav__cta:hover { transform: translateY(-2px); }
     .nav__cta:hover::before { transform: scaleX(1); }
-    .nav__drawer-link:hover { color: var(--accent-red); padding-left: 12px; }
+    .nav__drawer-link:hover { color: var(--accent-red); transform: translateX(12px); }
 }
 
 /* ---------- Адаптив ---------- */

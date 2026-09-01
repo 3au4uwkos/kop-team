@@ -83,7 +83,10 @@
     padding: 14px 0;
     border-top: 1px solid var(--line);
     font-size: 15px;
-    transition: padding-left var(--dur-base) var(--ease-out);
+}
+
+.hero__regalia-item > span {
+    transition: transform var(--dur-base) var(--ease-out);
 }
 
 .hero__regalia-item:last-child { border-bottom: 1px solid var(--line); }
@@ -130,7 +133,7 @@
     width: 100%;
     height: 100%;
     background: var(--ink);
-    animation: scroll-line 2.4s infinite var(--ease-in-out);
+    animation: scroll-line var(--dur-loop-slow) infinite var(--ease-in-out);
 }
 
 /* Фото тренера */
@@ -200,7 +203,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .hero__regalia-item:hover { padding-left: 12px; }
+    .hero__regalia-item:hover > span { transform: translateX(12px); }
 }
 
 /* Адаптив */

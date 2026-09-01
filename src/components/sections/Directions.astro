@@ -12,8 +12,9 @@ const SECTORS = [
 import '../../styles/sections/directions.css';
 
 ---
-<section class="directions" id="directions" aria-labelledby="directions-title">
+<section class="directions grain" id="directions" aria-labelledby="directions-title">
     <h2 class="visually-hidden" id="directions-title">Направления подготовки в Туле</h2>
+    <div class="bg-word bg-word--directions" aria-hidden="true">ВЫБОР</div>
 
     {SECTORS.map((s) => (
         <a href={`#${s.id}`}

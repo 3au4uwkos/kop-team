@@ -95,6 +95,36 @@
     color: rgba(14, 14, 16, 0.04);
 }
 
+.bg-word--legends {
+    right: -3vw;
+    bottom: 2vh;
+    font-size: clamp(140px, 20vw, 320px);
+    color: rgba(14, 14, 16, 0.045);
+}
+
+.bg-word--stats {
+    right: 2vw;
+    top: 50%;
+    translate: 0 -50%;
+    font-size: clamp(90px, 12vw, 190px);
+    color: rgba(247, 247, 248, 0.045);
+}
+
+.bg-word--directions {
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    font-size: clamp(120px, 18vw, 300px);
+    color: rgba(247, 247, 248, 0.05);
+}
+
+.bg-word--contacts {
+    right: -3vw;
+    bottom: -2vh;
+    font-size: clamp(140px, 22vw, 340px);
+    color: var(--paper-alt);
+}
+
 /* ---------- Зерно на тёмных секциях ----------
    SVG feTurbulence как data-URI: ни одного лишнего запроса. */
 .grain::after {
@@ -113,6 +143,8 @@
     position: relative;
     height: 0;
     overflow: visible;
+    /* Секции идут следом и перекрыли бы дугу собственным фоном. */
+    z-index: 6;
 }
 
 .mat-rule::before {
@@ -128,6 +160,12 @@
     border-radius: 50% 50% 0 0 / 100% 100% 0 0;
     opacity: 0.5;
     pointer-events: none;
+}
+
+/* Вариант для тёмной секции снизу. */
+.mat-rule--ink::before {
+    border-color: rgba(247, 247, 248, 0.18);
+    opacity: 1;
 }
 
 /* ---------- Раскрывающееся описание («Подробнее») ----------
@@ -258,12 +296,13 @@
 .site-footer__link::after {
     content: '';
     position: absolute;
-    left: 50%;
-    right: 50%;
+    left: 0;
+    right: 0;
     bottom: 6px;
     height: 1px;
     background: var(--accent-red);
-    transition: left var(--dur-base) var(--ease-out), right var(--dur-base) var(--ease-out);
+    transform: scaleX(0);
+    transition: transform var(--dur-base) var(--ease-out);
 }
 
 .site-footer__meta {
@@ -287,10 +326,10 @@
 
 @media (hover: hover) and (pointer: fine) {
     .site-footer__link:hover { color: var(--ink); }
-    .site-footer__link:hover::after { left: 0; right: 0; }
+    .site-footer__link:hover::after { transform: scaleX(1); }
 }
 
-.site-footer__link:focus-visible::after { left: 0; right: 0; }
+.site-footer__link:focus-visible::after { transform: scaleX(1); }
 
 @media (max-width: 560px) {
     .site-footer {

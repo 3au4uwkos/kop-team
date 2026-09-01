@@ -220,12 +220,12 @@
     width: 22px;
     height: 2px;
     background: rgba(247, 247, 248, 0.25);
-    transition: background var(--dur-base) ease, width var(--dur-base) var(--ease-out);
+    transition: background var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
 }
 
 .youth-camps__dot.is-active::before {
     background: var(--accent-red);
-    width: 30px;
+    transform: scaleX(1.4);
 }
 
 @media (hover: hover) and (pointer: fine) {

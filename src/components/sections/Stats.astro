@@ -12,7 +12,8 @@ const STATS = [
 import '../../styles/sections/stats.css';
 
 ---
-<section class="stats" id="stats" aria-label="Достижения тренера">
+<section class="stats grain" id="stats" aria-label="Достижения тренера">
+    <div class="bg-word bg-word--stats" aria-hidden="true">ИТОГ</div>
     <div class="stats__grid">
         {STATS.map((s, i) => (
             <div class="stat reveal" data-delay={i || undefined}>
