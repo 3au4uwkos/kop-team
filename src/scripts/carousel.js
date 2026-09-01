@@ -40,8 +40,15 @@ export function initCarousel(root) {
             else d.removeAttribute('aria-current');
         });
         if (countEl) countEl.textContent = `${pad(i + 1)} / ${pad(slides.length)}`;
-        if (prev) prev.disabled = i === 0;
-        if (next) next.disabled = i === slides.length - 1;
+    }
+
+    // Состояние стрелок считаем по прокрутке, а не по номеру слайда:
+    // в широком треке видно сразу несколько карточек, и последние из них
+    // уже показаны, когда индекс ещё не дошёл до конца списка.
+    function updateButtons() {
+        const max = track.scrollWidth - track.clientWidth;
+        if (prev) prev.disabled = track.scrollLeft <= 1;
+        if (next) next.disabled = track.scrollLeft >= max - 1;
     }
 
     // Текущий слайд — тот, чей левый край ближе всего к левому краю трека.
@@ -54,6 +61,7 @@ export function initCarousel(root) {
             if (d < min) { min = d; best = i; }
         });
         render(best);
+        updateButtons();
     }
 
     let frame = 0;
@@ -79,8 +87,15 @@ export function initCarousel(root) {
         if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
     });
 
+    // Пересчёт при смене ширины: число видимых карточек меняется вместе с ней.
+    window.addEventListener('resize', () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(sync);
+    }, { passive: true });
+
     sync();
     render(index < 0 ? 0 : index);
+    updateButtons();
 }
 
 export function initCarousels(root = document) {
