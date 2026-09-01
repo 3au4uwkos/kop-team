@@ -130,6 +130,99 @@
     pointer-events: none;
 }
 
+/* ---------- Раскрывающееся описание («Подробнее») ----------
+   Общий блок: используется и в светлых split-секциях,
+   и в тёмной подростковой. */
+.details {
+    max-width: 62ch;
+    margin-top: 8px;
+    border-top: 1px solid var(--line);
+}
+
+.details > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 0;
+    min-height: var(--tap);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+.details > summary::-webkit-details-marker { display: none; }
+
+.details > summary::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid var(--accent-red);
+    border-bottom: 1.5px solid var(--accent-red);
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform var(--dur-base) var(--ease-out);
+}
+
+.details[open] > summary::after {
+    transform: rotate(-135deg) translateY(-2px);
+}
+
+.details-body {
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.details-body h3 {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.details-body p,
+.details-body li {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+}
+
+.details-body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.details-body li {
+    position: relative;
+    padding-left: 18px;
+}
+
+.details-body li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 8px;
+    height: 1px;
+    background: var(--accent-red);
+}
+
+/* Тёмный вариант — для секций на ink-фоне. */
+.details--dark { border-top-color: rgba(247, 247, 248, 0.14); }
+.details--dark > summary { color: var(--paper); }
+.details--dark .details-body h3 { color: rgba(247, 247, 248, 0.55); }
+.details--dark .details-body p,
+.details--dark .details-body li { color: rgba(247, 247, 248, 0.85); }
+
 /* ---------- Футер сайта ---------- */
 .site-footer {
     padding: 40px var(--gutter) calc(32px + env(safe-area-inset-bottom));

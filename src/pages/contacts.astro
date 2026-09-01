@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import Socials from '../components/Socials.astro';
+import Requisites from '../components/Requisites.astro';
+import { locationSchema, personSchema, breadcrumbSchema } from '../data/schema';
+import { PHONE, PHONE_HUMAN, CITY } from '../data/site';
+import '../styles/page.css';
+import '../styles/sections/contacts.css';
+
+const crumbs = [
+    { name: 'Главная', path: '/' },
+    { name: 'Контакты', path: '/contacts/' },
+];
+
+// Статичная ссылка на Яндекс.Карты: без тяжёлого embed и без сторонних скриптов.
+// TODO(владелец): заменить поисковый запрос на точку зала, когда будет адрес.
+const YANDEX_MAPS = 'https://yandex.ru/maps/15/tula/';
+const PARK_MAPS = 'https://yandex.ru/maps/org/tsentralnyy_park_kultury_i_otdykha_imeni_p_p_belousova/1080190431/';
+---
+<Base
+    title="Контакты — тренер по самбо в Туле Копейкин П. С."
+    description="Как связаться с тренером по самбо в Туле: Telegram, WhatsApp, VK. Запись на тренировки только через мессенджеры — форм и сбора персональных данных на сайте нет."
+    path="/contacts/"
+    schema={[personSchema(), locationSchema(), breadcrumbSchema(crumbs)]}
+>
+    <div class="page">
+        <Crumbs items={crumbs} />
+        <h1 class="page__title">Контакты</h1>
+        <p class="page__lead">
+            Запись на тренировки идёт только перепиской в мессенджерах — так быстрее
+            и не нужно оставлять персональные данные на сайте. Отвечаю в течение дня.
+        </p>
+
+        <Socials heading="Мессенджеры и соцсети" />
+
+        <div class="prose">
+            <h2>Телефон</h2>
+            <p>
+                <a href={`tel:${PHONE}`}>{PHONE_HUMAN}</a> — этот же номер в WhatsApp.
+                Сообщение обычно доходит быстрее звонка: во время тренировки телефон
+                лежит в сумке.
+            </p>
+
+            <h2>Где проходят тренировки</h2>
+            <p>
+                Город — {CITY}. Зал и площадки зависят от направления и формата занятий:
+                точный адрес и как добраться тренер присылает при записи, вместе
+                с расписанием.
+            </p>
+            <p>
+                <!-- TODO(владелец): адрес зала — улица, дом, ориентир, как добраться. -->
+                Открытая утренняя зарядка проходит в Центральном парке культуры и отдыха
+                имени П. П. Белоусова по вторникам.
+            </p>
+
+            <a class="map-link" href={PARK_MAPS} target="_blank" rel="noopener noreferrer">
+                <div class="map-link__body">
+                    <span class="map-link__title">ЦПКиО им. П. П. Белоусова</span>
+                    <span class="map-link__note">
+                        Открыть на Яндекс.Картах — место открытой утренней зарядки.
+                        Карта открывается в новой вкладке: тяжёлый интерактивный
+                        виджет на страницу не подключается.
+                    </span>
+                </div>
+            </a>
+
+            <h2>{CITY} на карте</h2>
+            <p>
+                <a href={YANDEX_MAPS} target="_blank" rel="noopener noreferrer">Тула на Яндекс.Картах</a> —
+                ориентир для тех, кто приезжает из области.
+            </p>
+        </div>
+
+        <Requisites />
+    </div>
+</Base>

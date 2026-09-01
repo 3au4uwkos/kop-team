@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { FAQ } from '../data/faq';
+import { faqSchema, breadcrumbSchema, personSchema } from '../data/schema';
+import '../styles/page.css';
+
+const crumbs = [
+    { name: 'Главная', path: '/' },
+    { name: 'Вопросы и ответы', path: '/faq/' },
+];
+---
+<Base
+    title="Вопросы о тренировках по самбо в Туле — ответы тренера"
+    description="Двадцать частых вопросов о занятиях самбо в Туле: с какого возраста, как проходит первая тренировка, что взять с собой, травмоопасность, расписание, стоимость и запись."
+    path="/faq/"
+    schema={[personSchema(), faqSchema(FAQ), breadcrumbSchema(crumbs)]}
+>
+    <div class="page">
+        <Crumbs items={crumbs} />
+        <h1 class="page__title">Вопросы<br>и ответы</h1>
+        <p class="page__lead">
+            Собрал здесь то, что чаще всего спрашивают перед первой тренировкой.
+            Если вашего вопроса нет — напишите в мессенджер, отвечу лично.
+        </p>
+
+        <div class="faq">
+            {FAQ.map((item) => (
+                <details class="faq__item">
+                    <summary>{item.q}</summary>
+                    <p class="faq__answer">{item.a}</p>
+                </details>
+            ))}
+        </div>
+
+        <div class="prose">
+            <h2>Не нашли ответа?</h2>
+            <p>
+                Напишите в <a href="/contacts/">любой мессенджер из контактов</a> —
+                отвечу в течение дня. Расписание и стоимость обсуждаем лично.
+            </p>
+        </div>
+    </div>
+</Base>

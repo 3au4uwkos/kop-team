@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { NAV_LINKS, FOOTER_LINKS } from '../data/site';
+import '../styles/page.css';
+---
+<Base
+    title="Страница не найдена — Копейкин Самбо, Тула"
+    description="Такой страницы на сайте нет. Вернитесь на главную или перейдите к нужному разделу: направления, подростковые сборы, контакты."
+    path="/404/"
+    noindex
+>
+    <div class="notfound">
+        <div class="bg-word bg-word--merch" aria-hidden="true">МИМО</div>
+
+        <div class="notfound__code" aria-hidden="true">404</div>
+
+        <h1 class="page__title">Такой страницы нет</h1>
+        <p class="page__lead">
+            Ссылка устарела или в адресе опечатка. Ничего страшного —
+            всё, что было на сайте, никуда не делось.
+        </p>
+
+        <a class="notfound__cta" href="/#contacts">Записаться</a>
+
+        <nav class="notfound__links" aria-label="Разделы сайта">
+            <a href="/">На главную</a>
+            {NAV_LINKS.map((l) => <a href={`/${l.href}`}>{l.label}</a>)}
+            {FOOTER_LINKS.map((l) => <a href={l.href}>{l.label}</a>)}
+        </nav>
+    </div>
+</Base>

@@ -1,0 +1,20 @@
+---
+// ================================================================
+// Crumbs.astro — визуальные хлебные крошки. Разметка BreadcrumbList
+// собирается из тех же данных в схеме страницы.
+// ================================================================
+import type { Crumb } from '../data/schema';
+
+interface Props { items: Crumb[] }
+const { items } = Astro.props;
+---
+<nav class="page__crumbs" aria-label="Хлебные крошки">
+    {items.map((c, i) => (
+        <>
+            {i > 0 && <span aria-hidden="true">/</span>}
+            {i === items.length - 1
+                ? <span aria-current="page">{c.name}</span>
+                : <a href={c.path}>{c.name}</a>}
+        </>
+    ))}
+</nav>

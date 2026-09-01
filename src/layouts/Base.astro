@@ -52,6 +52,9 @@ const CSP = [
     "script-src 'self'",
     "base-uri 'self'",
     "form-action 'none'",
+    // frame-ancestors в <meta> браузером игнорируется (нужен HTTP-заголовок,
+    // которого GitHub Pages не даёт) — оставлен по ТЗ и как задел на случай
+    // переезда на хостинг с заголовками. В консоли даёт одно предупреждение.
     "frame-ancestors 'none'",
 ].join('; ');
 
