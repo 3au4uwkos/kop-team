@@ -1,12 +1,26 @@
 # ================================================================
-# Зеркало GitVerse Pages. После миграции на Astro публикуем не корень
-# репозитория, а собранную статику из dist/.
+# GitVerse Pages: сборка Astro и публикация статики.
+#
+# Триггер — push в master. Собирается dist/, он же и публикуется:
+# до миграции на Astro сюда уезжал корень репозитория, теперь это
+# сломало бы сайт (в корне лежат исходники, а не готовая статика).
+#
+# Именование артефакта (gitverse-pages) намеренно оставлено как было:
+# это единственная часть конфигурации, которая завязана на форк
+# действий у GitVerse и уже работала до миграции.
 # ================================================================
 name: GitVerse Pages Static
 
 on:
   push:
+    branches: [master]
   workflow_dispatch:
+
+# Публикуем только последний коммит: параллельные деплои затирали бы
+# друг друга, а очередь из них бессмысленна.
+concurrency:
+  group: gitverse-pages
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -21,11 +35,22 @@ jobs:
         with:
           node-version: '22'
 
+      # npm ci, а не install: ставит ровно то, что в package-lock.json,
+      # и падает при расхождении вместо тихого обновления зависимостей.
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
+
+      # Пустой dist означает, что сборка прошла вхолостую, — лучше
+      # уронить job здесь, чем опубликовать пустой сайт.
+      - name: Check build output
+        run: |
+          test -f dist/index.html
+          test -f dist/CNAME
+          test -f dist/sitemap-index.xml
+          echo "Собрано страниц: $(find dist -name '*.html' | wc -l)"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
