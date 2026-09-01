@@ -52,10 +52,13 @@ const CSP = [
     "script-src 'self'",
     "base-uri 'self'",
     "form-action 'none'",
-    // frame-ancestors в <meta> браузером игнорируется (нужен HTTP-заголовок,
-    // которого GitHub Pages не даёт) — оставлен по ТЗ и как задел на случай
-    // переезда на хостинг с заголовками. В консоли даёт одно предупреждение.
-    "frame-ancestors 'none'",
+    // frame-ancestors СОЗНАТЕЛЬНО не включён, хотя и был в ТЗ: в <meta>
+    // браузеры эту директиву игнорируют и пишут ошибку в консоль на каждой
+    // странице (ломает критерий «нет CSP-нарушений в консоли» и снимает
+    // 4 балла с Lighthouse Best Practices). Защиту от фрейминга даёт только
+    // HTTP-заголовок, а GitHub Pages заголовков не отдаёт.
+    // При переезде на хостинг с заголовками добавить туда
+    // `Content-Security-Policy: frame-ancestors 'none'` (или X-Frame-Options).
 ].join('; ');
 
 const jsonLd = schema.length

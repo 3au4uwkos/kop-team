@@ -4,6 +4,8 @@
 // Ниже 560 px превращаются в вертикальный список карточек (задача 4.4).
 // Градиенты-плейсхолдеры вынесены в CSS: инлайн-стили запрещены CSP.
 // ================================================================
+// Доступное имя ссылки складывается из её же видимого текста
+// («Боевое самбо»): aria-label здесь только расходился бы с ним.
 const SECTORS = [
     { id: 'combat', num: '01', lines: ['Боевое', 'самбо'], label: 'Боевое самбо', video: '/assets/video/combat-1.mp4' },
     { id: 'sambo', num: '02', lines: ['Спортивное', 'самбо'], label: 'Спортивное самбо', video: '/assets/video/sambo-1.mp4' },
@@ -14,20 +16,19 @@ import '../../styles/sections/directions.css';
 ---
 <section class="directions grain" id="directions" aria-labelledby="directions-title">
     <h2 class="visually-hidden" id="directions-title">Направления подготовки в Туле</h2>
-    <div class="bg-word bg-word--directions" aria-hidden="true">ВЫБОР</div>
+    <div class="bg-word bg-word--directions" data-word="ВЫБОР" aria-hidden="true"></div>
 
     {SECTORS.map((s) => (
         <a href={`#${s.id}`}
            class:list={['direction-sector', `direction-sector--${s.id}`]}
-           data-video={s.video}
-           aria-label={`${s.label} — перейти к разделу`}>
+           data-video={s.video}>
             <div class="direction-sector__media direction-sector__media--img" aria-hidden="true"></div>
             <!-- TODO(владелец): видео-петля направления; poster подставится из плейсхолдера. -->
             <video class="direction-sector__media direction-sector__media--video"
                    muted loop playsinline preload="none"></video>
             <div class="direction-sector__veil" aria-hidden="true"></div>
             <div class="direction-sector__label">
-                <div class="direction-sector__num">{s.num}</div>
+                <div class="direction-sector__num" aria-hidden="true">{s.num}</div>
                 <div class="direction-sector__name">
                     <span class="display--skew">{s.lines[0]}</span><br>
                     <span class="display--skew">{s.lines[1]}</span>

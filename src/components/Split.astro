@@ -42,7 +42,7 @@ import '../styles/sections/split.css';
     id={id}
     aria-labelledby={`${id}-title`}
 >
-    {bgWord && <div class="bg-word bg-word--split" aria-hidden="true">{bgWord}</div>}
+    {bgWord && <div class="bg-word bg-word--split" data-word={bgWord} aria-hidden="true"></div>}
 
     <div class="split__media" data-carousel>
         <div class="split__media-track" data-carousel-track

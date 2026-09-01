@@ -1,124 +1,108 @@
 # Копейкин Самбо — сайт-визитка
 
-Single-page application для тренера по самбо Копейкина П. С.
-Реализация по PRD.md (версия 1.0).
+Сайт тренера по самбо Копейкина Павла Сергеевича, город **Тула**.
+Одностраничник со всеми секциями плюс служебные страницы.
 
 ## Стек
 
-- HTML5 (семантические теги, ARIA)
-- CSS3 (custom properties, Grid, Flexbox, clip-path)
-- JavaScript ES6+ modules (vanilla, без транспиляции)
-- Lenis (~3KB gzip) — плавная soft-snap прокрутка (CDN)
-- Swiper (~40KB gzip) — карусели (CDN)
-- Шрифты Oswald + Manrope (Google Fonts)
+- **Astro 5**, статическая генерация (SSG). В браузер уезжает готовый HTML —
+  весь текст виден поисковикам и читателям без единой строчки JS.
+- CSS3: custom properties, Grid, Flexbox, clip-path, scroll-driven animations.
+- Vanilla ES-модули для интерактива (~6 КБ на всю страницу).
+  Ни одного стороннего рантайма: Swiper и Lenis заменены нативными
+  scroll-snap и `scroll-behavior: smooth`.
+- Шрифты Oswald + Manrope — self-hosted WOFF2, только latin и cyrillic.
 
-Сборка не требуется — проект работает открытием `index.html`.
+## Команды
+
+```bash
+npm install
+npm run dev       # локальная разработка, http://localhost:4321
+npm run build     # сборка в dist/
+npm run preview   # предпросмотр собранной статики
+```
+
+> `npm run dev` инжектит стили инлайном ради HMR, а meta-CSP их запрещает —
+> в dev-режиме страница выглядит неоформленной. Проверять вёрстку нужно
+> на `npm run build && npm run preview`.
 
 ## Структура
 
 ```
 kopeykin-sambo/
-├── index.html             # Каркас: preloader, nav, hero, плейсхолдеры секций
-├── robots.txt             # SEO
-├── sitemap.xml            # SEO
-├── PRD.md                 # Product Requirements
-├── README.md              # Этот файл
+├── astro.config.mjs          # site, sitemap, запрет инлайна стилей и скриптов
+├── lighthouserc.json         # бюджет производительности для CI
 │
-├── /sections/             # HTML-партиалы для AJAX-подгрузки
-│   ├── stats.html
-│   ├── legends.html
-│   ├── directions.html    # ✅ PRD 6.1 исправлено: SVG-текст в центроидах, увеличенный круг, декор
-│   ├── combat.html
-│   ├── sambo.html
-│   ├── striking.html
-│   ├── morning.html       # ✅ PRD 6.2 исправлено: muted палитра вместо оранжевого
-│   ├── youth.html
-│   └── contacts.html
+├── public/                   # копируется в dist/ как есть
+│   ├── CNAME                 # kopeykin-sambo.ru
+│   ├── robots.txt
+│   ├── assets/icons/
+│   └── fonts/files/          # 6 woff2: latin + cyrillic, обе гарнитуры
 │
-├── /css/
-│   ├── tokens.css         # :root CSS-переменные
-│   ├── base.css           # Reset + утилиты + preloader
-│   ├── nav.css            # Navbar + drawer
-│   ├── animations.css     # reveal + keyframes + reduced-motion
-│   └── /sections/         # Стили для каждой секции, подгружаются lazy
-│
-├── /js/                   # ES6-модули
-│   ├── main.js            # Точка входа
-│   ├── utils.js
-│   ├── lazy-loader.js     # IntersectionObserver → fetch('/sections/*.html')
-│   ├── smooth-scroll.js   # Lenis init
-│   ├── nav.js             # Автоскрытие, drawer, scroll-spy
-│   ├── reveal.js
-│   ├── counters.js
-│   ├── legends-carousel.js # Swiper + fallback
-│   ├── directions.js      # Hover на сектор + видео через foreignObject
-│   └── split-gallery.js   # Swiper в split-секциях
-│
-└── /assets/
-    ├── /img/              # WebP/AVIF/JPEG фото (по папкам секций)
-    ├── /video/            # MP4/WebM короткие ролики
-    └── /icons/            # Favicon (SVG/PNG), social icons
+├── src/
+│   ├── data/
+│   │   ├── site.ts           # контакты, адрес, реквизиты — единый источник
+│   │   ├── schema.ts         # сборка JSON-LD из site.ts
+│   │   └── faq.ts            # вопросы и ответы (и страница, и FAQPage)
+│   │
+│   ├── layouts/Base.astro    # head-мета, CSP, шрифты, навбар, футер
+│   │
+│   ├── components/
+│   │   ├── Nav / Footer / Preloader / Socials / Crumbs / Requisites
+│   │   ├── Split.astro       # каркас секции-направления
+│   │   └── sections/         # по компоненту на секцию главной
+│   │
+│   ├── pages/
+│   │   ├── index.astro       # главная: все 12 секций статически
+│   │   ├── faq.astro         # 20 вопросов + разметка FAQPage
+│   │   ├── contacts.astro
+│   │   ├── privacy.astro
+│   │   ├── terms.astro
+│   │   └── 404.astro
+│   │
+│   ├── scripts/              # reveal, counters, nav, carousel, directions
+│   └── styles/               # tokens, base, nav, animations, decor, page,
+│                             # fonts + sections/*
+└── docs/
+    ├── mobile-checklist.md   # ручная проверка на реальных устройствах
+    └── lighthouse-ci.md      # бюджет производительности
 ```
 
-## Исправления по PRD
+## Где что менять
 
-### 6.1 — Секция «Направления подготовки»
+| Задача | Файл |
+|---|---|
+| Телефон, мессенджеры, адрес, координаты зала | `src/data/site.ts` |
+| Реквизиты исполнителя (статус, ИНН, ОГРНИП) | `src/data/site.ts` → `REQUISITES` |
+| Вопросы и ответы | `src/data/faq.ts` |
+| Тексты направлений | `src/components/sections/*.astro` |
+| Пункты меню | `src/data/site.ts` → `NAV_LINKS` |
+| Ритм анимаций | `src/styles/tokens.css` → моушн-токены |
 
-- Текстовые подписи размещены SVG-элементами `<text>` в геометрических центроидах секторов — не съезжают при любом размере экрана.
-- Круг увеличен до `min(720px, 78vh)` на desktop.
-- Добавлена декоративная пунктирная окружность, радиальные линии-оси на границах секторов, нумерация 01/02/03, фоновое слово «ВЫБОР».
+## Деплой
 
-### 6.2 — Цветовой ритм
+Push в `master` запускает `.github/workflows/deploy.yml`:
+сборка Astro → бюджет Lighthouse → публикация на GitHub Pages.
+Сборка, не уложившаяся в бюджет, до прода не доезжает.
 
-Применена рекомендованная последовательность:
+В настройках репозитория: **Settings → Pages → Source = GitHub Actions**.
 
-```
-#hero       → paper
-#stats      → ink
-#legends    → paper-alt
-#directions → paper
-#combat     → ink media / paper content
-#sambo      → paper-alt media / paper content
-#striking   → ink media / paper content
-#morning    → paper-alt media / paper content (muted палитра вместо оранжевого)
-#youth      → ink
-#contacts   → paper
-```
+Зеркало на GitVerse собирается своим workflow из `.gitverse/workflows/`.
 
-## Доступность
+## Доступность и приватность
 
-- Клавиатурная навигация по всему сайту
-- Фокус-кольца (`outline 2px` алый с offset 3px)
-- ARIA-атрибуты (aria-label, aria-current, aria-expanded)
-- Семантика: `<main>`, `<h1>` только в Hero, `<h2>` на секциях
-- `prefers-reduced-motion: reduce` — все анимации 0.01ms
+- Клавиатурная навигация везде, фокус-кольца, focus-trap в мобильном меню.
+- `prefers-reduced-motion: reduce` отключает всё движение.
+- Тап-цели не меньше 48×48 px.
+- Персональные данные не собираются: форм, cookies и аналитики нет,
+  запись — только переходом в мессенджеры.
 
-## Запуск
+## Что делает владелец отдельно
 
-1. Открыть `index.html` в современном браузере, ИЛИ
-2. Запустить локальный сервер (требуется для работы AJAX-подгрузки секций):
-
-```bash
-# Python 3
-python -m http.server 8000
-
-# Node (http-server)
-npx http-server -p 8000
-
-# PHP
-php -S localhost:8000
-```
-
-Затем перейти по адресу `http://localhost:8000`.
-
-> ⚠️ Открытие `index.html` напрямую (file://) в Chrome работать НЕ будет — браузер заблокирует `fetch()` для локальных файлов (CORS). В Firefox можно, в Chrome — только через локальный сервер.
-
-## Что осталось дополнить для продакшна
-
-- Заменить плейсхолдеры фото/видео на реальные ассеты
-- Оптимизация изображений: WebP + AVIF через `<picture>` + адаптивные размеры
-- Реальные контакты в `sections/contacts.html`
-- Favicon PNG-версии 16/32/180
-- Превью для OG-тегов
-- Минификация CSS/JS (опционально, через terser + csso) — см. `/dist/`
-- Форма записи с валидацией (модальное окно)
+- Фото и видео вместо градиентов-плейсхолдеров, OG-изображение,
+  PNG-иконки 16/32/180.
+- Реальные карточки воспитанников в секции «Легенды ковра»
+  (сейчас там заглушки).
+- Налоговый статус и ИНН для блока реквизитов.
+- Адрес зала и координаты для карточки на картах.
+- Вычитка черновых текстов направлений и ответов FAQ.

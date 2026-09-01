@@ -34,8 +34,10 @@ export function initCarousel(root) {
         dots.forEach((d, n) => {
             const active = n === i;
             d.classList.toggle('is-active', active);
-            d.setAttribute('aria-selected', active ? 'true' : 'false');
-            d.tabIndex = active ? 0 : -1;
+            // aria-current, а не aria-selected: последний допустим только
+            // у role="tab", которого у обычной кнопки нет.
+            if (active) d.setAttribute('aria-current', 'true');
+            else d.removeAttribute('aria-current');
         });
         if (countEl) countEl.textContent = `${pad(i + 1)} / ${pad(slides.length)}`;
         if (prev) prev.disabled = i === 0;

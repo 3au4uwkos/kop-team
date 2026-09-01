@@ -1,6 +1,9 @@
 # ================================================================
-# Сборка Astro и публикация на GitHub Pages.
-# В настройках репозитория: Settings → Pages → Source = GitHub Actions.
+# Сборка Astro -> бюджет Lighthouse -> публикация на GitHub Pages.
+# Деплой стоит за проверкой бюджета: сборка, не уложившаяся в пороги,
+# на прод не уезжает.
+#
+# В настройках репозитория: Settings -> Pages -> Source = GitHub Actions.
 # ================================================================
 name: Deploy to GitHub Pages
 
@@ -14,7 +17,6 @@ permissions:
   pages: write
   id-token: write
 
-# Параллельные деплои не нужны: публикуем последний коммит.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -32,9 +34,36 @@ jobs:
         with:
           node-version: 22
 
+  lighthouse:
+    name: Performance budget
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Берём ту же статику, что поедет на прод, вместо повторной сборки.
+      - name: Download built site
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+
+      - name: Unpack artifact
+        run: |
+          mkdir -p dist
+          tar -xf artifact.tar -C dist
+          ls -la dist
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          artifactName: lighthouse-report
+
   deploy:
     name: Deploy
-    needs: build
+    needs: lighthouse
     runs-on: ubuntu-latest
     environment:
       name: github-pages
