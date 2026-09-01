@@ -68,6 +68,9 @@
     text-transform: uppercase;
     letter-spacing: 0.15em;
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
     padding: 12px 0;
     transition: color var(--dur-base) ease;
 }
@@ -78,7 +81,7 @@
     position: absolute;
     left: 50%;
     right: 50%;
-    bottom: 6px;
+    bottom: 9px;
     height: 2px;
     background: var(--accent-red);
     transition: left var(--dur-base) var(--ease-out), right var(--dur-base) var(--ease-out);

@@ -248,7 +248,10 @@
 
 .site-footer__link {
     position: relative;
-    padding: 12px 0;
+    padding: 14px 0;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
     transition: color var(--dur-base) var(--ease-out);
 }
 

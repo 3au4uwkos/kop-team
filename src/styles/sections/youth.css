@@ -180,6 +180,7 @@
 }
 
 .youth-camps__btn {
+    flex: 0 0 var(--tap);
     width: var(--tap);
     height: var(--tap);
     border: 1px solid rgba(247, 247, 248, 0.25);
@@ -200,13 +201,13 @@
 
 .youth-camps__dots {
     display: flex;
-    gap: 4px;
-    margin-left: 4px;
+    margin-left: 0;
 }
 
 /* Полоска 22x2, кликабельная зона — 44x44. */
 .youth-camps__dot {
-    width: 30px;
+    flex: 0 0 var(--tap);
+    width: var(--tap);
     height: var(--tap);
     display: flex;
     align-items: center;

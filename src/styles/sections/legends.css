@@ -154,6 +154,7 @@
 }
 
 .legends__btn {
+    flex: 0 0 var(--tap);
     width: var(--tap);
     height: var(--tap);
     border: 1px solid var(--ink);
