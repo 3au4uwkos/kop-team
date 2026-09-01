@@ -87,6 +87,23 @@
 
 .social:hover .social__arrow { transform: translateX(6px) rotate(-45deg); }
 
+/* Сноска-маркировка Instagram (Meta) */
+.social__mark {
+    color: var(--accent-red);
+    font-size: 0.9em;
+    vertical-align: super;
+    line-height: 0;
+    margin-left: 1px;
+}
+
+.socials__note {
+    margin-top: 16px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--muted);
+    max-width: 720px;
+}
+
 .footer {
     display: flex;
     justify-content: space-between;
