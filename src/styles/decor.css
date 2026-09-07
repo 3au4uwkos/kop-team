@@ -259,6 +259,39 @@
     background: var(--accent-red);
 }
 
+/* ---------- Плавное раскрытие <details> ----------
+   Общее правило и для «Подробнее» на главной, и для вопросов на /faq/:
+   интеракция одна и та же, ритм у неё должен быть один.
+
+   ::details-content анимируется только в паре с interpolate-size:
+   без него block-size: auto не интерполируется и высота прыгает.
+   Где браузер этого не умеет — блок раскрывается мгновенно, как раньше:
+   поведение не ломается, теряется только плавность. */
+@supports (interpolate-size: allow-keywords) {
+    @media (prefers-reduced-motion: no-preference) {
+        :root { interpolate-size: allow-keywords; }
+
+        .details::details-content,
+        .faq__item::details-content {
+            block-size: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition:
+                block-size var(--dur-base) var(--ease-out),
+                opacity var(--dur-base) var(--ease-out),
+                /* без allow-discrete контент исчезал бы сразу,
+                   не дожидаясь схлопывания высоты */
+                content-visibility var(--dur-base) allow-discrete;
+        }
+
+        .details[open]::details-content,
+        .faq__item[open]::details-content {
+            block-size: auto;
+            opacity: 1;
+        }
+    }
+}
+
 /* Тёмный вариант — для секций на ink-фоне. */
 .details--dark { border-top-color: rgba(247, 247, 248, 0.14); }
 .details--dark > summary { color: var(--paper); }

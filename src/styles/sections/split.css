@@ -8,14 +8,26 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     position: relative;
-    overflow: hidden;
+    /* clip, а не hidden: hidden сделал бы секцию контейнером прокрутки
+       и sticky у медиа-рамки перестал бы работать. Режет так же. */
+    overflow: clip;
 }
 
 /* ---------- Медиа ---------- */
 .split__media {
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     clip-path: polygon(0 0, 100% 0, calc(100% - 80px) 100%, 0 100%);
+}
+
+/*
+  Рамка, которая держит кадры в поле зрения. По умолчанию просто
+  заполняет колонку; липкой становится только на десктопе, где медиа
+  и текст стоят рядом (см. медиазапрос ниже).
+*/
+.split__media-sticky {
+    position: relative;
+    height: 100%;
 }
 
 .split__media-track {
@@ -336,6 +348,23 @@
     .spec:hover { border-top-color: var(--accent-red); }
     .offer:hover { border-top-color: var(--accent-red); }
     .offer:hover > * { transform: translateX(12px); }
+}
+
+/* ---------- Медиа не уезжает из вида ----------
+   Только на десктопе: там медиа и текст стоят колонками рядом, и пока
+   читатель идёт по раскрытому «Подробнее», кадры остаются перед глазами.
+   На мобильном медиа стоит НАД текстом, и приклеенное оно съело бы
+   половину экрана у самого текста — там оставляем обычную прокрутку. */
+@media (min-width: 961px) {
+    .split__media-sticky {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+    }
+
+    /* Секция может быть выше экрана (раскрытый текст) — тогда колонка
+       медиа тянется на всю её высоту, а липкая рамка ходит внутри. */
+    .split__media { align-self: stretch; }
 }
 
 /* ---------- Адаптив ---------- */

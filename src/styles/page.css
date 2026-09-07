@@ -133,6 +133,7 @@
 
 .faq__item { border-bottom: 1px solid var(--line); }
 
+/* Само раскрытие анимируется общим правилом для <details> в decor.css. */
 .faq__item > summary {
     list-style: none;
     cursor: pointer;
@@ -145,6 +146,11 @@
     letter-spacing: 0.01em;
     display: flex;
     align-items: center;
+    transition: color var(--dur-base) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .faq__item > summary:hover { color: var(--accent-red); }
 }
 
 .faq__item > summary::-webkit-details-marker { display: none; }
@@ -170,6 +176,18 @@
     font-size: 16px;
     line-height: 1.75;
     color: var(--muted);
+}
+
+@supports (interpolate-size: allow-keywords) {
+    @media (prefers-reduced-motion: no-preference) {
+        /* Текст ответа догоняет раскрывающуюся высоту, а не появляется
+           сразу целиком: движение только по transform/opacity. */
+        .faq__item > .faq__answer {
+            transform: translateY(-6px);
+            transition: transform var(--dur-base) var(--ease-out);
+        }
+        .faq__item[open] > .faq__answer { transform: translateY(0); }
+    }
 }
 
 /* ---------- Карта на /contacts/ ---------- */

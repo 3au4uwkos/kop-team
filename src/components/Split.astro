@@ -45,47 +45,55 @@ import '../styles/sections/split.css';
     {bgWord && <div class="bg-word bg-word--split" data-word={bgWord} aria-hidden="true"></div>}
 
     <div class="split__media" data-carousel>
-        <div class="split__media-track" data-carousel-track
-             tabindex="0" role="group" aria-label={`Галерея: ${ariaLabel}`}>
-            {frames.map(() => (
-                <div class="split__slide">
-                    <div class="split__slide-inner"></div>
-                    <!--
-                      TODO(владелец): заменить плейсхолдер на фото.
-                      <picture>
-                        <source srcset="/assets/img/SECTION/frame-N.avif" type="image/avif" />
-                        <source srcset="/assets/img/SECTION/frame-N.webp" type="image/webp" />
-                        <img src="/assets/img/SECTION/frame-N.jpg" alt="" width="1200" height="1600"
-                             loading="lazy" decoding="async" />
-                      </picture>
-                    -->
-                </div>
-            ))}
-        </div>
-
-        <div class="split__media-tag">Фото · свайп</div>
-
-        {video && (
-            <video class="split__video" preload="none" playsinline muted loop
-                   poster={poster} src={video}></video>
-        )}
-        {video && (
-            <button class="split__play" type="button" aria-label={`Воспроизвести видео: ${ariaLabel}`}>
-                <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor" aria-hidden="true">
-                    <path d="M22 13L0 26V0L22 13Z" />
-                </svg>
-            </button>
-        )}
-
-        {slides > 1 && (
-            <div class="split__media-dots">
-                {frames.map((i) => (
-                    <button class:list={['split__media-dot', i === 0 && 'is-active']}
-                            type="button" data-carousel-dot
-                            aria-label={`Кадр ${i + 1} из ${slides}`}></button>
+        <!--
+          Липкая рамка. Когда «Подробнее» раскрыто, текстовая колонка
+          вырастает в несколько экранов и медиа уезжало вверх вместе
+          с ней — читатель терял его из виду. Теперь кадры остаются
+          перед глазами всё время, пока он читает.
+        -->
+        <div class="split__media-sticky">
+            <div class="split__media-track" data-carousel-track
+                 tabindex="0" role="group" aria-label={`Галерея: ${ariaLabel}`}>
+                {frames.map(() => (
+                    <div class="split__slide">
+                        <div class="split__slide-inner"></div>
+                        <!--
+                          TODO(владелец): заменить плейсхолдер на фото.
+                          <picture>
+                            <source srcset="/assets/img/SECTION/frame-N.avif" type="image/avif" />
+                            <source srcset="/assets/img/SECTION/frame-N.webp" type="image/webp" />
+                            <img src="/assets/img/SECTION/frame-N.jpg" alt="" width="1200" height="1600"
+                                 loading="lazy" decoding="async" />
+                          </picture>
+                        -->
+                    </div>
                 ))}
             </div>
-        )}
+
+            <div class="split__media-tag">Фото · свайп</div>
+
+            {video && (
+                <video class="split__video" preload="none" playsinline muted loop
+                       poster={poster} src={video}></video>
+            )}
+            {video && (
+                <button class="split__play" type="button" aria-label={`Воспроизвести видео: ${ariaLabel}`}>
+                    <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor" aria-hidden="true">
+                        <path d="M22 13L0 26V0L22 13Z" />
+                    </svg>
+                </button>
+            )}
+
+            {slides > 1 && (
+                <div class="split__media-dots">
+                    {frames.map((i) => (
+                        <button class:list={['split__media-dot', i === 0 && 'is-active']}
+                                type="button" data-carousel-dot
+                                aria-label={`Кадр ${i + 1} из ${slides}`}></button>
+                    ))}
+                </div>
+            )}
+        </div>
     </div>
 
     <div class="split__content">
