@@ -3,11 +3,13 @@
 // Stats.astro — достижения. Цифры анимируются счётчиком, но в DOM
 // сразу лежит финальное значение: без JS и для поисковиков — корректно.
 // ================================================================
+// plus: показывать ли «+» после числа. У стажа его нет — «18+ лет»
+// звучало бы как «не меньше восемнадцати», а это точная цифра.
 const STATS = [
-    { target: 18, label: 'Лет тренерского опыта' },
-    { target: 500, label: 'Воспитанников' },
-    { target: 16, label: 'Кандидатов в мастера спорта' },
-    { target: 12, label: 'Мастеров спорта' },
+    { target: 18, label: 'Лет тренерского опыта', plus: false },
+    { target: 500, label: 'Воспитанников', plus: true },
+    { target: 16, label: 'Кандидатов в мастера спорта', plus: true },
+    { target: 12, label: 'Мастеров спорта', plus: true },
 ];
 import '../../styles/sections/stats.css';
 
@@ -19,7 +21,7 @@ import '../../styles/sections/stats.css';
             <div class="stat reveal" data-delay={i || undefined}>
                 <div class="stat__num">
                     <span class="stat-count" data-target={s.target}>{s.target}</span
-                    ><span class="stat__suffix">+</span>
+                    >{s.plus && <span class="stat__suffix">+</span>}
                 </div>
                 <div class="stat__label">{s.label}</div>
             </div>
