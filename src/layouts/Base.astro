@@ -78,8 +78,11 @@ const jsonLd = schema.length
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Копейкин Павел Сергеевич" />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    <!-- noindex и canonical вместе — противоречивые сигналы, а 404 к тому же
+         отдаётся по любому адресу: собственного URL у неё нет. -->
+    {noindex
+        ? <meta name="robots" content="noindex, follow" />
+        : <link rel="canonical" href={canonical} />}
 
     <!-- Критичные шрифты первого экрана: стартуют, не дожидаясь парсинга CSS. -->
     <link rel="preload" as="font" type="font/woff2" crossorigin
@@ -89,7 +92,7 @@ const jsonLd = schema.length
 
     <!-- OpenGraph -->
     <meta property="og:type" content={ogType} />
-    <meta property="og:url" content={canonical} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
