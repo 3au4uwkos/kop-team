@@ -30,12 +30,12 @@ npm run media     # пересобрать фото и видео из vk-media/
 ## Структура
 
 ```
-kopeykin-sambo/
+kop-team/
 ├── astro.config.mjs          # site, sitemap, запрет инлайна стилей и скриптов
 ├── lighthouserc.json         # бюджет производительности для CI
 │
 ├── public/                   # копируется в dist/ как есть
-│   ├── CNAME                 # kopeykin-sambo.ru
+│   ├── CNAME                 # kop-team.ru
 │   ├── robots.txt
 │   ├── assets/img/           # AVIF/WebP/JPEG — результат npm run media
 │   ├── assets/video/         # беззвучные петли: направления, галереи, фон

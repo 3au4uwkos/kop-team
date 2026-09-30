@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Base: основной сайт живёт в корне kopeykin-sambo.ru, зеркало на GitVerse
+// Base: основной сайт живёт в корне kop-team.ru, зеркало на GitVerse
 // Pages — в подкаталоге /kop-team/ (свои домены там не поддерживаются).
 // Workflow зеркала собирает с SITE_BASE=/kop-team, GitHub — без него.
 const BASE = process.env.SITE_BASE || '/';
@@ -11,13 +11,13 @@ const MIRROR = BASE !== '/';
 // Статическая генерация (SSG) — на выходе чистый HTML/CSS без JS-фреймворка.
 export default defineConfig({
     // site остаётся основным доменом и на зеркале: canonical и JSON-LD
-    // указывают поисковикам на kopeykin-sambo.ru, дублей не будет.
-    site: 'https://kopeykin-sambo.ru',
+    // указывают поисковикам на kop-team.ru, дублей не будет.
+    site: 'https://kop-team.ru',
     base: BASE,
     trailingSlash: 'always',
     integrations: [
         // Карта сайта — только для основного домена: на зеркале она
-        // перечисляла бы несуществующие адреса вида kopeykin-sambo.ru/kop-team/….
+        // перечисляла бы несуществующие адреса вида kop-team.ru/kop-team/….
         ...(MIRROR ? [] : [sitemap({
             // 404 не индексируется — в карту сайта не попадает.
             filter: (page) => !page.includes('/404'),

@@ -7,7 +7,7 @@
 // и молча выпадают из разметки — JSON-LD остаётся валидным.
 // ================================================================
 
-export const SITE_URL = 'https://kopeykin-sambo.ru';
+export const SITE_URL = 'https://kop-team.ru';
 export const CITY = 'Тула';
 export const COACH_NAME = 'Копейкин Павел Сергеевич';
 export const COACH_NAME_SHORT = 'Копейкин П. С.';

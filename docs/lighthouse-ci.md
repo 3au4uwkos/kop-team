@@ -23,7 +23,7 @@
 о качестве сборки:
 
 - **`canonical`** — Lighthouse проверяет статику на `localhost`, а
-  `<link rel="canonical">` указывает на `https://kopeykin-sambo.ru/`.
+  `<link rel="canonical">` указывает на `https://kop-team.ru/`.
   Аудит считает это ошибкой «ведёт на другой домен». Убрать canonical
   нельзя — он нужен в проде; менять его на localhost бессмысленно.
 - **`is-crawlable`** — на локальном сервере нет `robots.txt` в том виде,
