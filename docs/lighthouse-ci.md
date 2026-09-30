@@ -15,6 +15,10 @@
 | TBT                    | < 300 мс  | `total-blocking-time`             |
 | Performance score      | ≥ 90      | `categories:performance`          |
 | SEO score              | = 100     | `categories:seo`                  |
+| Accessibility score    | = 100     | `categories:accessibility`        |
+
+Best Practices считается, но порога нет: в него входят ошибки в консоли,
+а случайная сетевая ошибка раннера не должна блокировать деплой.
 
 ## Почему три аудита отключены
 

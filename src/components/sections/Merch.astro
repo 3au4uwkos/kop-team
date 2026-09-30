@@ -69,10 +69,13 @@ import '../../styles/sections/merch.css';
     </div>
 
     <!-- Партнёр клуба — по просьбе тренера (голосовое от 18.04.2026).
-         TODO(владелец): ссылка на магазин и логотип, когда будут. -->
-    <aside class="partner reveal" data-delay="3" aria-labelledby="partner-title">
+         TODO(владелец): ссылка на магазин и логотип, когда будут.
+         Обычный div, а не aside: вложенный в <main> aside — ориентир
+         «дополнительное содержимое» не на своём месте (axe: landmark-
+         complementary-is-top-level), а заголовок h3 и так даёт структуру. -->
+    <div class="partner reveal" data-delay="3">
         <div class="partner__kicker">Партнёр клуба</div>
-        <h3 class="partner__name display" id="partner-title">
+        <h3 class="partner__name display">
             <span class="display--skew">«Единоборец»</span>
         </h3>
         <p class="partner__text">
@@ -80,5 +83,5 @@ import '../../styles/sections/merch.css';
             мастер спорта России и воспитанник нашего клуба. Куртки, борцовки,
             перчатки и защита — у своих.
         </p>
-    </aside>
+    </div>
 </section>
