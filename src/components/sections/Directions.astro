@@ -9,16 +9,17 @@
 // Постер — декорация: смысл несёт текст ссылки, поэтому alt пустой.
 // ================================================================
 import Photo from '../Photo.astro';
+import { url } from '../../lib/url';
 
 // Доступное имя ссылки складывается из её же видимого текста.
 const SIZES = '(min-width: 961px) 45vw, 100vw';
 const SECTORS = [
     { id: 'combat', num: '01', lines: ['Боевое', 'самбо'], sub: 'Дети с 10 лет · 16–18 лет · взрослые 18+',
-      video: '/assets/video/combat-1.mp4' },
+      video: url('/assets/video/combat-1.mp4') },
     { id: 'sambo', num: '02', lines: ['Спортивное', 'самбо'], sub: 'Дети с 6 лет и взрослые',
-      video: '/assets/video/sambo-1.mp4' },
+      video: url('/assets/video/sambo-1.mp4') },
     { id: 'striking', num: '03', lines: ['Ударная', 'техника'], sub: 'Мужчины, девушки, юноши',
-      video: '/assets/video/striking-1.mp4' },
+      video: url('/assets/video/striking-1.mp4') },
 ];
 import '../../styles/sections/directions.css';
 

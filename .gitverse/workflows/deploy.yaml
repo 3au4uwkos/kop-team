@@ -1,15 +1,26 @@
 # ================================================================
-# GitVerse Pages: сборка Astro и публикация статики.
+# GitVerse Pages: сборка Astro и публикация статики (зеркало сайта).
 #
-# Триггер — push в master. Собирается dist/, он же и публикуется:
-# до миграции на Astro сюда уезжал корень репозитория, теперь это
-# сломало бы сайт (в корне лежат исходники, а не готовая статика).
+# Почему падал деплой (task 2414887, 30.09.2026): deploy-pages находил
+# артефакт, но POST /repos/3au4uwkos/kop-team/pages/deployments отвечал
+# 404 — для репозитория не включены «Страницы». Это настройка, а не код:
 #
-# Именование артефакта (gitverse-pages) намеренно оставлено как было:
-# это единственная часть конфигурации, которая завязана на форк
-# действий у GitVerse и уже работала до миграции.
+#   GitVerse → репозиторий → Настройки → Страницы →
+#   включить, Источник = «Воркфлоу», сохранить.
+#
+# (Если источник выбран «Ветка», экшен вернёт 417 «wrong pages source
+# type».) Требования GitVerse: репозиторий публичный, CI/CD включён.
+#
+# Экшены закреплены на v1.0.0: плавающий тег v1 раннер брал из
+# устаревшего кеша («Unable to pull refs/heads/v1» в логе). Документация
+# пишет gitverse/…, но таких репозиториев нет — рабочие лежат в actions/.
+#
+# Сайт проекта на GitVerse живёт в подкаталоге:
+#   https://3au4uwkos.gitverse.site/kop-team/
+# (свои домены GitVerse не поддерживает), поэтому сборка идёт
+# с SITE_BASE=/kop-team — см. astro.config.mjs и src/lib/url.ts.
 # ================================================================
-name: GitVerse Pages Static
+name: GitVerse Pages
 
 on:
   push:
@@ -42,27 +53,30 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          SITE_BASE: /kop-team
 
-      # Пустой dist означает, что сборка прошла вхолостую, — лучше
-      # уронить job здесь, чем опубликовать пустой сайт.
+      # Пустой dist или пути без /kop-team/ означают сломанное зеркало —
+      # лучше уронить job здесь, чем опубликовать такой сайт.
       - name: Check build output
         run: |
           test -f dist/index.html
-          test -f dist/CNAME
-          test -f dist/sitemap-index.xml
+          grep -q '/kop-team/_astro/' dist/index.html
           echo "Собрано страниц: $(find dist -name '*.html' | wc -l)"
+          du -sh dist
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      # Имя артефакта по умолчанию — gitverse-pages, deploy-pages ждёт его же.
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v1.0.0
         with:
-          path: 'dist'
+          path: dist
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      # Go необходим для выполнения deploy-pages
+      # deploy-pages написан на Go (runs.using: go) — без Go он не стартует.
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -70,9 +84,7 @@ jobs:
 
       - name: Deploy to GitVerse Pages
         id: deployment
-        uses: actions/deploy-pages@v1
-        with:
-          artifact_name: gitverse-pages
+        uses: actions/deploy-pages@v1.0.0
 
       - name: Print deploy URL
         run: echo "page_url = ${{ steps.deployment.outputs.page_url }}"

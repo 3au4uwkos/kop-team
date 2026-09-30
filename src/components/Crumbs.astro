@@ -4,6 +4,7 @@
 // собирается из тех же данных в схеме страницы.
 // ================================================================
 import type { Crumb } from '../data/schema';
+import { url } from '../lib/url';
 
 interface Props { items: Crumb[] }
 const { items } = Astro.props;
@@ -14,7 +15,7 @@ const { items } = Astro.props;
             {i > 0 && <span aria-hidden="true">/</span>}
             {i === items.length - 1
                 ? <span aria-current="page">{c.name}</span>
-                : <a href={c.path}>{c.name}</a>}
+                : <a href={url(c.path)}>{c.name}</a>}
         </>
     ))}
 </nav>

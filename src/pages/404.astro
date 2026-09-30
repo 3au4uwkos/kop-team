@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { NAV_LINKS, FOOTER_LINKS } from '../data/site';
+import { url } from '../lib/url';
 import '../styles/page.css';
 ---
 <Base
@@ -20,12 +21,12 @@ import '../styles/page.css';
             всё, что было на сайте, никуда не делось.
         </p>
 
-        <a class="notfound__cta" href="/#contacts">Записаться</a>
+        <a class="notfound__cta" href={url('/#contacts')}>Записаться</a>
 
         <nav class="notfound__links" aria-label="Разделы сайта">
-            <a href="/">На главную</a>
-            {NAV_LINKS.map((l) => <a href={`/${l.href}`}>{l.label}</a>)}
-            {FOOTER_LINKS.map((l) => <a href={l.href}>{l.label}</a>)}
+            <a href={url('/')}>На главную</a>
+            {NAV_LINKS.map((l) => <a href={url(`/${l.href}`)}>{l.label}</a>)}
+            {FOOTER_LINKS.map((l) => <a href={url(l.href)}>{l.label}</a>)}
         </nav>
     </div>
 </Base>

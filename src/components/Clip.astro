@@ -9,6 +9,7 @@
 // движения» ролик сам не стартует — только по кнопке.
 // ================================================================
 import MEDIA from '../data/media.json';
+import { url } from '../lib/url';
 
 interface Props {
     /** Имя ролика в /assets/video/ без расширения. */
@@ -28,8 +29,8 @@ import '../styles/clip.css';
 <div class:list={['clip', cls]}>
     <video class="clip__video" muted loop playsinline preload="none"
            width={meta.width} height={meta.height}
-           poster={`/assets/img/${poster}-${meta.width}.webp`}
-           data-clip data-src={`/assets/video/${src}.mp4`}
+           poster={url(`/assets/img/${poster}-${meta.width}.webp`)}
+           data-clip data-src={url(`/assets/video/${src}.mp4`)}
            aria-label={label}></video>
     <button class="clip__toggle" type="button" data-clip-toggle aria-label="Воспроизвести видео">
         <svg class="clip__icon clip__icon--play" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">

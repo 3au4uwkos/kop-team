@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
 import Crumbs from '../components/Crumbs.astro';
 import { breadcrumbSchema } from '../data/schema';
 import { SOCIALS, META_FOOTNOTE, COACH_NAME, PHONE_HUMAN } from '../data/site';
@@ -99,7 +100,7 @@ const crumbs = [
                 Поскольку персональные данные через сайт не собираются, запрашивать
                 их удаление или исправление не требуется. По любым вопросам,
                 связанным с публикациями и перепиской, можно обратиться к владельцу
-                сайта через <a href="/contacts/">контакты</a>.
+                сайта через <a href={url('/contacts/')}>контакты</a>.
             </p>
 
             <h2>Изменения политики</h2>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
 import Crumbs from '../components/Crumbs.astro';
 import { FAQ } from '../data/faq';
 import { faqSchema, breadcrumbSchema, personSchema } from '../data/schema';
@@ -36,7 +37,7 @@ const crumbs = [
         <div class="prose">
             <h2>Не нашли ответа?</h2>
             <p>
-                Напишите в <a href="/contacts/">любой мессенджер из контактов</a> —
+                Напишите в <a href={url('/contacts/')}>любой мессенджер из контактов</a> —
                 отвечу в течение дня. Расписание и стоимость обсуждаем лично.
             </p>
         </div>

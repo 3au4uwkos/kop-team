@@ -12,14 +12,15 @@ import {
     REQUISITES, REQUISITES_READY, STATUS_LABEL,
 } from '../data/site';
 import Logo from './Logo.astro';
+import { url } from '../lib/url';
 ---
 <footer class="site-footer">
-    <a class="site-footer__brand" href="/" aria-label="Kop.team — на главную">
+    <a class="site-footer__brand" href={url('/')} aria-label="Kop.team — на главную">
         <Logo class="site-footer__logo" />
     </a>
     <nav class="site-footer__nav" aria-label="Служебные страницы">
         {FOOTER_LINKS.map((l) => (
-            <a class="site-footer__link" href={l.href}>{l.label}</a>
+            <a class="site-footer__link" href={url(l.href)}>{l.label}</a>
         ))}
     </nav>
 

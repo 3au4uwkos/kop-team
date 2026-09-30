@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
 import Crumbs from '../components/Crumbs.astro';
 import { breadcrumbSchema } from '../data/schema';
 import { COACH_NAME } from '../data/site';
@@ -87,7 +88,7 @@ const crumbs = [
                 Условия могут обновляться. Актуальная редакция всегда размещена
                 по этому адресу, дата последнего изменения указана вверху страницы.
                 По вопросам об этих условиях пишите через
-                <a href="/contacts/">контакты</a>.
+                <a href={url('/contacts/')}>контакты</a>.
             </p>
         </div>
     </div>

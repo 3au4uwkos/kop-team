@@ -16,6 +16,7 @@
 // фото, когда будут; согласие каждого спортсмена на публикацию.
 // ================================================================
 import Photo from '../Photo.astro';
+import { url } from '../../lib/url';
 
 interface Legend {
     name: string;
@@ -83,7 +84,7 @@ import '../../styles/sections/legends.css';
          и играет, только когда секция в кадре (см. скрипт ниже). -->
     <div class="legends__video-bg" aria-hidden="true">
         <video class="legends__video" muted loop playsinline preload="none"
-               data-src="/assets/video/legends-archive.mp4"></video>
+               data-src={url('/assets/video/legends-archive.mp4')}></video>
     </div>
     <div class="bg-word bg-word--legends" data-word="МАСТЕРА" aria-hidden="true"></div>
 

@@ -108,7 +108,19 @@ Push в `master` запускает `.github/workflows/deploy.yml`:
 
 В настройках репозитория: **Settings → Pages → Source = GitHub Actions**.
 
-Зеркало на GitVerse собирается своим workflow из `.gitverse/workflows/`.
+Зеркало на GitVerse (`https://3au4uwkos.gitverse.site/kop-team/`) собирается
+своим workflow из `.gitverse/workflows/` с `SITE_BASE=/kop-team`: свои домены
+GitVerse не поддерживает, сайт живёт в подкаталоге, поэтому все внутренние
+пути идут через `url()` из `src/lib/url.ts`. В настройках репозитория на GitVerse:
+**Настройки → Страницы → включить, Источник = «Воркфлоу»** — без этого деплой
+падает с 404.
+
+Проверить зеркальную сборку локально (в Git Bash `MSYS_NO_PATHCONV=1`
+не даёт превратить `/kop-team` в путь Windows):
+
+```bash
+MSYS_NO_PATHCONV=1 SITE_BASE=/kop-team npx astro build --outDir dist-mirror
+```
 
 ## Доступность и приватность
 

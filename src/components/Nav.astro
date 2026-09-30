@@ -5,15 +5,16 @@
 // ================================================================
 import { NAV_LINKS } from '../data/site';
 import Logo from './Logo.astro';
+import { url } from '../lib/url';
 
 interface Props { home?: boolean }
 const { home = false } = Astro.props;
 
-const href = (h: string) => (home ? h : `/${h}`);
+const href = (h: string) => (home ? h : url(`/${h}`));
 const desktop = NAV_LINKS.filter((l) => l.desktop);
 ---
 <header class="nav" id="nav">
-    <a href={home ? '#hero' : '/'} class="nav__brand" aria-label="Kop.team — на главную">
+    <a href={home ? '#hero' : url('/')} class="nav__brand" aria-label="Kop.team — на главную">
         <Logo variant="wordmark" class="nav__logo" />
         <span class="nav__brand-dot" aria-hidden="true"></span>
     </a>

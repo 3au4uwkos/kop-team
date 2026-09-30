@@ -7,6 +7,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Preloader from '../components/Preloader.astro';
 import { SITE_URL, BRAND } from '../data/site';
+import { url } from '../lib/url';
 
 import '../styles/fonts.css';
 import '../styles/tokens.css';
@@ -82,9 +83,9 @@ const jsonLd = schema.length
 
     <!-- Критичные шрифты первого экрана: стартуют, не дожидаясь парсинга CSS. -->
     <link rel="preload" as="font" type="font/woff2" crossorigin
-          href="/fonts/files/TK3IWkUHHAIjg75cFRf3bXL8LICs1_Fv40pKlN4NNSeSASz7FmlSHYjedg.woff2" />
+          href={url('/fonts/files/TK3IWkUHHAIjg75cFRf3bXL8LICs1_Fv40pKlN4NNSeSASz7FmlSHYjedg.woff2')} />
     <link rel="preload" as="font" type="font/woff2" crossorigin
-          href="/fonts/files/xn7gYHE41ni1AdIRggOxSuXd.woff2" />
+          href={url('/fonts/files/xn7gYHE41ni1AdIRggOxSuXd.woff2')} />
 
     <!-- OpenGraph -->
     <meta property="og:type" content={ogType} />
@@ -105,10 +106,10 @@ const jsonLd = schema.length
     <meta name="twitter:image" content={ogImage} />
 
     <!-- Favicons. PNG и OG-картинку рисует tools/og/make_og.py. -->
-    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href={url('/assets/icons/favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={url('/assets/icons/favicon-32.png')} />
+    <link rel="icon" type="image/png" sizes="16x16" href={url('/assets/icons/favicon-16.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={url('/assets/icons/apple-touch-icon.png')} />
 
     {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
 
