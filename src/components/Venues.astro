@@ -1,0 +1,28 @@
+---
+// ================================================================
+// Venues.astro — где проходят тренировки: залы и их группы.
+// Данные — VENUES в src/data/site.ts (один источник и для JSON-LD).
+// ================================================================
+import { VENUES, CITY, venueMapUrl } from '../data/site';
+import '../styles/venues.css';
+
+interface Props {
+    /** Тёмный фон секции — светлый текст. */
+    dark?: boolean;
+}
+const { dark = false } = Astro.props;
+---
+<ul class:list={['venues', dark && 'venues--dark']} aria-label="Где проходят тренировки">
+    {VENUES.map((v) => (
+        <li class="venue">
+            <div class="venue__name">{v.name}</div>
+            <div class="venue__address">{v.address ? `${CITY}, ${v.address}` : CITY}</div>
+            <ul class="venue__groups">
+                {v.groups.map((g) => <li>{g}</li>)}
+            </ul>
+            <a class="venue__map" href={venueMapUrl(v)} target="_blank" rel="noopener noreferrer">
+                Открыть на Яндекс.Картах <span aria-hidden="true">→</span>
+            </a>
+        </li>
+    ))}
+</ul>

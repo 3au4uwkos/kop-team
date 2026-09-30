@@ -1,0 +1,624 @@
+{
+  "camps/2024-moscow": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2024-ryazan": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2024-summer": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2025-autumn": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2025-summer": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2025-winter": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2025-yuryev": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2025-zvezdny": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2026-spring": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/2026-summer": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/archive-field": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "camps/archive-sea": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 450,
+    "fallback": 400
+  },
+  "combat/1": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "combat/2": {
+    "widths": [
+      640,
+      853
+    ],
+    "width": 853,
+    "height": 1066,
+    "fallback": 640
+  },
+  "combat/3": {
+    "widths": [
+      640,
+      711
+    ],
+    "width": 711,
+    "height": 889,
+    "fallback": 640
+  },
+  "combat/4": {
+    "widths": [
+      640,
+      961
+    ],
+    "width": 961,
+    "height": 1201,
+    "fallback": 640
+  },
+  "combat/v": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "directions/combat": {
+    "widths": [
+      640,
+      853
+    ],
+    "width": 853,
+    "height": 1280,
+    "fallback": 640
+  },
+  "directions/sambo": {
+    "widths": [
+      640,
+      960
+    ],
+    "width": 960,
+    "height": 1440,
+    "fallback": 640
+  },
+  "directions/striking": {
+    "widths": [
+      640,
+      960
+    ],
+    "width": 960,
+    "height": 1440,
+    "fallback": 640
+  },
+  "fp-kids/1": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "fp-kids/2": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "fp-kids/3": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "fp-kids/4": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "fp-kids/v": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "hero/coach": {
+    "widths": [
+      480,
+      680,
+      800,
+      1040
+    ],
+    "width": 1040,
+    "height": 1387,
+    "fallback": 480
+  },
+  "legends/mvd-team": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 960,
+    "fallback": 400
+  },
+  "legends/nikonenko": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 960,
+    "fallback": 400
+  },
+  "legends/petrov": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 960,
+    "fallback": 400
+  },
+  "legends/saakov": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 960,
+    "fallback": 400
+  },
+  "legends/sukhoparova": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 960,
+    "fallback": 400
+  },
+  "legends/viktorov": {
+    "widths": [
+      400,
+      719
+    ],
+    "width": 719,
+    "height": 959,
+    "fallback": 400
+  },
+  "life/food": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "life/games": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "life/gym": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "life/ice": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "life/phones": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "life/pool": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "life/stadium": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "life/v": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "merch/patch": {
+    "widths": [
+      560,
+      1000
+    ],
+    "width": 1000,
+    "height": 750,
+    "fallback": 560
+  },
+  "merch/patch-alt": {
+    "widths": [
+      560,
+      1000
+    ],
+    "width": 1000,
+    "height": 750,
+    "fallback": 560
+  },
+  "merch/suit": {
+    "widths": [
+      560,
+      1000
+    ],
+    "width": 1000,
+    "height": 750,
+    "fallback": 560
+  },
+  "merch/suit-alt": {
+    "widths": [
+      560,
+      1000
+    ],
+    "width": 1000,
+    "height": 750,
+    "fallback": 560
+  },
+  "merch/tee": {
+    "widths": [
+      560,
+      1000
+    ],
+    "width": 1000,
+    "height": 750,
+    "fallback": 560
+  },
+  "merch/tee-alt": {
+    "widths": [
+      560,
+      1000
+    ],
+    "width": 1000,
+    "height": 750,
+    "fallback": 560
+  },
+  "morning/1": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "morning/2": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "morning/3": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "morning/4": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "morning/5": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "sambo/1": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "sambo/2": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "sambo/3": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "sambo/4": {
+    "widths": [
+      640,
+      960
+    ],
+    "width": 960,
+    "height": 1200,
+    "fallback": 640
+  },
+  "sambo/v": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "season/cfo": {
+    "widths": [
+      720,
+      1280
+    ],
+    "width": 1280,
+    "height": 800,
+    "fallback": 720
+  },
+  "season/cups": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "season/debut": {
+    "widths": [
+      720,
+      1280
+    ],
+    "width": 1280,
+    "height": 800,
+    "fallback": 720
+  },
+  "season/first-start": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "season/kotov": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "season/ludinovo": {
+    "widths": [
+      720,
+      1280
+    ],
+    "width": 1280,
+    "height": 800,
+    "fallback": 720
+  },
+  "season/proud": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "season/sambo-day": {
+    "widths": [
+      400,
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 400
+  },
+  "season/v": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  },
+  "striking/1": {
+    "widths": [
+      640,
+      960
+    ],
+    "width": 960,
+    "height": 1200,
+    "fallback": 640
+  },
+  "striking/2": {
+    "widths": [
+      640,
+      960
+    ],
+    "width": 960,
+    "height": 1200,
+    "fallback": 640
+  },
+  "striking/3": {
+    "widths": [
+      640,
+      960
+    ],
+    "width": 960,
+    "height": 1200,
+    "fallback": 640
+  },
+  "striking/4": {
+    "widths": [
+      640,
+      1080
+    ],
+    "width": 1080,
+    "height": 1350,
+    "fallback": 640
+  },
+  "striking/v": {
+    "widths": [
+      720
+    ],
+    "width": 720,
+    "height": 900,
+    "fallback": 720
+  }
+}

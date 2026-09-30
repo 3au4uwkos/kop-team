@@ -1,24 +1,27 @@
 ---
 // ================================================================
-// Merch.astro — единая форма команды.
+// Merch.astro — единая форма команды KOP.Team.
+// Фото — из постов тренера во ВКонтакте (март–апрель 2026).
+// Основной кадр — вещь в деле, при наведении проявляется второй:
+// сама вещь крупно. На тач-экранах виден только основной.
 // ================================================================
+import Photo from '../Photo.astro';
+
 const ITEMS = [
     {
-        num: '01', title: 'Футболки', mod: 'tee',
-        desc: 'Базовый элемент формы — для тренировок, разминок и выездов.',
-        path: 'M30 28 L50 22 Q60 34 70 22 L90 28 L100 44 L82 50 L82 98 L38 98 L38 50 L20 44 Z',
+        num: '01', title: 'Футболки', photo: 'merch/tee', photoAlt: 'merch/tee-alt',
+        desc: 'Белые и чёрные футболки с эмблемой KOP.Team Sambo Club — для тренировок, разминок и выездов.',
+        alt: 'Тренер в белой футболке KOP.Team Sambo Club в зале борьбы, вид со спины',
     },
     {
-        num: '02', title: 'Нашивки', mod: 'patch',
-        desc: 'Нашивки на куртки самбо. Знак принадлежности к команде на соревнованиях и сборах.',
-        path: 'M60 16 L100 30 L94 78 Q78 98 60 104 Q42 98 26 78 L20 30 Z',
-        extra: 'M46 58 L56 68 L76 48',
+        num: '02', title: 'Нашивки', photo: 'merch/patch', photoAlt: 'merch/patch-alt',
+        desc: 'Нашивка на спину куртки самбо: фамилия спортсмена, RUS, Тула и KOP.Team. Знак команды на соревнованиях и сборах.',
+        alt: 'Нашивка на спине красной куртки самбо: фамилия, RUS, Тула, KOP.Team',
     },
     {
-        num: '03', title: 'Спортивные костюмы', mod: 'suit',
-        desc: 'Парадная и выездная экипировка — для сборов и соревнований. Узнаваемый силуэт команды в одном кадре.',
-        path: 'M38 14 L60 22 L82 14 L92 38 L86 46 L86 104 L34 104 L34 46 L28 38 Z',
-        line: true,
+        num: '03', title: 'Спортивные костюмы', photo: 'merch/suit', photoAlt: 'merch/suit-alt',
+        desc: 'Олимпийка с эмблемой клуба уже есть, полный спортивный костюм KOP.Team — в работе. Парадная и выездная форма для сборов и соревнований.',
+        alt: 'Белая олимпийка с эмблемой KOP.Team Sambo Club, вид со спины',
     },
 ];
 import '../../styles/sections/merch.css';
@@ -45,13 +48,11 @@ import '../../styles/sections/merch.css';
     <div class="merch__grid">
         {ITEMS.map((it, i) => (
             <article class="merch-card reveal" data-delay={i + 1}>
-                <div class:list={['merch-card__media', 'merch-card__media--' + it.mod]} aria-hidden="true">
-                    <svg class="merch-card__icon" viewBox="0 0 120 120" fill="none"
-                         stroke="currentColor" stroke-width="2">
-                        <path d={it.path} />
-                        {it.extra && <path d={it.extra} stroke-linecap="round" stroke-linejoin="round" />}
-                        {it.line && <line x1="60" y1="24" x2="60" y2="104" />}
-                    </svg>
+                <div class="merch-card__media">
+                    <Photo name={it.photo} alt={it.alt} class="merch-card__img"
+                           sizes="(max-width: 960px) 100vw, 33vw" />
+                    <Photo name={it.photoAlt} alt="" class="merch-card__img merch-card__img--alt"
+                           sizes="(max-width: 960px) 100vw, 33vw" />
                 </div>
                 <div class="merch-card__body">
                     <div class="merch-card__num">{it.num}</div>
@@ -66,4 +67,18 @@ import '../../styles/sections/merch.css';
         <div class="merch__foot-line" aria-hidden="true"></div>
         <p class="merch__foot-text">Ассортимент и размеры — по запросу в мессенджерах.</p>
     </div>
+
+    <!-- Партнёр клуба — по просьбе тренера (голосовое от 18.04.2026).
+         TODO(владелец): ссылка на магазин и логотип, когда будут. -->
+    <aside class="partner reveal" data-delay="3" aria-labelledby="partner-title">
+        <div class="partner__kicker">Партнёр клуба</div>
+        <h3 class="partner__name display" id="partner-title">
+            <span class="display--skew">«Единоборец»</span>
+        </h3>
+        <p class="partner__text">
+            Магазин экипировки для единоборств. Его основатель — Глеб Петров,
+            мастер спорта России и воспитанник нашего клуба. Куртки, борцовки,
+            перчатки и защита — у своих.
+        </p>
+    </aside>
 </section>

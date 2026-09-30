@@ -1,4 +1,4 @@
-# Копейкин Самбо — сайт-визитка
+# Kop.team — сайт тренера по самбо
 
 Сайт тренера по самбо Копейкина Павла Сергеевича, город **Тула**.
 Одностраничник со всеми секциями плюс служебные страницы.
@@ -20,6 +20,7 @@ npm install
 npm run dev       # локальная разработка, http://localhost:4321
 npm run build     # сборка в dist/
 npm run preview   # предпросмотр собранной статики
+npm run media     # пересобрать фото и видео из vk-media/ (нужен ffmpeg)
 ```
 
 > `npm run dev` инжектит стили инлайном ради HMR, а meta-CSP их запрещает —
@@ -36,11 +37,14 @@ kopeykin-sambo/
 ├── public/                   # копируется в dist/ как есть
 │   ├── CNAME                 # kopeykin-sambo.ru
 │   ├── robots.txt
+│   ├── assets/img/           # AVIF/WebP/JPEG — результат npm run media
+│   ├── assets/video/         # беззвучные петли: направления, галереи, фон
 │   ├── assets/icons/
 │   └── fonts/files/          # 6 woff2: latin + cyrillic, обе гарнитуры
 │
 ├── src/
 │   ├── data/
+│   │   ├── media.json        # размеры кадров — пишет npm run media
 │   │   ├── site.ts           # контакты, адрес, реквизиты — единый источник
 │   │   ├── schema.ts         # сборка JSON-LD из site.ts
 │   │   └── faq.ts            # вопросы и ответы (и страница, и FAQPage)
@@ -49,21 +53,35 @@ kopeykin-sambo/
 │   │
 │   ├── components/
 │   │   ├── Nav / Footer / Preloader / Socials / Crumbs / Requisites
+│   │   ├── Photo.astro       # <picture> AVIF → WebP → JPEG по ключу кадра
+│   │   ├── Clip.astro        # видео-петля: играет, пока видна; кнопка паузы
+│   │   ├── Logo.astro        # эмблема Kop.team (SVG-контуры из logo.json)
+│   │   ├── Venues.astro      # залы и группы — на /contacts/
 │   │   ├── Split.astro       # каркас секции-направления
 │   │   └── sections/         # по компоненту на секцию главной
 │   │
 │   ├── pages/
-│   │   ├── index.astro       # главная: все 12 секций статически
+│   │   ├── index.astro       # главная: все 13 секций статически
 │   │   ├── faq.astro         # 20 вопросов + разметка FAQPage
 │   │   ├── contacts.astro
 │   │   ├── privacy.astro
 │   │   ├── terms.astro
 │   │   └── 404.astro
 │   │
-│   ├── scripts/              # reveal, counters, nav, carousel, directions
+│   ├── scripts/              # reveal, counters, nav, carousel, directions,
+│   │                         # clips, legends-video
 │   └── styles/               # tokens, base, nav, animations, decor, page,
 │                             # fonts + sections/*
+├── tools/
+│   ├── media.config.mjs      # какие кадры из vk-media/ идут на сайт
+│   ├── build-media.mjs       # нарезка фото (sharp) и видео (ffmpeg)
+│   ├── logo/make_logo.py     # эмблема Kop.team → SVG и src/data/logo.json
+│   ├── logo/icons.mjs        # favicon и PNG-иконки из SVG эмблемы
+│   └── og/make_og.py         # OG-картинка с эмблемой
+│
 └── docs/
+    ├── client-requests.md    # пожелания заказчика и где они на сайте
+    ├── media-sources.md      # откуда каждый кадр (генерируется)
     ├── mobile-checklist.md   # ручная проверка на реальных устройствах
     └── lighthouse-ci.md      # бюджет производительности
 ```
@@ -78,6 +96,9 @@ kopeykin-sambo/
 | Тексты направлений | `src/components/sections/*.astro` |
 | Пункты меню | `src/data/site.ts` → `NAV_LINKS` |
 | Ритм анимаций | `src/styles/tokens.css` → моушн-токены |
+| Фото и видео в секциях | `tools/media.config.mjs` → `npm run media` |
+| Залы и адреса | `src/data/site.ts` → `VENUES` |
+| Эмблема и иконки | `python tools/logo/make_logo.py`, `node tools/logo/icons.mjs` |
 
 ## Деплой
 
@@ -102,10 +123,8 @@ Push в `master` запускает `.github/workflows/deploy.yml`:
 Полный список — `docs/owner-checklist.md` (токен, DNS, Вебмастер, реквизиты).
 Коротко:
 
-- Фото и видео вместо градиентов-плейсхолдеров, OG-изображение,
-  PNG-иконки 16/32/180.
-- Реальные карточки воспитанников в секции «Легенды ковра»
-  (сейчас там заглушки).
+- Согласия спортсменов и родителей на фото и имена на сайте
+  (кадры уже стоят — из архива VK, см. `docs/media-sources.md`).
 - Налоговый статус и ИНН для блока реквизитов.
 - Адрес зала и координаты для карточки на картах.
 - Вычитка черновых текстов направлений и ответов FAQ.

@@ -63,13 +63,19 @@
     transition: transform var(--dur-slow) var(--ease-out);
 }
 
-.split__video {
+.split__slide-inner picture {
+    display: block;
+    height: 100%;
+}
+
+/* Затемнение снизу — под точки галереи: на светлом кадре
+   (белая стена, снег) они иначе пропадают. */
+.split__slide-inner::after {
+    content: '';
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 2;
+    background: linear-gradient(180deg, transparent 72%, rgba(14, 14, 16, 0.55) 100%);
+    pointer-events: none;
 }
 
 /* Зеркальная раскладка */
@@ -81,26 +87,6 @@
     grid-column: 1;
     grid-row: 1;
 }
-
-/* Кнопка play */
-.split__play {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 96px;
-    height: 96px;
-    border: 2px solid var(--paper);
-    border-radius: 50%;
-    color: var(--paper);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background var(--dur-base) ease, transform var(--dur-base) var(--ease-out);
-    z-index: 3;
-}
-
-.split__play svg { margin-left: 4px; }
 
 /* ---------- Точки ---------- */
 .split__media-dots {
@@ -136,18 +122,6 @@
 .split__media-dot.is-active::before {
     background: var(--paper);
     transform: scaleX(1.3);
-}
-
-.split__media-tag {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    font-family: var(--font-display);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(247, 247, 248, 0.6);
-    z-index: 4;
 }
 
 /* ---------- Контент ---------- */
@@ -226,40 +200,32 @@
     font-size: 15px;
 }
 
-/* ---------- Цветовой ритм секций ---------- */
+/* ---------- Цветовой ритм секций ----------
+   Градиент — подложка, пока грузится фото (и цвет рамки на время
+   загрузки). Сам кадр ложится поверх и закрывает его целиком. */
 .split--combat .split__media { background: var(--ink); }
 .split--combat .split__slide-inner {
-    background:
-        linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
-        linear-gradient(135deg, var(--accent-blue) 0%, #0E0E10 100%);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, #0E0E10 100%);
 }
 
 .split--sambo .split__media { background: var(--paper-alt); }
 .split--sambo .split__slide-inner {
-    background:
-        linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
-        linear-gradient(135deg, var(--accent-red) 0%, #0E0E10 100%);
+    background: linear-gradient(135deg, var(--accent-red) 0%, #0E0E10 100%);
 }
 
 .split--striking .split__media { background: var(--ink); }
 .split--striking .split__slide-inner {
-    background:
-        linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
-        linear-gradient(135deg, #444 0%, #0E0E10 100%);
+    background: linear-gradient(135deg, #444 0%, #0E0E10 100%);
 }
 
 .split--fp-kids .split__media { background: var(--ink); }
 .split--fp-kids .split__slide-inner {
-    background:
-        linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
-        linear-gradient(135deg, #C08457 0%, #2A1F18 100%);
+    background: linear-gradient(135deg, #C08457 0%, #2A1F18 100%);
 }
 
 .split--morning .split__media { background: var(--paper-alt); }
 .split--morning .split__slide-inner {
-    background:
-        linear-gradient(180deg, transparent 50%, rgba(14, 14, 16, 0.8) 100%),
-        linear-gradient(135deg, #6B7280 0%, #1F2937 100%);
+    background: linear-gradient(135deg, #6B7280 0%, #1F2937 100%);
 }
 
 /* ---------- Форматы тренировок ---------- */
@@ -315,6 +281,38 @@
     position: relative;
 }
 
+.offer__place {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink);
+}
+
+.offer__place b { font-weight: 700; }
+
+.offer__place a {
+    /* Цель касания не меньше 24 px по высоте (WCAG 2.5.8). */
+    display: inline-block;
+    padding: 3px 0;
+    margin-top: -3px;
+    text-decoration: underline;
+    text-decoration-color: rgba(228, 0, 43, 0.5);
+    text-underline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .offer__place a:hover { color: var(--accent-red); }
+}
+
+.offer__pin {
+    flex: 0 0 auto;
+    margin-top: 1px;
+    color: var(--accent-red);
+}
+
 .offer__list li::before {
     content: '';
     position: absolute;
@@ -340,11 +338,6 @@
 /* ---------- Hover — только с настоящим курсором ---------- */
 @media (hover: hover) and (pointer: fine) {
     .split:hover .split__slide-inner { transform: scale(1.05); }
-    .split__play:hover {
-        background: var(--accent-red);
-        border-color: var(--accent-red);
-        transform: translate(-50%, -50%) scale(1.1);
-    }
     .spec:hover { border-top-color: var(--accent-red); }
     .offer:hover { border-top-color: var(--accent-red); }
     .offer:hover > * { transform: translateX(12px); }
@@ -391,7 +384,6 @@
     }
 
     .split__media-dots { left: 20px; }
-    .split__media-tag { top: 20px; left: 20px; }
 }
 
 @media (max-width: 560px) {

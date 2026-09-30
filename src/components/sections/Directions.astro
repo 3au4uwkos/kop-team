@@ -1,52 +1,51 @@
 ---
 // ================================================================
-// Directions.astro — три клиновидных сектора по 120°.
-// Ниже 560 px превращаются в вертикальный список карточек (задача 4.4).
-// Градиенты-плейсхолдеры вынесены в CSS: инлайн-стили запрещены CSP.
+// Directions.astro — три направления на весь экран.
+//
+// Десктоп: три высокие колонки с косыми границами (6°, как наклон
+// заголовков сайта). Ролики вертикальные, а колонка — почти их
+// пропорция, поэтому действие видео всегда в центре кадра. Наведение
+// расширяет колонку и запускает видео. Телефон и планшет: три полосы.
+// Постер — декорация: смысл несёт текст ссылки, поэтому alt пустой.
 // ================================================================
-// Доступное имя ссылки складывается из её же видимого текста
-// («Боевое самбо»): aria-label здесь только расходился бы с ним.
+import Photo from '../Photo.astro';
+
+// Доступное имя ссылки складывается из её же видимого текста.
+const SIZES = '(min-width: 961px) 45vw, 100vw';
 const SECTORS = [
-    { id: 'combat', num: '01', lines: ['Боевое', 'самбо'], label: 'Боевое самбо', video: '/assets/video/combat-1.mp4' },
-    { id: 'sambo', num: '02', lines: ['Спортивное', 'самбо'], label: 'Спортивное самбо', video: '/assets/video/sambo-1.mp4' },
-    { id: 'striking', num: '03', lines: ['Ударная', 'техника'], label: 'Ударная техника', video: '/assets/video/striking-1.mp4' },
+    { id: 'combat', num: '01', lines: ['Боевое', 'самбо'], sub: 'Дети с 10 лет · 16–18 лет · взрослые 18+',
+      video: '/assets/video/combat-1.mp4' },
+    { id: 'sambo', num: '02', lines: ['Спортивное', 'самбо'], sub: 'Дети с 6 лет и взрослые',
+      video: '/assets/video/sambo-1.mp4' },
+    { id: 'striking', num: '03', lines: ['Ударная', 'техника'], sub: 'Мужчины, девушки, юноши',
+      video: '/assets/video/striking-1.mp4' },
 ];
 import '../../styles/sections/directions.css';
 
 ---
 <section class="directions grain" id="directions" aria-labelledby="directions-title">
     <h2 class="visually-hidden" id="directions-title">Направления подготовки в Туле</h2>
-    <div class="bg-word bg-word--directions" data-word="ВЫБОР" aria-hidden="true"></div>
 
     {SECTORS.map((s) => (
         <a href={`#${s.id}`}
            class:list={['direction-sector', `direction-sector--${s.id}`]}
            data-video={s.video}>
-            <div class="direction-sector__media direction-sector__media--img" aria-hidden="true"></div>
-            <!-- TODO(владелец): видео-петля направления; poster подставится из плейсхолдера. -->
+            <Photo name={`directions/${s.id}`} alt="" sizes={SIZES}
+                   class="direction-sector__media direction-sector__media--img" />
             <video class="direction-sector__media direction-sector__media--video"
                    muted loop playsinline preload="none"></video>
             <div class="direction-sector__veil" aria-hidden="true"></div>
             <div class="direction-sector__label">
                 <div class="direction-sector__num" aria-hidden="true">{s.num}</div>
                 <div class="direction-sector__name">
-                    <span class="display--skew">{s.lines[0]}</span><br>
+                    <span class="display--skew">{s.lines[0]}</span>
                     <span class="display--skew">{s.lines[1]}</span>
                 </div>
+                <div class="direction-sector__sub">{s.sub}</div>
                 <div class="direction-sector__arrow" aria-hidden="true">→</div>
             </div>
         </a>
     ))}
-
-    <!--
-      Разделительные лучи между секторами. Границы клиньев в CSS-координатах
-      (ось Y вниз) проходят под углами 90° / 210° / 330°.
-    -->
-    <svg class="directions__dividers" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <line x1="50" y1="50" x2="50" y2="100" class="directions__divider-line" />
-        <line x1="50" y1="50" x2="-62" y2="-15" class="directions__divider-line" />
-        <line x1="50" y1="50" x2="162" y2="-15" class="directions__divider-line" />
-    </svg>
 </section>
 
 <script>

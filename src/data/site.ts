@@ -11,7 +11,8 @@ export const SITE_URL = 'https://kopeykin-sambo.ru';
 export const CITY = 'Тула';
 export const COACH_NAME = 'Копейкин Павел Сергеевич';
 export const COACH_NAME_SHORT = 'Копейкин П. С.';
-export const BRAND = 'Копейкин Самбо';
+/** Клуб тренера — эмблема Kop.team в шапке, футере и OG. */
+export const BRAND = 'Kop.team';
 
 /** Телефон в формате E.164 — из ссылки WhatsApp. */
 export const PHONE = '+79056295471';
@@ -77,15 +78,54 @@ export const ADDRESS = {
 export const GEO: { latitude: number; longitude: number } | null = null;
 
 /**
- * Расписание. Точное время — в личных сообщениях (решение владельца),
- * поэтому в openingHours только достоверно известные слоты.
- * TODO(владелец): подтвердить/дополнить часы работы зала.
+ * Расписание групп — по афише набора 2026 года (VK, 23.08.2026).
+ * Групповая тренировка — полтора часа, индивидуальная — час.
+ * TODO(владелец): время старшей группы в «Тула Арене» и утренней зарядки.
  */
 export const OPENING_HOURS = [
-    // Открытая утренняя зарядка в ЦПКиО им. Белоусова — вторник.
-    { dayOfWeek: ['Tuesday'], opens: '08:00', closes: '09:00' },
-    // Группа выходного дня по боевому самбо.
-    { dayOfWeek: ['Saturday', 'Sunday'], opens: '10:00', closes: '18:00' },
+    // Дети 6–10 лет, группа начальной подготовки.
+    { dayOfWeek: ['Tuesday', 'Thursday'], opens: '15:00', closes: '16:30' },
+    // Начальная подготовка, второй год.
+    { dayOfWeek: ['Monday', 'Wednesday', 'Friday'], opens: '15:00', closes: '16:30' },
+    // Боевое самбо, 16–18 лет и 18+, С/К «Динамо».
+    { dayOfWeek: ['Wednesday', 'Friday'], opens: '19:30', closes: '21:00' },
+];
+
+// ----------------------------------------------------------------
+// Где проходят тренировки — со слов тренера (голосовое от 23.08.2026):
+// боевое самбо осталось в «Динамо», детские группы переехали в Академию
+// единоборств на ул. Демонстрации, 5А, старшая группа — в «Тула Арене».
+// Адреса — по 2ГИС, Яндекс.Картам и сайту «Динамо» (dynamo71.ru).
+// ----------------------------------------------------------------
+export interface Venue {
+    name: string;
+    address: string | null;
+    groups: string[];
+}
+
+/** Поиск зала на Яндекс.Картах: без встраивания карты и без скриптов. */
+export const venueMapUrl = (v: Venue) =>
+    `https://yandex.ru/maps/15/tula/?text=${encodeURIComponent(`${v.name}, Тула, ${v.address ?? ''}`)}`;
+
+export const VENUES: Venue[] = [
+    {
+        name: 'Академия единоборств',
+        address: 'ул. Демонстрации, 5А',
+        groups: [
+            'Дети 6–10 лет, начальная подготовка — вт, чт 15:00–16:30',
+            'Начальная подготовка, 2-й год — пн, ср, пт 15:00–16:30',
+        ],
+    },
+    {
+        name: 'С/К «Динамо»',
+        address: 'ул. Жаворонкова, ЦПКиО им. П. П. Белоусова, стр. 1',
+        groups: ['Боевое самбо, 16–18 лет и 18+ — ср, пт 19:30–21:00'],
+    },
+    {
+        name: '«Тула Арена»',
+        address: 'Калужское шоссе, 18',
+        groups: ['Старшая группа по самбо — расписание в личных сообщениях'],
+    },
 ];
 
 /** Диапазон цен для SportsActivityLocation. Стоимость обсуждается лично. */
@@ -134,13 +174,14 @@ export const FOOTER_LINKS = [
 /** Пункты навигации главной (якоря). */
 export const NAV_LINKS = [
     { href: '#legends', label: 'Легенды', desktop: true },
+    { href: '#season', label: 'Турниры', desktop: false },
     { href: '#directions', label: 'Направления', desktop: true },
     { href: '#combat', label: 'Боевое самбо', desktop: true },
     { href: '#sambo', label: 'Самбо', desktop: true },
     { href: '#striking', label: 'Ударка', desktop: true },
     { href: '#morning', label: 'Утренняя зарядка', desktop: false },
     { href: '#fp-kids', label: 'ОФП 4–6 лет', desktop: false },
-    { href: '#youth', label: 'Подростки', desktop: true },
+    { href: '#youth', label: 'Сборы', desktop: true },
     { href: '#merch', label: 'Мерч', desktop: true },
     { href: '#contacts', label: 'Контакты', desktop: false },
 ];

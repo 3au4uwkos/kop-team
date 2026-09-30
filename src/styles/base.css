@@ -113,24 +113,20 @@ section {
 }
 
 .preloader__mark {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(40px, 8vw, 88px);
     color: var(--paper);
-    letter-spacing: 0.05em;
-    transform: skewX(-6deg);
-    overflow: hidden;
 }
 
-/* Line-wipe: слово выезжает снизу вверх из-под маски. */
-.preloader__mark span {
+/* Эмблема проявляется из лёгкого уменьшения. */
+.preloader__logo {
     display: block;
-    animation: preload-wipe var(--dur-wipe) var(--ease-out) both;
+    width: clamp(140px, 22vw, 220px);
+    height: auto;
+    animation: preload-in var(--dur-wipe) var(--ease-out) both;
 }
 
-@keyframes preload-wipe {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(0); }
+@keyframes preload-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
 }
 
 @keyframes preload-out {

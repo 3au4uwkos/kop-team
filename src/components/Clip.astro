@@ -1,0 +1,43 @@
+---
+// ================================================================
+// Clip.astro — беззвучная видео-петля, которая играет, только пока
+// видна (scripts/clips.js). Файл ролика грузится лишь при первом
+// появлении на экране; до этого — постер из той же нарезки.
+//
+// Кнопка паузы обязательна: движущийся контент дольше 5 секунд
+// пользователь должен уметь остановить (WCAG 2.2.2). При «Уменьшении
+// движения» ролик сам не стартует — только по кнопке.
+// ================================================================
+import MEDIA from '../data/media.json';
+
+interface Props {
+    /** Имя ролика в /assets/video/ без расширения. */
+    src: string;
+    /** Ключ постера в src/data/media.json. */
+    poster: string;
+    /** Что происходит в ролике — для скринридеров. */
+    label: string;
+    class?: string;
+}
+
+const { src, poster, label, class: cls } = Astro.props;
+const meta = (MEDIA as Record<string, { width: number; height: number }>)[poster];
+if (!meta) throw new Error(`Clip: нет постера «${poster}» в src/data/media.json`);
+import '../styles/clip.css';
+---
+<div class:list={['clip', cls]}>
+    <video class="clip__video" muted loop playsinline preload="none"
+           width={meta.width} height={meta.height}
+           poster={`/assets/img/${poster}-${meta.width}.webp`}
+           data-clip data-src={`/assets/video/${src}.mp4`}
+           aria-label={label}></video>
+    <button class="clip__toggle" type="button" data-clip-toggle aria-label="Воспроизвести видео">
+        <svg class="clip__icon clip__icon--play" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true">
+            <path d="M14 8L0 16V0L14 8Z" fill="currentColor" />
+        </svg>
+        <svg class="clip__icon clip__icon--pause" width="12" height="14" viewBox="0 0 12 14" aria-hidden="true">
+            <rect width="4" height="14" fill="currentColor" />
+            <rect x="8" width="4" height="14" fill="currentColor" />
+        </svg>
+    </button>
+</div>

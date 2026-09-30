@@ -1,26 +1,91 @@
 ---
 // ================================================================
-// Legends.astro — карусель учеников на scroll-snap (без Swiper).
+// Legends.astro — лента учеников.
 //
-// TODO(владелец): заменить карточки на реальных воспитанников
-// (ФИО, звание, титул) и их фото. Ниже — плейсхолдеры.
+// На компьютере секция закрепляется на экране, и прокрутка колёсиком
+// ведёт карточки по горизонтали (scripts/legends-scroll.js); дойдя до
+// последней, страница листается дальше. На тач-экранах — обычная
+// лента на scroll-snap, которую листают пальцем.
+//
+// Состав и звания — по просьбе тренера (голосовые от 20.04.2026):
+// мастерам спорта — «МС», остальным — «КМС». Достижения с фото —
+// из постов во ВКонтакте и дипломов на снимках (docs/media-sources.md).
+// У кого нет фото, карточка типографическая: крупно звание, ниже имя.
+// Сухопарова и Авакянц — сверено с сайтом тульского «Динамо» и новостями
+// областного спорта. TODO(владелец): имена Журавкова, Мазина, Ушакова;
+// фото, когда будут; согласие каждого спортсмена на публикацию.
 // ================================================================
-const LEGENDS = [
-    { name: 'Иванов А.', title: 'МС по самбо', sub: 'Призёр чемпионата России' },
-    { name: 'Петров Д.', title: 'КМС по боевому самбо', sub: 'Чемпион ЦФО' },
-    { name: 'Сидоров М.', title: 'МСМК', sub: 'Призёр Кубка мира' },
-    { name: 'Смирнов Р.', title: 'МС', sub: 'Чемпион Тульской области' },
-    { name: 'Козлов И.', title: 'КМС', sub: 'Победитель первенства' },
-    { name: 'Новиков В.', title: 'МС', sub: 'Финалист Спартакиады' },
+import Photo from '../Photo.astro';
+
+interface Legend {
+    name: string;
+    /** Крупная плашка звания на типографической карточке. */
+    rank: string;
+    title: string;
+    sub?: string;
+    photo?: string;
+    alt?: string;
+}
+
+const LEGENDS: Legend[] = [
+    {
+        name: 'Петров Глеб', rank: 'МС', photo: 'legends/petrov',
+        title: 'Мастер спорта России по самбо',
+        sub: 'Золото турнира Европейской федерации самбо, Пореч · победитель чемпионата ЦФО',
+        alt: 'Юный Глеб Петров с дипломом и золотой медалью рядом с тренером, Пореч',
+    },
+    {
+        name: 'Никоненко Глеб', rank: 'МС', photo: 'legends/nikonenko',
+        title: 'Мастер спорта России по самбо, 2025',
+        sub: 'Бронзовый призёр чемпионата ЦФО по боевому самбо',
+        alt: 'Глеб Никоненко с тренером Павлом Копейкиным',
+    },
+    {
+        name: 'Сааков Феликс', rank: 'МС', photo: 'legends/saakov',
+        title: 'Мастер спорта России по самбо, 2024',
+        sub: 'Звание присвоено приказом Минспорта России',
+        alt: 'Феликс Сааков с медалью и грамотой рядом с тренером',
+    },
+    { name: 'Лысенко Михаил', rank: '5×МС', title: 'Пятикратный мастер спорта' },
+    {
+        name: 'Сухопарова Мария', rank: 'МС', photo: 'legends/sukhoparova',
+        title: 'Серебро первенства мира среди юниорок, Рига',
+        sub: 'Победительница первенства России, до 56 кг — семь побед из семи',
+        alt: 'Мария Сухопарова с серебряной медалью и дипломом первенства мира рядом с тренером',
+    },
+    {
+        name: 'Команда МВД', rank: '3', photo: 'legends/mvd-team',
+        title: '3 место чемпионата МВД России',
+        sub: 'Рукопашный бой · Анапа, 2024 · 30 команд',
+        alt: 'Команда по рукопашному бою с кубком за третье место',
+    },
+    {
+        name: 'Викторов Даниил', rank: 'КМС', photo: 'legends/viktorov',
+        title: 'КМС · победитель Всероссийской гимназиады по самбо',
+        sub: 'Орёл, 2019',
+        alt: 'Пьедестал Всероссийской гимназиады по самбо в Орле',
+    },
+    { name: 'Авакянц Анатолий', rank: 'КМС', title: 'Кандидат в мастера спорта',
+      sub: 'Чемпион Тульской области по самбо и дзюдо среди юношей' },
+    { name: 'Казаков Илья', rank: 'КМС', title: 'Кандидат в мастера спорта' },
+    { name: 'Журавков', rank: 'КМС', title: 'Кандидат в мастера спорта' },
+    { name: 'Мазин', rank: 'КМС', title: 'Кандидат в мастера спорта' },
+    { name: 'Ушаков', rank: 'КМС', title: 'Кандидат в мастера спорта' },
+    { name: 'Ильин Максим', rank: 'КМС', title: 'Кандидат в мастера спорта' },
+    { name: 'Зайцев Матвей', rank: 'КМС', title: 'Кандидат в мастера спорта' },
 ];
-const total = String(LEGENDS.length).padStart(2, '0');
 import '../../styles/sections/legends.css';
 
 ---
 <section class="legends" id="legends" aria-labelledby="legends-title" data-carousel>
-    <div class="legends__video-bg" aria-hidden="true"></div>
-    <div class="bg-word bg-word--legends" data-word="АРХИВ" aria-hidden="true"></div>
-    <div class="legends__video-tag">Архив · Нарезка схваток</div>
+  <div class="legends__pin">
+    <!-- Фон — чёрно-белая нарезка схваток под светлой вуалью. Грузится
+         и играет, только когда секция в кадре (см. скрипт ниже). -->
+    <div class="legends__video-bg" aria-hidden="true">
+        <video class="legends__video" muted loop playsinline preload="none"
+               data-src="/assets/video/legends-archive.mp4"></video>
+    </div>
+    <div class="bg-word bg-word--legends" data-word="МАСТЕРА" aria-hidden="true"></div>
 
     <div class="legends__head">
         <h2 class="display legends__title reveal" id="legends-title">
@@ -29,20 +94,22 @@ import '../../styles/sections/legends.css';
         </h2>
         <p class="legends__intro reveal" data-delay="1">
             Ученики, которые прошли путь от первой тренировки до пьедестала.
-            Смахните карточки в сторону, чтобы увидеть всех.
         </p>
     </div>
 
     <div class="legends__carousel-wrap">
         <div class="legends__carousel" data-carousel-track
              tabindex="0" role="group" aria-label="Карточки воспитанников">
-            {LEGENDS.map((l, i) => (
-                <article class="legend-card">
+            {LEGENDS.map((l) => (
+                <article class:list={['legend-card', !l.photo && 'legend-card--text']}>
+                    {l.photo
+                        ? <Photo name={l.photo} alt={l.alt ?? l.name} class="legend-card__img"
+                                 sizes="(max-width: 960px) min(78vw, 320px), clamp(240px, 28vw, 360px)" />
+                        : <div class="legend-card__rank" aria-hidden="true">{l.rank}</div>}
                     <div class="legend-card__ph" aria-hidden="true"></div>
                     <div class="legend-card__info">
-                        <div class="legend-card__num">{String(i + 1).padStart(2, '0')} / {total}</div>
                         <h3 class="legend-card__name">{l.name}</h3>
-                        <p class="legend-card__title">{l.title}<br>{l.sub}</p>
+                        <p class="legend-card__title">{l.title}{l.sub && <><br>{l.sub}</>}</p>
                     </div>
                 </article>
             ))}
@@ -61,7 +128,14 @@ import '../../styles/sections/legends.css';
                     <path d="M1 6H17M17 6L12 1M17 6L12 11" />
                 </svg>
             </button>
-            <div class="legends__count" data-carousel-count aria-live="polite">01 / {total}</div>
         </div>
     </div>
+  </div>
 </section>
+
+<script>
+    import { initLegendsVideo } from '../../scripts/legends-video.js';
+    import { initLegendsScroll } from '../../scripts/legends-scroll.js';
+    initLegendsVideo();
+    initLegendsScroll();
+</script>

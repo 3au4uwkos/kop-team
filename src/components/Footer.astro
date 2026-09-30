@@ -11,8 +11,12 @@ import {
     FOOTER_LINKS, YEAR, COACH_NAME, CITY,
     REQUISITES, REQUISITES_READY, STATUS_LABEL,
 } from '../data/site';
+import Logo from './Logo.astro';
 ---
 <footer class="site-footer">
+    <a class="site-footer__brand" href="/" aria-label="Kop.team — на главную">
+        <Logo class="site-footer__logo" />
+    </a>
     <nav class="site-footer__nav" aria-label="Служебные страницы">
         {FOOTER_LINKS.map((l) => (
             <a class="site-footer__link" href={l.href}>{l.label}</a>

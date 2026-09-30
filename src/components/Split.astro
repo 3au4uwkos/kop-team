@@ -1,13 +1,32 @@
 ---
 // ================================================================
 // Split.astro — каркас диагональной split-секции (направления).
-// Медиа-колонка — нативная scroll-snap галерея: свайп даёт браузер,
+// Медиа-колонка — нативная scroll-snap галерея: прокрутку даёт браузер,
 // JS только синхронизирует точки.
 //
-// Кнопка play рендерится только если передан `video`: мёртвых
-// контролов на странице быть не должно. Файлы видео/фото готовит
-// владелец (вне скоупа кода) — разметка <picture>/poster уже здесь.
+// Слайд — фото или видео-петля (Clip): ролик играет, пока слайд
+// на экране. Кадры и ролики собирает `npm run media`
+// (tools/media.config.mjs), сюда приходят их ключи.
 // ================================================================
+import Photo from './Photo.astro';
+import Clip from './Clip.astro';
+
+interface PhotoFrame {
+    /** Ключ кадра в src/data/media.json, например 'combat/1'. */
+    name: string;
+    alt: string;
+}
+
+interface ClipFrame {
+    /** Имя ролика в /assets/video/ без расширения. */
+    clip: string;
+    /** Ключ постера в src/data/media.json. */
+    poster: string;
+    alt: string;
+}
+
+type Frame = PhotoFrame | ClipFrame;
+
 interface Props {
     id: string;
     num: string;
@@ -19,21 +38,20 @@ interface Props {
     titleLines: string[];
     /** Продолжение h2 — сюда идёт поисковый запрос целиком. */
     titleSub: string;
-    /** Сколько кадров в галерее (пока — плейсхолдеры под фото владельца). */
-    slides?: number;
-    /** Путь к видео, когда владелец его добавит. */
-    video?: string;
-    poster?: string;
+    /** Кадры галереи — по порядку показа. */
+    photos: Frame[];
     /** Фоновое слово-декорация для параллакса. */
     bgWord?: string;
 }
 
 const {
     id, num, ariaLabel, modifier, reverse = false,
-    titleLines, titleSub, slides = 3, video, poster, bgWord,
+    titleLines, titleSub, photos, bgWord,
 } = Astro.props;
 
-const frames = Array.from({ length: slides }, (_, i) => i);
+const slides = photos.length;
+// Рамка медиа — половина экрана на десктопе и весь экран на мобильном.
+const SIZES = '(min-width: 961px) 50vw, 100vw';
 import '../styles/sections/split.css';
 
 ---
@@ -54,39 +72,21 @@ import '../styles/sections/split.css';
         <div class="split__media-sticky">
             <div class="split__media-track" data-carousel-track
                  tabindex="0" role="group" aria-label={`Галерея: ${ariaLabel}`}>
-                {frames.map(() => (
+                {photos.map((p) => (
                     <div class="split__slide">
-                        <div class="split__slide-inner"></div>
-                        <!--
-                          TODO(владелец): заменить плейсхолдер на фото.
-                          <picture>
-                            <source srcset="/assets/img/SECTION/frame-N.avif" type="image/avif" />
-                            <source srcset="/assets/img/SECTION/frame-N.webp" type="image/webp" />
-                            <img src="/assets/img/SECTION/frame-N.jpg" alt="" width="1200" height="1600"
-                                 loading="lazy" decoding="async" />
-                          </picture>
-                        -->
+                        <div class="split__slide-inner">
+                            {'clip' in p
+                                ? <Clip src={p.clip} poster={p.poster} label={p.alt} />
+                                : <Photo name={p.name} alt={p.alt} sizes={SIZES} class="split__img" />}
+                        </div>
                     </div>
                 ))}
             </div>
 
-            <div class="split__media-tag">Фото · свайп</div>
-
-            {video && (
-                <video class="split__video" preload="none" playsinline muted loop
-                       poster={poster} src={video}></video>
-            )}
-            {video && (
-                <button class="split__play" type="button" aria-label={`Воспроизвести видео: ${ariaLabel}`}>
-                    <svg width="22" height="26" viewBox="0 0 22 26" fill="currentColor" aria-hidden="true">
-                        <path d="M22 13L0 26V0L22 13Z" />
-                    </svg>
-                </button>
-            )}
 
             {slides > 1 && (
                 <div class="split__media-dots">
-                    {frames.map((i) => (
+                    {photos.map((_, i) => (
                         <button class:list={['split__media-dot', i === 0 && 'is-active']}
                                 type="button" data-carousel-dot
                                 aria-label={`Кадр ${i + 1} из ${slides}`}></button>

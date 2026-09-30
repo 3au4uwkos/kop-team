@@ -6,3 +6,5 @@ dist/
 .DS_Store
 npm-debug.log*
 .lighthouseci/
+# Личный архив выгрузки VK (2 ГБ) — исходники для npm run media
+vk-media/

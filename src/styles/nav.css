@@ -33,26 +33,33 @@
 }
 
 .nav__brand {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 22px;
-    letter-spacing: 0.04em;
-    transform: skewX(-6deg);
     display: flex;
-    align-items: baseline;
-    gap: 2px;
-    /* Тап-цель бренда — не меньше 44 px по высоте. */
-    padding: 10px 0;
+    align-items: center;
+    color: var(--ink);
+    /* Тап-цель бренда — не меньше 48 px по высоте. */
+    min-height: var(--tap);
+}
+
+/* «Kop.team» из эмблемы клуба; красная точка — акцент сайта. */
+.nav__logo {
+    display: block;
+    height: 26px;
+    width: auto;
 }
 
 .nav__brand-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--accent-red);
+    width: 7px;
+    height: 7px;
+    margin-left: 6px;
+    align-self: flex-end;
+    margin-bottom: 18px;
     border-radius: 50%;
-    transform: skewX(6deg);
-    margin-left: 4px;
-    align-self: center;
+    background: var(--accent-red);
+}
+
+@media (max-width: 960px) {
+    .nav__logo { height: 23px; }
+    .nav__brand-dot { margin-bottom: 18px; }
 }
 
 .nav__list {

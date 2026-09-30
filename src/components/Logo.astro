@@ -1,0 +1,49 @@
+---
+// ================================================================
+// Logo.astro — эмблема Kop.team (контуры: tools/logo/make_logo.py).
+//
+//   variant="emblem"  — полная: кольцо, «Kop.team», «самбо | единоборства»;
+//   variant="lockup"  — строчная без кольца: слово и подпись;
+//   variant="wordmark" — одно «Kop.team»: для шапки, где подпись
+//                       при высоте 30–40 px превратилась бы в точки.
+// Цвет — currentColor, поэтому эмблема перекрашивается обычным color.
+// ================================================================
+import LOGO from '../data/logo.json';
+
+interface Props {
+    variant?: 'emblem' | 'lockup' | 'wordmark';
+    class?: string;
+    /** Подпись для скринридеров; пусто — эмблема декоративная. */
+    title?: string;
+}
+
+const { variant = 'emblem', class: cls, title } = Astro.props;
+const e = LOGO.emblem;
+const l = LOGO.lockup;
+const w = LOGO.wordmark;
+---
+{variant === 'emblem' ? (
+    <svg class={cls} viewBox={e.viewBox} xmlns="http://www.w3.org/2000/svg"
+         role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : 'true'}
+         focusable="false">
+        <circle cx={e.ring.cx} cy={e.ring.cy} r={e.ring.r} fill="none"
+                stroke="currentColor" stroke-width={e.ring.stroke} class="logo__ring" />
+        <path d={e.word} fill="currentColor" />
+        <path d={e.sub} fill="currentColor" />
+        <rect x={e.bar.x} y={e.bar.y} width={e.bar.w} height={e.bar.h} fill="currentColor" />
+    </svg>
+) : variant === 'wordmark' ? (
+    <svg class={cls} viewBox={w.viewBox} xmlns="http://www.w3.org/2000/svg"
+         role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : 'true'}
+         focusable="false">
+        <path d={w.word} fill="currentColor" />
+    </svg>
+) : (
+    <svg class={cls} viewBox={l.viewBox} xmlns="http://www.w3.org/2000/svg"
+         role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : 'true'}
+         focusable="false">
+        <path d={l.word} fill="currentColor" />
+        <path d={l.sub} fill="currentColor" class="logo__sub" />
+        <rect x={l.bar.x} y={l.bar.y} width={l.bar.w} height={l.bar.h} fill="currentColor" class="logo__sub" />
+    </svg>
+)}

@@ -1,59 +1,50 @@
 /* ================================================================
-   СЕКЦИЯ: НАПРАВЛЕНИЯ ПОДГОТОВКИ
-   Полный экран, три клиновидных сектора по 120°.
-   Границы клиньев в CSS-координатах (Y вниз): 90° / 210° / 330°.
-   Ниже 560 px — вертикальный список из трёх карточек (задача 4.4).
+   СЕКЦИЯ: НАПРАВЛЕНИЯ ПОДГОТОВКИ — всегда на весь экран.
+   Десктоп: три высокие колонки с косыми границами (6°), наведённая
+   расширяется и включает видео. Ниже 960 px — три полосы одна под
+   другой, первое касание включает видео, второе — переход.
    ================================================================ */
 .directions {
     position: relative;
     height: 100vh;   /* fallback */
     height: 100svh;
-    min-height: 600px;
+    min-height: 560px;
     width: 100%;
     overflow: hidden;
     background: var(--ink);
+    display: flex;
 }
 
 .direction-sector {
-    position: absolute;
-    inset: 0;
+    position: relative;
     display: block;
     overflow: hidden;
-    transform-origin: 50% 50%;
+    flex: 1 1 0;
+    min-width: 0;
+    transition: flex-grow var(--dur-slow) var(--ease-out);
 }
 
-.direction-sector--combat   { clip-path: polygon(50% 50%, -123% -50%, 223% -50%); }
-.direction-sector--sambo    { clip-path: polygon(50% 50%, 223% -50%, 50% 250%); }
-.direction-sector--striking { clip-path: polygon(50% 50%, 50% 250%, -123% -50%); }
-
-/* Медиа (постер и видео) */
+/* ---------- Медиа: постер и видео заполняют колонку ---------- */
 .direction-sector__media {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background-size: cover;
-    background-position: center;
+    object-position: 50% 50%;
     transition: opacity var(--dur-slow) var(--ease-out),
                 transform var(--dur-slow) var(--ease-out);
 }
 
-/* Градиенты-плейсхолдеры вместо инлайн-стилей: CSP style-src 'self'. */
-.direction-sector--combat .direction-sector__media--img {
-    background-image: linear-gradient(135deg, #2a2a2e 0%, #0E0E10 100%);
-}
-.direction-sector--sambo .direction-sector__media--img {
-    background-image: linear-gradient(135deg, #E4002B 0%, #0E0E10 100%);
-}
-.direction-sector--striking .direction-sector__media--img {
-    background-image: linear-gradient(135deg, #0033A0 0%, #0E0E10 100%);
-}
+/* Подложка, пока грузится постер (инлайн-стили запрещены CSP). */
+.direction-sector--combat .direction-sector__media--img { background: linear-gradient(135deg, #2a2a2e 0%, #0E0E10 100%); }
+.direction-sector--sambo .direction-sector__media--img { background: linear-gradient(135deg, #E4002B 0%, #0E0E10 100%); }
+.direction-sector--striking .direction-sector__media--img { background: linear-gradient(135deg, #0033A0 0%, #0E0E10 100%); }
 
 .direction-sector__media--img { opacity: 1; }
 .direction-sector__media--video { opacity: 0; }
 
-/* Раскрытый сектор: постер уходит, видео проявляется.
+/* Раскрытая колонка: постер уходит, видео проявляется.
    is-active ставится из JS (тач: первое касание). */
 .direction-sector.is-active .direction-sector__media--img,
 .direction-sector:focus-visible .direction-sector__media--img {
@@ -65,56 +56,37 @@
     opacity: 1;
 }
 
+/* Низ темнее — под подпись; верх чуть приглушён под навигацию. */
 .direction-sector__veil {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(14, 14, 16, 0.15) 0%, rgba(14, 14, 16, 0.75) 100%);
+    background: linear-gradient(180deg, rgba(14, 14, 16, 0.35) 0%, rgba(14, 14, 16, 0) 22%,
+                                rgba(14, 14, 16, 0) 48%, rgba(14, 14, 16, 0.85) 100%);
     z-index: 1;
-    transition: opacity var(--dur-slow) ease;
     pointer-events: none;
 }
 
-.direction-sector.is-active .direction-sector__veil { opacity: 0.7; }
-
-/* ---------- Подпись сектора ---------- */
+/* ---------- Подпись ---------- */
 .direction-sector__label {
     position: absolute;
     z-index: 2;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 clamp(20px, 3vw, 44px) clamp(28px, 7vh, 64px);
     color: var(--paper);
     font-family: var(--font-display);
     text-transform: uppercase;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    transition: transform var(--dur-slow) var(--ease-out);
-}
-
-.direction-sector--combat .direction-sector__label {
-    top: 14%;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    align-items: center;
-}
-
-.direction-sector--sambo .direction-sector__label {
-    right: 7%;
-    bottom: 18%;
-    text-align: right;
-    align-items: flex-end;
-}
-
-.direction-sector--striking .direction-sector__label {
-    left: 7%;
-    bottom: 18%;
-    text-align: left;
     align-items: flex-start;
+    gap: 10px;
 }
 
 .direction-sector__num {
     font-size: 12px;
     letter-spacing: 0.3em;
-    color: rgba(247, 247, 248, 0.65);
+    color: rgba(247, 247, 248, 0.7);
     font-weight: 500;
 }
 
@@ -123,17 +95,28 @@
     display: inline-block;
     width: 28px;
     height: 1px;
-    background: currentColor;
+    background: var(--accent-red);
     vertical-align: middle;
     margin-right: 10px;
     margin-bottom: 3px;
 }
 
 .direction-sector__name {
-    font-size: clamp(28px, 4vw, 60px);
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(30px, 3.4vw, 58px);
     font-weight: 600;
     letter-spacing: 0.01em;
     line-height: 0.95;
+}
+
+.direction-sector__sub {
+    font-family: var(--font-body);
+    text-transform: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(247, 247, 248, 0.85);
+    max-width: 30ch;
 }
 
 .direction-sector__arrow {
@@ -145,108 +128,65 @@
 
 .direction-sector.is-active .direction-sector__arrow { opacity: 1; }
 
-/* ---------- Разделительные лучи ---------- */
-.directions__dividers {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 3;
-    overflow: visible;
+/* ---------- Десктоп: косые колонки ----------
+   Наклон 6° по высоте экрана: tan 6° × 100svh ≈ 10.5svh. Соседние
+   колонки заходят друг на друга на этот скос минус 3 px — в зазоре
+   виден тёмный фон секции, он и есть косая граница. */
+@media (min-width: 961px) {
+    .directions { --cut: 10.5svh; }
+
+    .direction-sector {
+        margin-right: calc(-1 * var(--cut) + 3px);
+        clip-path: polygon(var(--cut) 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+    }
+    .direction-sector:first-of-type {
+        clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+    }
+    .direction-sector:last-of-type {
+        margin-right: 0;
+        clip-path: polygon(var(--cut) 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    /* Подпись не заезжает под косой край колонки. */
+    .direction-sector__label { padding-left: calc(var(--cut) * 0.35 + 28px); }
+    .direction-sector:first-of-type .direction-sector__label { padding-left: clamp(24px, 4vw, 64px); }
 }
 
-.directions__divider-line {
-    stroke: var(--paper);
-    stroke-width: 0.15;
-    stroke-opacity: 0.35;
-    vector-effect: non-scaling-stroke;
-}
-
-@media (hover: hover) and (pointer: fine) {
+/* Наведение: колонка шире, соседи уже; видео вместо постера. */
+@media (min-width: 961px) and (hover: hover) and (pointer: fine) {
+    .directions:hover .direction-sector { flex-grow: 0.8; }
+    .directions .direction-sector:hover { flex-grow: 1.5; }
     .direction-sector:hover .direction-sector__media--img { opacity: 0; transform: scale(1.03); }
     .direction-sector:hover .direction-sector__media--video { opacity: 1; }
-    .direction-sector:hover .direction-sector__veil { opacity: 0.7; }
     .direction-sector:hover .direction-sector__arrow { opacity: 1; transform: translateX(12px); }
-    .direction-sector--combat:hover .direction-sector__arrow { transform: translateY(-8px); }
-    .direction-sector--striking:hover .direction-sector__arrow { transform: translateX(-12px); }
 }
 
-/* ---------- Планшет: три горизонтальные полосы ---------- */
-@media (max-width: 960px) and (min-width: 561px) {
+/* ---------- Планшет и телефон: три полноэкранные полосы ---------- */
+@media (max-width: 960px) {
     .directions {
-        height: auto;
-        min-height: 100svh;
-        display: flex;
+        min-height: 540px;
         flex-direction: column;
     }
-    .direction-sector {
-        position: relative;
-        inset: auto;
-        width: 100%;
-        flex: 1 0 33.333svh;
-        min-height: 220px;
-        clip-path: none;
-    }
-    .direction-sector--combat .direction-sector__label,
-    .direction-sector--sambo .direction-sector__label,
-    .direction-sector--striking .direction-sector__label {
-        top: 50%;
-        left: 7%;
-        right: auto;
-        bottom: auto;
-        transform: translateY(-50%);
-        text-align: left;
-        align-items: flex-start;
-    }
-    .directions__dividers { display: none; }
     .direction-sector + .direction-sector {
-        border-top: 1px solid rgba(247, 247, 248, 0.12);
+        border-top: 1px solid rgba(247, 247, 248, 0.14);
     }
-}
-
-/* ---------- Мобильный: вертикальный список карточек (задача 4.4) ----------
-   SVG-диаграмма из клиньев на 360 px нечитаема — те же три ссылки
-   с теми же данными и переходами превращаются в карточки. */
-@media (max-width: 560px) {
-    .directions {
-        height: auto;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        padding: var(--section-pad) var(--gutter);
-    }
-
-    .direction-sector {
-        position: relative;
-        inset: auto;
-        width: 100%;
-        min-height: 168px;
-        clip-path: none;
-        border: 1px solid rgba(247, 247, 248, 0.14);
-        display: flex;
-        align-items: center;
-    }
-
-    .direction-sector__media--video { display: none; }
+    /* В широкой полосе из портретного кадра видна середина — лица
+       на постерах выше центра, поэтому смещаем кадр вверх. */
+    .direction-sector--combat .direction-sector__media--img { object-position: 50% 30%; }
+    .direction-sector--sambo .direction-sector__media--img { object-position: 50% 58%; }
+    .direction-sector--striking .direction-sector__media--img { object-position: 50% 32%; }
 
     .direction-sector__veil {
-        background: linear-gradient(90deg, rgba(14, 14, 16, 0.82) 30%, rgba(14, 14, 16, 0.25) 100%);
+        background: linear-gradient(90deg, rgba(14, 14, 16, 0.78) 0%, rgba(14, 14, 16, 0.15) 80%);
     }
-
-    .direction-sector--combat .direction-sector__label,
-    .direction-sector--sambo .direction-sector__label,
-    .direction-sector--striking .direction-sector__label {
-        position: static;
-        transform: none;
-        text-align: left;
-        align-items: flex-start;
-        padding: 22px;
-        gap: 8px;
+    .direction-sector__label {
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+        padding: 0 var(--gutter);
+        gap: 6px;
     }
-
-    .direction-sector__name { font-size: 28px; }
-
-    .directions__dividers { display: none; }
+    .direction-sector__name { font-size: clamp(28px, 7vw, 48px); }
+    .direction-sector__sub { font-size: 13px; }
+    .direction-sector__arrow { display: none; }
 }

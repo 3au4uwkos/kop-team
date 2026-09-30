@@ -4,6 +4,7 @@
 // На главной пункты — якоря (#combat), на служебных — /#combat.
 // ================================================================
 import { NAV_LINKS } from '../data/site';
+import Logo from './Logo.astro';
 
 interface Props { home?: boolean }
 const { home = false } = Astro.props;
@@ -12,8 +13,9 @@ const href = (h: string) => (home ? h : `/${h}`);
 const desktop = NAV_LINKS.filter((l) => l.desktop);
 ---
 <header class="nav" id="nav">
-    <a href={home ? '#hero' : '/'} class="nav__brand" aria-label="Копейкин — на главную">
-        КОПЕЙКИН<span class="nav__brand-dot" aria-hidden="true"></span>
+    <a href={home ? '#hero' : '/'} class="nav__brand" aria-label="Kop.team — на главную">
+        <Logo variant="wordmark" class="nav__logo" />
+        <span class="nav__brand-dot" aria-hidden="true"></span>
     </a>
     <nav aria-label="Основная навигация">
         <ul class="nav__list">

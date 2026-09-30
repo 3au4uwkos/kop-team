@@ -115,14 +115,6 @@
     color: rgba(247, 247, 248, 0.045);
 }
 
-.bg-word--directions {
-    left: 50%;
-    top: 50%;
-    translate: -50% -50%;
-    font-size: clamp(120px, 18vw, 300px);
-    color: rgba(247, 247, 248, 0.05);
-}
-
 .bg-word--contacts {
     right: -3vw;
     bottom: -2vh;
@@ -314,6 +306,22 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
+}
+
+.site-footer__brand {
+    display: block;
+    color: var(--ink);
+    transition: color var(--dur-base) ease;
+}
+
+.site-footer__logo {
+    display: block;
+    width: 88px;
+    height: 88px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .site-footer__brand:hover { color: var(--accent-red); }
 }
 
 .site-footer__nav {

@@ -1,12 +1,13 @@
 ---
 // ================================================================
-// Preloader.astro — титр «КОПЕЙКИН»: line-wipe + уход вверх, ≤ 400 мс.
+// Preloader.astro — эмблема Kop.team: проявление + уход вверх, ≤ 400 мс.
 // Анимация чисто CSS, поэтому без JS сайт тоже открывается.
 // JS лишь убирает слой раньше, если страница загрузилась быстрее.
 // ================================================================
+import Logo from './Logo.astro';
 ---
 <div class="preloader" id="preloader" aria-hidden="true">
-    <div class="preloader__mark"><span>КОПЕЙКИН</span></div>
+    <div class="preloader__mark"><Logo class="preloader__logo" /></div>
 </div>
 
 <script>

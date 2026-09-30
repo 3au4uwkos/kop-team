@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Crumbs from '../components/Crumbs.astro';
 import Socials from '../components/Socials.astro';
 import Requisites from '../components/Requisites.astro';
+import Venues from '../components/Venues.astro';
 import { locationSchema, personSchema, breadcrumbSchema } from '../data/schema';
 import { PHONE, PHONE_HUMAN, CITY } from '../data/site';
 import '../styles/page.css';
@@ -44,12 +45,16 @@ const PARK_MAPS = 'https://yandex.ru/maps/org/tsentralnyy_park_kultury_i_otdykha
 
             <h2>Где проходят тренировки</h2>
             <p>
-                Город — {CITY}. Зал и площадки зависят от направления и формата занятий:
-                точный адрес и как добраться тренер присылает при записи, вместе
-                с расписанием.
+                Город — {CITY}. У каждого направления свой зал; как добраться,
+                тренер подскажет при записи.
             </p>
+        </div>
+
+        <Venues />
+
+        <div class="prose">
             <p>
-                <!-- TODO(владелец): адрес зала — улица, дом, ориентир, как добраться. -->
+                <!-- TODO(владелец): точные адреса «Динамо» и «Тула Арены». -->
                 Открытая утренняя зарядка проходит в Центральном парке культуры и отдыха
                 имени П. П. Белоусова по вторникам.
             </p>

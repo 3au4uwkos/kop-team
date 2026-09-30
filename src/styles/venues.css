@@ -1,0 +1,82 @@
+/* ================================================================
+   ГДЕ ТРЕНИРУЕМСЯ — карточки залов (components/Venues.astro)
+   ================================================================ */
+.venues {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.venue {
+    padding: 22px 22px 24px;
+    border-top: 2px solid var(--accent-red);
+    background: var(--paper-alt);
+}
+
+.venue__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.venue__address {
+    margin-top: 4px;
+    font-size: 14px;
+    /* --muted на paper-alt даёт 4.3:1 — чуть ниже нормы WCAG, темнее. */
+    color: #56565b;
+}
+
+.venue__groups {
+    list-style: none;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.venue__groups li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.venue__groups li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 8px;
+    height: 1px;
+    background: var(--accent-red);
+}
+
+.venue { display: flex; flex-direction: column; }
+
+.venue__map {
+    margin-top: auto;
+    padding-top: 14px;
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-red);
+    text-underline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .venue__map:hover { color: var(--accent-red); }
+}
+
+@media (max-width: 960px) {
+    .venues { grid-template-columns: 1fr; }
+}

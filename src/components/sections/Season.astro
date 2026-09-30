@@ -1,0 +1,65 @@
+---
+// ================================================================
+// Season.astro — «Сезон на ковре»: мозаика турниров последних лет.
+// Даты и названия — из постов тренера во ВКонтакте
+// (docs/media-sources.md). Сетка 4 колонки: широкая плитка — 2
+// колонки 8:5, узкая — 1 колонка 4:5, высота рядов совпадает.
+// ================================================================
+import Photo from '../Photo.astro';
+import Clip from '../Clip.astro';
+
+const TILES = [
+    { photo: 'season/ludinovo', wide: true, date: 'Февраль 2026 · Людиново', title: 'Всероссийский турнир',
+      alt: 'Построение участников всероссийского турнира в большом зале' },
+    { photo: 'season/cups', date: 'Ноябрь 2025', title: 'Кубки и медали',
+      alt: 'Кубки и медали на столе награждения' },
+    { clip: 'season', poster: 'season/v', date: 'После старта', title: 'Медали из рук тренера',
+      alt: 'Видео: тренер раздаёт медали и грамоты ребятам в красных куртках' },
+    { photo: 'season/first-start', date: 'Январь 2026 · арена «Динамо»', title: '«Мой первый старт»',
+      alt: 'Малыши в куртках самбо на арене «Динамо» перед первыми соревнованиями' },
+    { photo: 'season/sambo-day', date: '16 ноября 2025', title: 'Всероссийский день самбо',
+      alt: 'Воспитанники Копейкина на пьедестале турнира в День самбо' },
+    { photo: 'season/debut', wide: true, date: 'Декабрь 2025', title: 'Соревнования новичков',
+      alt: 'Большая группа новичков с грамотами после первых соревнований' },
+    { photo: 'season/cfo', wide: true, date: 'Май 2025', title: 'Открытое первенство ЦФО',
+      alt: 'Призёры открытого первенства ЦФО по самбо с тренером' },
+    { photo: 'season/kotov', date: '19 сентября 2026', title: 'Турнир памяти В. Б. Котова',
+      alt: 'Призёры турнира памяти В. Б. Котова с тренером' },
+    { photo: 'season/proud', date: '27 сентября 2026', title: 'Турнир юношей 2012–2013 г. р.',
+      alt: 'Пьедестал турнира: ребята в красных куртках и тренер' },
+];
+import '../../styles/sections/season.css';
+
+---
+<section class="season" id="season" aria-labelledby="season-title">
+    <div class="bg-word bg-word--season" data-word="ТУРНИРЫ" aria-hidden="true"></div>
+
+    <div class="season__head">
+        <h2 class="display season__title reveal" id="season-title">
+            <span class="display--skew">Сезон</span><br>
+            <span class="display--skew season__title-accent">на ковре</span>
+        </h2>
+        <p class="season__intro reveal" data-delay="1">
+            Почти каждые выходные — старты: от «Моего первого старта» для новичков
+            до всероссийских турниров, первенств ЦФО, Европы и мира. Соревнования — не обязанность,
+            а следующий шаг для тех, кто к нему готов.
+        </p>
+    </div>
+
+    <ul class="season__grid">
+        {TILES.map((t, i) => (
+            <li class:list={['season-tile', 'reveal', t.wide && 'season-tile--wide']} data-delay={(i % 3) + 1}>
+                <div class="season-tile__media">
+                    {t.clip
+                        ? <Clip src={t.clip} poster={t.poster!} label={t.alt} />
+                        : <Photo name={t.photo!} alt={t.alt} class="season-tile__img"
+                                 sizes={t.wide ? '(max-width: 960px) 100vw, 50vw' : '(max-width: 960px) 50vw, 25vw'} />}
+                </div>
+                <div class="season-tile__caption">
+                    <span class="season-tile__date">{t.date}</span>
+                    <span class="season-tile__title">{t.title}</span>
+                </div>
+            </li>
+        ))}
+    </ul>
+</section>

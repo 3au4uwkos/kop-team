@@ -8,7 +8,13 @@ import Split from '../Split.astro';
     modifier="striking"
     titleLines={['Ударная', 'техника']}
     titleSub="Ударная техника в Туле: тренировки для мужчин, девушек и юношей"
-    slides={3}
+    photos={[
+        { clip: 'striking-gallery', poster: 'striking/v', alt: 'Видео: работа на лапах в берёзовой роще' },
+        { name: 'striking/1', alt: 'Тренер держит лапы, ученик бьёт прямой на открытой площадке' },
+        { name: 'striking/2', alt: 'Тренер ставит мальчику удар и защиту' },
+        { name: 'striking/3', alt: 'Подросток в перчатках бьёт по лапам тренера, у ног — координационная лестница' },
+        { name: 'striking/4', alt: 'Бой с тенью в зале' },
+    ]}
     bgWord="УДАР"
 >
     <div class="split__offers reveal" data-delay="3">

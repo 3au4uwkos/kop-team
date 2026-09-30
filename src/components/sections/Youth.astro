@@ -1,15 +1,51 @@
 ---
 // ================================================================
 // Youth.astro — подростковые лагерные смены.
-// Лента смен — scroll-snap (без Swiper); градиенты карточек в CSS.
-// TODO(владелец): фото со сборов вместо градиентов-плейсхолдеров.
+// Лента смен — scroll-snap (без Swiper), ниже — мозаика «как проходит
+// смена». Смены, базы и даты — из постов тренера во ВКонтакте, фото
+// и видео — оттуда же и с его телефона (docs/media-sources.md).
 // ================================================================
+import Photo from '../Photo.astro';
+import Clip from '../Clip.astro';
+
 const CAMPS = [
-    { tag: 'Лето · 2025', place: 'Подмосковье · база «Волга»', title: 'Летняя смена' },
-    { tag: 'Осень · 2025', place: 'Сочи · Красная поляна', title: 'Горный сбор' },
-    { tag: 'Зима · 2026', place: 'Карелия · база «Онего»', title: 'Зимний интенсив' },
-    { tag: 'Весна · 2026', place: 'Крым · Алушта', title: 'Весенняя смена' },
-    { tag: 'Лето · 2024', place: 'Подмосковье · база «Сосны»', title: 'Классика' },
+    { tag: 'Июнь · 2026', place: 'Выездные сборы', title: 'Лето без телефонов',
+      photo: 'camps/2026-summer', alt: 'Группа ребят на летних сборах в сосновом лесу' },
+    { tag: 'Весна · 2026', place: 'РУТБ «Ока»', title: 'Весенние каникулы',
+      photo: 'camps/2026-spring', alt: 'Участники весенних сборов в куртках самбо с тренером' },
+    { tag: 'Осень · 2025', place: 'РУТБ «Ока»', title: 'Осенние каникулы',
+      photo: 'camps/2025-autumn', alt: 'Ребята в куртках самбо у баннера турнира на базе «Ока»' },
+    { tag: 'Август · 2025', place: 'Лагерь «Звёздный»', title: 'Летняя смена',
+      photo: 'camps/2025-zvezdny', alt: 'Смена в лагере «Звёздный» на футбольном поле среди сосен' },
+    { tag: 'Август · 2025', place: 'Юрьев-Польский · Владимирская обл.', title: 'Спарринг-сбор',
+      photo: 'camps/2025-yuryev', alt: 'Команда в куртках самбо на выездном сборе' },
+    { tag: 'Июнь · 2025', place: 'РУТБ «Ока»', title: 'Летние сборы',
+      photo: 'camps/2025-summer', alt: 'Большая группа ребят с тренерами на лесной лестнице' },
+    { tag: 'Январь · 2025', place: 'РУТБ «Ока»', title: 'Новогодние каникулы',
+      photo: 'camps/2025-winter', alt: 'Ребята на катке во время зимних сборов' },
+    { tag: 'Июнь · 2024', place: 'Детский спортивный лагерь', title: 'Летняя смена',
+      photo: 'camps/2024-summer', alt: 'Ребята выстроились у корпуса летнего лагеря' },
+    { tag: 'Январь · 2024', place: 'Рязань', title: 'Сбор со спаррингами',
+      photo: 'camps/2024-ryazan', alt: 'Команда в куртках самбо на сборе в Рязани' },
+    { tag: 'Январь · 2024', place: 'Москва', title: 'Открытый сбор по самбо и дзюдо',
+      photo: 'camps/2024-moscow', alt: 'Старшие ребята у баннера открытого тренировочного сбора в Москве' },
+    // Год южной смены — со слов тренера (голосовое от 26.04.2026).
+    { tag: 'Лето · 2022–2023', place: 'Юг · на море', title: 'Летний лагерь',
+      photo: 'camps/archive-sea', alt: 'Группа ребят с тренерами на пляже на закате' },
+    { tag: 'Лето', place: 'Тульская область', title: 'Летний лагерь',
+      photo: 'camps/archive-field', alt: 'Тренер проводит упражнение с резиной на футбольном поле лагеря' },
+];
+
+// Мозаика «как проходит смена»: по кадру на каждый пункт распорядка.
+const LIFE = [
+    { photo: 'life/stadium', caption: 'Две тренировки в день', alt: 'Тренировка с резиной на беговой дорожке стадиона' },
+    { clip: 'life', poster: 'life/v', caption: 'Скорость и координация', alt: 'Видео: упражнения на координационной лестнице на стадионе' },
+    { photo: 'life/food', caption: 'Шведский стол', alt: 'Шведский стол в столовой базы: салаты, гарниры, пельмени' },
+    { photo: 'life/pool', caption: 'Бассейн', alt: 'Открытый бассейн летнего лагеря' },
+    { photo: 'life/games', caption: 'Игры на воздухе', alt: 'Баскетбол на уличной площадке базы' },
+    { photo: 'life/gym', caption: 'Тренажёрный зал', alt: 'Подросток занимается на тренажёре' },
+    { photo: 'life/ice', caption: 'Каток', alt: 'Группа ребят на катке базы' },
+    { photo: 'life/phones', caption: 'Телефоны — вечером', alt: 'Телефоны ребят лежат на подоконнике до вечернего звонка родителям' },
 ];
 import '../../styles/sections/youth.css';
 
@@ -19,25 +55,44 @@ import '../../styles/sections/youth.css';
 
     <div class="youth__layout">
         <div class="youth__about">
-            <div class="kicker reveal">Подростковая группа · 12–17 лет</div>
+            <div class="kicker reveal">Выезды с ребятами · круглый год</div>
             <h2 class="youth__title reveal" data-delay="1" id="youth-title">
                 <span class="display youth__title-main">
                     <span class="display--skew">Лагерные</span><br>
                     <span class="display--skew youth__title-accent">смены</span>
                 </span>
-                <span class="youth__title-sub">Выездные сборы по самбо для подростков 12–17 лет</span>
+                <span class="youth__title-sub">Летний спортивный лагерь и сборы по самбо на всех каникулах</span>
             </h2>
             <p class="youth__intro reveal" data-delay="2">
-                Выездные сборы до двух недель на спортивно-тренировочных базах:
-                две тренировки в день, разбор техники, полное питание и медицинский
+                Мы регулярно выезжаем с детьми: летом — в спортивный лагерь,
+                на осенние, зимние и весенние каникулы — на учебно-тренировочные
+                сборы. Две тренировки в день, разбор техники, питание и медицинский
                 контроль — интенсив и отдых в одном формате.
             </p>
+            <ol class="youth-year reveal" data-delay="2" aria-label="Выезды в течение года">
+                <li class="youth-year__item youth-year__item--summer">
+                    <span class="youth-year__season">Лето</span>
+                    <span class="youth-year__what">Спортивный лагерь</span>
+                </li>
+                <li class="youth-year__item">
+                    <span class="youth-year__season">Осенние каникулы</span>
+                    <span class="youth-year__what">Сборы</span>
+                </li>
+                <li class="youth-year__item">
+                    <span class="youth-year__season">Зимние каникулы</span>
+                    <span class="youth-year__what">Сборы</span>
+                </li>
+                <li class="youth-year__item">
+                    <span class="youth-year__season">Весенние каникулы</span>
+                    <span class="youth-year__what">Сборы</span>
+                </li>
+            </ol>
             <ul class="youth__list reveal" data-delay="2">
                 <li>Длительность — от 7 до 14 дней</li>
-                <li>Проживание на базах Подмосковья, Кавказа и юга</li>
+                <li>Базы: РУТБ «Ока», лагерь «Звёздный», выезды в другие регионы</li>
                 <li>Две тренировки в день + теория и видеоразбор</li>
-                <li>Спортивные игры, бассейн, природа</li>
-                <li>Полное питание и медицинский контроль</li>
+                <li>Спортивные игры, бассейн, баня, каток, природа</li>
+                <li>Питание и медицинский контроль</li>
             </ul>
 
             <details class="details details--dark">
@@ -67,15 +122,16 @@ import '../../styles/sections/youth.css';
 
                     <h3>Быт и безопасность</h3>
                     <ul>
-                        <li>полное питание — пятиразовое, с учётом нагрузки;</li>
+                        <li>питание — трёхразовое, шведский стол, с учётом нагрузки;</li>
                         <li>медицинский контроль на базе на протяжении всей смены;</li>
                         <li>тренер живёт вместе с группой и отвечает за режим;</li>
-                        <li>связь с родителями — ежедневно, в оговорённые часы.</li>
+                        <li>днём — без телефонов: вечером десять минут на звонок
+                            родителям, чтобы рассказать, как прошёл день.</li>
                     </ul>
 
                     <h3>Кому подходит</h3>
                     <p>
-                        Смены рассчитаны на подростков 12–17 лет, которые уже занимаются
+                        Смены рассчитаны на ребят, которые уже занимаются
                         и хотят прибавить. Опыт соревнований не обязателен: нагрузка
                         распределяется по уровню, и новичок не окажется в одной паре
                         с кандидатом в мастера. Для многих ребят сбор становится
@@ -91,7 +147,9 @@ import '../../styles/sections/youth.css';
                  tabindex="0" role="group" aria-label="Фотолента лагерных смен">
                 {CAMPS.map((c, i) => (
                     <article class="camp-card">
-                        <div class:list={['camp-card__media', 'camp-card__media--' + (i + 1)]}>
+                        <div class:list={['camp-card__media', 'camp-card__media--' + ((i % 5) + 1)]}>
+                            <Photo name={c.photo} alt={c.alt} class="camp-card__img"
+                                   sizes="(max-width: 960px) min(76vw, 320px), clamp(260px, 26vw, 360px)" />
                             <div class="camp-card__tag">{c.tag}</div>
                         </div>
                         <div class="camp-card__body">
@@ -107,14 +165,34 @@ import '../../styles/sections/youth.css';
                         aria-label="Предыдущая смена">←</button>
                 <button class="youth-camps__btn" type="button" data-carousel-next
                         aria-label="Следующая смена">→</button>
-                <div class="youth-camps__dots">
-                    {CAMPS.map((c, i) => (
-                        <button class:list={['youth-camps__dot', i === 0 && 'is-active']}
-                                type="button" data-carousel-dot
-                                aria-label={'Смена: ' + c.title}></button>
-                    ))}
-                </div>
             </div>
         </div>
+    </div>
+
+    <div class="youth-life">
+        <div class="youth-life__head reveal">
+            <h3 class="youth-life__title display">
+                <span class="display--skew">Как проходит смена</span>
+            </h3>
+            <p class="youth-life__intro">
+                Подъём, зарядка, две тренировки, бассейн и игры, вечером — звонок
+                родителям. Кадры с настоящих сборов на РУТБ «Ока» и в «Звёздном».
+            </p>
+        </div>
+        <ul class="youth-life__grid">
+            {LIFE.map((t, i) => (
+                <li class="life-tile reveal" data-delay={(i % 4) + 1}>
+                    <div class="life-tile__media">
+                        {t.clip
+                            ? <Clip src={t.clip} poster={t.poster!} label={t.alt} />
+                            : <Photo name={t.photo!} alt={t.alt} class="life-tile__img"
+                                     sizes="(max-width: 560px) 50vw, (max-width: 960px) 33vw, 25vw" />}
+                    </div>
+                    <div class="life-tile__caption">
+                        {t.caption}
+                    </div>
+                </li>
+            ))}
+        </ul>
     </div>
 </section>

@@ -111,6 +111,9 @@
 }
 
 .socials__note {
+    /* Над фоновым словом «ЗАПИСЬ»: без этого буквы его перекрывали. */
+    position: relative;
+    z-index: 2;
     margin-top: 14px;
     font-size: 11px;
     line-height: 1.55;

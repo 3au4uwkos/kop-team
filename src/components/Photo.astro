@@ -1,0 +1,41 @@
+---
+// ================================================================
+// Photo.astro — <picture> с AVIF → WebP (по srcset) → один малый JPEG
+// для совсем старых браузеров.
+// Файлы и размеры собирает `npm run media` (tools/build-media.mjs),
+// сюда приходит только ключ: 'combat/1' → /assets/img/combat/1-640.avif …
+// ================================================================
+import MEDIA from '../data/media.json';
+
+interface Props {
+    /** Ключ из tools/media.config.mjs, например 'hero/coach'. */
+    name: string;
+    alt: string;
+    /** Подсказка браузеру, какой ширины будет картинка на экране. */
+    sizes: string;
+    class?: string;
+    /** Первый экран: грузим сразу и с высоким приоритетом. */
+    eager?: boolean;
+}
+
+const { name, alt, sizes, class: cls, eager = false } = Astro.props;
+const meta = (MEDIA as Record<string, { widths: number[]; width: number; height: number; fallback: number }>)[name];
+if (!meta) throw new Error(`Photo: нет «${name}» в src/data/media.json — запустите npm run media`);
+
+const base = `/assets/img/${name}`;
+const srcset = (ext: string) => meta.widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(', ');
+---
+<picture>
+    <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
+    <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+    <img
+        class={cls}
+        src={`${base}-${meta.fallback}.jpg`}
+        width={meta.width}
+        height={meta.height}
+        alt={alt}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding={eager ? 'sync' : 'async'}
+        fetchpriority={eager ? 'high' : undefined}
+    />
+</picture>

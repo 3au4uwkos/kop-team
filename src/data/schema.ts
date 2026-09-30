@@ -5,7 +5,7 @@
 // ================================================================
 import {
     SITE_URL, CITY, COACH_NAME, BRAND, PHONE,
-    ADDRESS, GEO, OPENING_HOURS, PRICE_RANGE, SOCIALS,
+    ADDRESS, GEO, OPENING_HOURS, PRICE_RANGE, SOCIALS, VENUES,
 } from './site';
 
 const COACH_ID = `${SITE_URL}/#coach`;
@@ -31,7 +31,7 @@ export function personSchema() {
         jobTitle: 'Тренер по самбо',
         description:
             'Мастер спорта России по самбо, рукопашному бою и боевому самбо, ' +
-            'тренер высшей категории. Тренерский стаж более 18 лет.',
+            'тренер высшей категории по борьбе самбо. Тренерский стаж более 18 лет.',
         url: `${SITE_URL}/`,
         telephone: PHONE,
         address: postalAddress(),
@@ -65,6 +65,14 @@ export function locationSchema() {
         })),
         sameAs: SOCIALS.filter((s) => s.sameAs).map((s) => s.href),
     };
+    // Залы, где идут группы: у каждого — своё место в разметке.
+    node.containsPlace = VENUES.map((v) => ({
+        '@type': 'SportsActivityLocation',
+        name: v.name,
+        address: v.address
+            ? { ...postalAddress(), streetAddress: v.address }
+            : postalAddress(),
+    }));
     // TODO(владелец): координаты зала — см. GEO в site.ts.
     if (GEO) {
         node.geo = { '@type': 'GeoCoordinates', latitude: GEO.latitude, longitude: GEO.longitude };

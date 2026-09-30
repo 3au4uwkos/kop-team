@@ -8,18 +8,27 @@ import Split from '../Split.astro';
     modifier="combat"
     titleLines={['Боевое', 'самбо']}
     titleSub="Боевое самбо в Туле для взрослых и детей с 10 лет"
-    slides={4}
+    photos={[
+        { clip: 'combat-gallery', poster: 'combat/v', alt: 'Видео: спарринг по боевому самбо среди детей — шлемы, перчатки, защита' },
+        { name: 'combat/1', alt: 'Взрослая группа боевого самбо в защите — кулаки к камере' },
+        { name: 'combat/2', alt: 'Взрослая группа боевого самбо в шлемах, перчатках и щитках' },
+        { name: 'combat/3', alt: 'Тренер в куртке самбо и перчатках, рядом шлем' },
+        { name: 'combat/4', alt: 'Перчатки и лапы на красной куртке самбо' },
+    ]}
     bgWord="БОЙ"
 >
     <div class="split__offers reveal" data-delay="3">
         <div class="offer">
-            <div class="offer__kind">Группа выходного дня</div>
-            <div class="offer__for">Для взрослых</div>
+            <div class="offer__kind">Групповые тренировки</div>
+            <div class="offer__for">Для юношей 16–18 лет и взрослых 18+</div>
             <ul class="offer__list">
-                <li>длительность занятия до 1,5 часа</li>
-                <li>тренировки проходят по субботам или воскресеньям</li>
-                <li>точное расписание — в личных сообщениях</li>
+                <li>среда и пятница, 19:30–21:00</li>
+                <li>длительность занятия 1,5 часа</li>
             </ul>
+            <div class="offer__place">
+                <svg class="offer__pin" width="12" height="16" viewBox="0 0 12 16" aria-hidden="true"><path d="M6 0a6 6 0 0 0-6 6c0 4.5 6 10 6 10s6-5.5 6-10a6 6 0 0 0-6-6Zm0 8.2A2.2 2.2 0 1 1 6 3.8a2.2 2.2 0 0 1 0 4.4Z" fill="currentColor"/></svg>
+                <a href="https://yandex.ru/maps/15/tula/?text=%D0%A1/%D0%9A%20%C2%AB%D0%94%D0%B8%D0%BD%D0%B0%D0%BC%D0%BE%C2%BB%2C%20%D0%A2%D1%83%D0%BB%D0%B0%2C%20%D1%83%D0%BB.%20%D0%96%D0%B0%D0%B2%D0%BE%D1%80%D0%BE%D0%BD%D0%BA%D0%BE%D0%B2%D0%B0%2C%20%D0%A6%D0%9F%D0%9A%D0%B8%D0%9E%20%D0%B8%D0%BC.%20%D0%9F.%20%D0%9F.%20%D0%91%D0%B5%D0%BB%D0%BE%D1%83%D1%81%D0%BE%D0%B2%D0%B0" target="_blank" rel="noopener noreferrer"><b>С/К «Динамо»</b> · ул. Жаворонкова, ЦПКиО им. П. П. Белоусова</a>
+            </div>
         </div>
         <div class="offer">
             <div class="offer__kind">Персональные тренировки</div>
@@ -73,7 +82,7 @@ import Split from '../Split.astro';
                     и всегда под контролем тренера;</li>
                 <li>тем, кто уже занимался борьбой или ударкой и хочет собрать
                     два навыка в один;</li>
-                <li>новичкам без спортивного прошлого: группа выходного дня
+                <li>новичкам без спортивного прошлого: групповые
                     и персональные занятия рассчитаны в том числе на них.</li>
             </ul>
 

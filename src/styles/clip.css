@@ -1,0 +1,54 @@
+/* ================================================================
+   CLIP — видео-петля с кнопкой паузы (components/Clip.astro)
+   ================================================================ */
+.clip {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--ink);
+}
+
+.clip__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Визуал — кружок 36 px, кликабельная зона — полноценные 48 px. */
+.clip__toggle {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 3;
+    width: var(--tap);
+    height: var(--tap);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper);
+}
+
+.clip__toggle::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: rgba(14, 14, 16, 0.55);
+    border: 1px solid rgba(247, 247, 248, 0.35);
+    transition: background var(--dur-base) ease, border-color var(--dur-base) ease;
+}
+
+.clip__icon { position: relative; }
+.clip__icon--play { margin-left: 3px; }
+.clip__icon--pause { display: none; }
+.clip__toggle.is-playing .clip__icon--play { display: none; }
+.clip__toggle.is-playing .clip__icon--pause { display: block; }
+
+.clip__toggle:focus-visible { outline: 2px solid var(--paper); outline-offset: -2px; }
+
+@media (hover: hover) and (pointer: fine) {
+    .clip__toggle:hover::before {
+        background: var(--accent-red);
+        border-color: var(--accent-red);
+    }
+}
