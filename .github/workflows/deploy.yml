@@ -27,8 +27,12 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      # Полная история: lastmod в sitemap.xml — дата последнего коммита
+      # по файлам страницы; в мелком клоне у всех была бы дата HEAD.
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Build with Astro
         uses: withastro/action@v3
@@ -90,11 +94,9 @@ jobs:
       - name: Notify Yandex and Bing
         run: |
           site="https://$SITE_HOST"
-          # sitemap-index.xml -> sitemap-N.xml -> адреса страниц.
-          sitemaps=$(curl -fsS "$site/sitemap-index.xml" | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g') || true
-          urls=$(for s in $sitemaps; do curl -fsS "$s" | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g'; done) || true
+          urls=$(curl -fsS "$site/sitemap.xml" | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g') || true
           if [ -z "$urls" ]; then
-            echo "::warning::IndexNow: не удалось получить адреса из $site/sitemap-index.xml"
+            echo "::warning::IndexNow: не удалось получить адреса из $site/sitemap.xml"
             exit 0
           fi
           echo "$urls"

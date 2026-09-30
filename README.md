@@ -31,7 +31,7 @@ npm run media     # пересобрать фото и видео из vk-media/
 
 ```
 kop-team/
-├── astro.config.mjs          # site, sitemap, запрет инлайна стилей и скриптов
+├── astro.config.mjs          # site, base, запрет инлайна стилей и скриптов
 ├── lighthouserc.json         # бюджет производительности для CI
 │
 ├── public/                   # копируется в dist/ как есть
@@ -66,6 +66,7 @@ kop-team/
 │   │   ├── contacts.astro
 │   │   ├── privacy.astro
 │   │   ├── terms.astro
+│   │   ├── sitemap.xml.ts    # карта сайта, lastmod из истории git
 │   │   └── 404.astro
 │   │
 │   ├── scripts/              # reveal, counters, nav, carousel, directions,

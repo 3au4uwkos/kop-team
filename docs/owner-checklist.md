@@ -16,7 +16,7 @@
       ```
 - [ ] Repository → Settings → Code security: включить **Secret scanning**
       и **Push protection**.
-- [ ] Включить **Dependabot alerts** (следит за astro и @astrojs/sitemap).
+- [ ] Включить **Dependabot alerts** (следит за astro).
 - [ ] Settings → Branches → Add rule для `master`: запретить force-push.
 
 ## 2. Публикация
@@ -54,7 +54,7 @@
 Приоритет — Яндекс: целевая аудитория Тула.
 
 - [ ] **Яндекс.Вебмастер**: добавить сайт, подтвердить права,
-      отправить `https://kop-team.ru/sitemap-index.xml`.
+      отправить `https://kop-team.ru/sitemap.xml`.
 - [ ] **Яндекс.Бизнес**: карточка организации на Картах
       (после этого станут известны координаты для `GEO` в `src/data/site.ts`).
 - [ ] Продублировать карточку в **2ГИС**.
