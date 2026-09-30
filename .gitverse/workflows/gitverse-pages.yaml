@@ -1,0 +1,99 @@
+name: GitVerse Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: gitverse-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          SITE_BASE: /kop-team
+      - name: Check build output
+        run: |
+          test -f dist/index.html
+          grep -q '/kop-team/_astro/' dist/index.html
+          echo "Собрано страниц: $(find dist -name '*.html' | wc -l)"
+          du -sh dist
+      - name: Upload pages artifact
+        id: upload1
+        continue-on-error: true
+        timeout-minutes: 8
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitverse-pages
+          path: dist
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+
+      - name: Upload pages artifact (повтор 1)
+        id: upload2
+        if: steps.upload1.outcome != 'success'
+        continue-on-error: true
+        timeout-minutes: 8
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitverse-pages
+          path: dist
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+
+      - name: Upload pages artifact (повтор 2)
+        if: steps.upload1.outcome != 'success' && steps.upload2.outcome != 'success'
+        timeout-minutes: 8
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitverse-pages
+          path: dist
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.23'
+
+      - name: Deploy to GitVerse Pages
+        id: deployment
+        timeout-minutes: 20
+        uses: actions/deploy-pages@v1.0.0
+
+      - name: Print deploy URL
+        run: echo "page_url = ${{ steps.deployment.outputs.page_url }}"
+      - name: Explain deploy failure
+        if: failure() && steps.deployment.outcome == 'failure'
+        run: |
+          echo "::error::Если выше «failed to create deployment: 404» — в репозитории не включены Страницы."
+          echo "::error::GitVerse → kop-team → Настройки → Страницы: включить, Источник = «Воркфлоу», сохранить."
+          echo "::error::Затем CI/CD → «GitVerse Pages» → запустить заново. Коммитить ничего не нужно."
