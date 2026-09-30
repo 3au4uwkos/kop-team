@@ -11,9 +11,13 @@
 # (Если источник выбран «Ветка», экшен вернёт 417 «wrong pages source
 # type».) Требования GitVerse: репозиторий публичный, CI/CD включён.
 #
-# Экшены закреплены на v1.0.0: плавающий тег v1 раннер брал из
+# deploy-pages закреплён на v1.0.0: плавающий тег v1 раннер брал из
 # устаревшего кеша («Unable to pull refs/heads/v1» в логе). Документация
 # пишет gitverse/…, но таких репозиториев нет — рабочие лежат в actions/.
+#
+# Загрузка артефакта — с таймаутом и двумя повторами (task 2414976):
+# хранилище артефактов GitVerse иногда вешает запрос, а сам экшен
+# таймаута не имеет. Подробности — у шага загрузки ниже.
 #
 # Сайт проекта на GitVerse живёт в подкаталоге:
 #   https://3au4uwkos.gitverse.site/kop-team/
@@ -65,11 +69,57 @@ jobs:
           echo "Собрано страниц: $(find dist -name '*.html' | wc -l)"
           du -sh dist
 
-      # Имя артефакта по умолчанию — gitverse-pages, deploy-pages ждёт его же.
+      # Загрузка артефакта — с таймаутом и повторами.
+      #
+      # Почему не upload-pages-artifact (task 2414976, 30.09.2026): он лишь
+      # обёртка над upload-artifact, а форк upload-artifact у GitVerse шлёт
+      # архив кусками по 8 МБ без таймаута на кусок. Один запрос к их
+      # хранилищу повис на 25 из ~40 МБ — шаг ждал 30 минут, пока раннер
+      # не убил job. Те же ~40 МБ в прошлом запуске загрузились нормально,
+      # так что это сбой инфраструктуры, а не лимит: лечится повтором.
+      #
+      # Параметры те же, что у upload-pages-artifact (имя gitverse-pages —
+      # его ждёт deploy-pages, хранение 1 день), плюс overwrite: повтор
+      # заменяет недокачанную попытку. compression-level 0: фото и видео
+      # уже сжаты, zip только тратил бы время.
       - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v1.0.0
+        id: upload1
+        continue-on-error: true
+        timeout-minutes: 8
+        uses: actions/upload-artifact@v4
         with:
+          name: gitverse-pages
           path: dist
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+
+      - name: Upload pages artifact (повтор 1)
+        id: upload2
+        if: steps.upload1.outcome != 'success'
+        continue-on-error: true
+        timeout-minutes: 8
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitverse-pages
+          path: dist
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
+
+      - name: Upload pages artifact (повтор 2)
+        if: steps.upload1.outcome != 'success' && steps.upload2.outcome != 'success'
+        timeout-minutes: 8
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitverse-pages
+          path: dist
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
 
   deploy:
     needs: build
@@ -84,6 +134,7 @@ jobs:
 
       - name: Deploy to GitVerse Pages
         id: deployment
+        timeout-minutes: 20
         uses: actions/deploy-pages@v1.0.0
 
       - name: Print deploy URL
