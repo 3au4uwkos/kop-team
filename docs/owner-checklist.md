@@ -61,6 +61,9 @@
 - [ ] **Google Search Console**: домен-ресурс через DNS TXT,
       отправить тот же sitemap.
 - [ ] **Bing Webmaster**: импорт из GSC — закрывает Bing, Yahoo и DuckDuckGo.
+- [x] **IndexNow**: после каждого деплоя workflow сам сообщает Яндексу
+      и Bing адреса из sitemap. Результат — в Вебмастере:
+      «Индексирование → IndexNow».
 
 ## 4. Разовая проверка после первого деплоя
 

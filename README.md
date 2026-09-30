@@ -103,8 +103,12 @@ kop-team/
 ## Деплой
 
 Push в `master` запускает `.github/workflows/deploy.yml`:
-сборка Astro → бюджет Lighthouse → публикация на GitHub Pages.
+сборка Astro → бюджет Lighthouse → публикация на GitHub Pages →
+уведомление Яндекса и Bing через IndexNow.
 Сборка, не уложившаяся в бюджет, до прода не доезжает.
+
+IndexNow-ключ — файл `public/<ключ>.txt`; тот же ключ стоит в
+`INDEXNOW_KEY` в workflow. Меняются только вместе.
 
 В настройках репозитория: **Settings → Pages → Source = GitHub Actions**.
 

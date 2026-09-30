@@ -1,5 +1,6 @@
 # ================================================================
-# Сборка Astro -> бюджет Lighthouse -> публикация на GitHub Pages.
+# Сборка Astro -> бюджет Lighthouse -> публикация на GitHub Pages
+# -> уведомление поисковиков (IndexNow).
 # Деплой стоит за проверкой бюджета: сборка, не уложившаяся в пороги,
 # на прод не уезжает.
 #
@@ -72,3 +73,45 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # IndexNow: сообщаем Яндексу и Bing, что страницы обновились, — переобход
+  # за часы вместо недель. Ключ — имя и содержимое public/<ключ>.txt: по нему
+  # поисковики проверяют, что пишет владелец сайта. Адреса берём из sitemap
+  # уже опубликованного сайта. Уведомление не часть деплоя: при сбое —
+  # предупреждение в сводке запуска, job остаётся зелёным.
+  indexnow:
+    name: IndexNow
+    needs: deploy
+    runs-on: ubuntu-latest
+    env:
+      SITE_HOST: kop-team.ru
+      INDEXNOW_KEY: ef7e6ea64540873b47d65839676aaa7f
+    steps:
+      - name: Notify Yandex and Bing
+        run: |
+          site="https://$SITE_HOST"
+          # sitemap-index.xml -> sitemap-N.xml -> адреса страниц.
+          sitemaps=$(curl -fsS "$site/sitemap-index.xml" | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g') || true
+          urls=$(for s in $sitemaps; do curl -fsS "$s" | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g'; done) || true
+          if [ -z "$urls" ]; then
+            echo "::warning::IndexNow: не удалось получить адреса из $site/sitemap-index.xml"
+            exit 0
+          fi
+          echo "$urls"
+
+          body=$(jq -n --arg host "$SITE_HOST" --arg key "$INDEXNOW_KEY" \
+            --arg loc "$site/$INDEXNOW_KEY.txt" --arg urls "$urls" \
+            '{host: $host, key: $key, keyLocation: $loc, urlList: ($urls | split("\n"))}')
+
+          # 200 — принято; 202 — принято, ключ ещё проверяется.
+          # api.indexnow.org раздаёт адреса Bing и остальным участникам протокола.
+          for endpoint in https://yandex.com/indexnow https://api.indexnow.org/indexnow; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST \
+              -H 'Content-Type: application/json; charset=utf-8' \
+              --data "$body" "$endpoint") || code=000
+            echo "$endpoint -> $code"
+            case "$code" in
+              200|202) ;;
+              *) echo "::warning::IndexNow: $endpoint ответил $code" ;;
+            esac
+          done
