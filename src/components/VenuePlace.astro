@@ -1,0 +1,21 @@
+---
+// ================================================================
+// VenuePlace.astro — строка «зал · адрес» со ссылкой на Яндекс.Карты
+// в карточках направлений. Название и адрес берутся из VENUES
+// (src/data/site.ts) — единственного источника адресов; копии ссылок
+// в секциях расходились с ним (у «Динамо» терялось «стр. 1»).
+// ================================================================
+import { VENUES, venueMapUrl } from '../data/site';
+
+interface Props {
+    /** Название зала ровно как в VENUES. */
+    name: string;
+}
+
+const venue = VENUES.find((v) => v.name === Astro.props.name);
+if (!venue) throw new Error(`VenuePlace: нет зала «${Astro.props.name}» в VENUES`);
+---
+<div class="offer__place">
+    <svg class="offer__pin" width="12" height="16" viewBox="0 0 12 16" aria-hidden="true"><path d="M6 0a6 6 0 0 0-6 6c0 4.5 6 10 6 10s6-5.5 6-10a6 6 0 0 0-6-6Zm0 8.2A2.2 2.2 0 1 1 6 3.8a2.2 2.2 0 0 1 0 4.4Z" fill="currentColor"/></svg>
+    <a href={venueMapUrl(venue)} target="_blank" rel="noopener noreferrer"><b>{venue.name}</b>{venue.address && ` · ${venue.address}`}</a>
+</div>
