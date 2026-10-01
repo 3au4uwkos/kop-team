@@ -51,6 +51,9 @@ const CSP = [
     "img-src 'self' data:",
     "style-src 'self'",
     "script-src 'self'",
+    // Плагинов (<object>/<embed>) на сайте нет — запрещаем явно, а не
+    // через default-src 'self'.
+    "object-src 'none'",
     "base-uri 'self'",
     "form-action 'none'",
     // frame-ancestors СОЗНАТЕЛЬНО не включён, хотя и был в ТЗ: в <meta>
