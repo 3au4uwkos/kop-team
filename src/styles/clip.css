@@ -8,7 +8,23 @@
     background: var(--ink);
 }
 
+/* Постер под видео: тот же кадр, то же кадрирование. Выносим из потока
+   сам <picture> — секции задают picture display: block и высоту 100%,
+   и в потоке он вытолкнул бы видео вниз. */
+.clip > picture {
+    position: absolute;
+    inset: 0;
+}
+
+.clip__poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .clip__video {
+    position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     object-fit: cover;

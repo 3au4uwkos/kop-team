@@ -4,12 +4,19 @@
 // видна (scripts/clips.js). Файл ролика грузится лишь при первом
 // появлении на экране; до этого — постер из той же нарезки.
 //
+// Постер — не атрибут poster, а <picture> под видео: атрибут грузится
+// сразу и только в одном формате, а все ролики ниже первого экрана —
+// шесть постеров тянули ~0,5 МБ при открытии главной. <picture> берёт
+// AVIF и грузится лениво, как остальные фото. Видео без постера
+// прозрачно, пока не покажет первый кадр, — до этого видна картинка.
+//
 // Кнопка паузы обязательна: движущийся контент дольше 5 секунд
 // пользователь должен уметь остановить (WCAG 2.2.2). При «Уменьшении
 // движения» ролик сам не стартует — только по кнопке.
 // ================================================================
 import MEDIA from '../data/media.json';
 import { url } from '../lib/url';
+import Photo from './Photo.astro';
 
 interface Props {
     /** Имя ролика в /assets/video/ без расширения. */
@@ -27,9 +34,10 @@ if (!meta) throw new Error(`Clip: нет постера «${poster}» в src/dat
 import '../styles/clip.css';
 ---
 <div class:list={['clip', cls]}>
+    {/* Постер одной ширины: sizes на выбор файла не влияет, но нужен для srcset. */}
+    <Photo name={poster} alt="" sizes="(max-width: 960px) 100vw, 50vw" class="clip__poster" />
     <video class="clip__video" muted loop playsinline preload="none"
            width={meta.width} height={meta.height}
-           poster={url(`/assets/img/${poster}-${meta.width}.webp`)}
            data-clip data-src={url(`/assets/video/${src}.mp4`)}
            aria-label={label}></video>
     <button class="clip__toggle" type="button" data-clip-toggle aria-label="Воспроизвести видео">
