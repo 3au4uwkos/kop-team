@@ -294,13 +294,22 @@
 .offer__place b { font-weight: 700; }
 
 .offer__place a {
-    /* Цель касания не меньше 24 px по высоте (WCAG 2.5.8). */
+    position: relative;
     display: inline-block;
     padding: 3px 0;
     margin-top: -3px;
     text-decoration: underline;
     text-decoration-color: rgba(228, 0, 43, 0.5);
     text-underline-offset: 3px;
+}
+
+/* Ссылка в одну строку — 25 px; невидимое продолжение на 12 px вверх
+   и вниз доводит цель касания до --tap (48 px), не сдвигая вёрстку.
+   Сверху и снизу — простой текст карточки, перекрывать там нечего. */
+.offer__place a::after {
+    content: '';
+    position: absolute;
+    inset: -12px 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
