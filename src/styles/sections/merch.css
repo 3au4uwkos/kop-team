@@ -202,7 +202,7 @@
     font-size: 11px;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--accent-red);
+    color: var(--accent-red-on-ink);
 }
 
 .partner__name {

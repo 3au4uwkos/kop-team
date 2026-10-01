@@ -217,7 +217,7 @@
     margin-top: auto;
     padding-top: 24px;
     font-size: 13px;
-    color: var(--muted);
+    color: var(--muted-on-ink);
     letter-spacing: 0.05em;
 }
 

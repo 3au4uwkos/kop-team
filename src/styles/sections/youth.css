@@ -8,6 +8,8 @@
     color: var(--paper);
     position: relative;
     overflow: hidden;
+    /* Секция тёмная: обычный --muted здесь не читается. */
+    --muted: var(--muted-on-ink);
     display: flex;
     flex-direction: column;
     gap: clamp(64px, 10vh, 120px);
