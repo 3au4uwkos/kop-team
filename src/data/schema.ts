@@ -36,7 +36,10 @@ export function personSchema() {
         telephone: PHONE,
         address: postalAddress(),
         knowsLanguage: 'ru',
-        areaServed: { '@type': 'City', name: CITY },
+        // Связь тренер → зал. Обратное coach у SportsActivityLocation
+        // schema.org не допускает (только у SportsTeam), areaServed у
+        // Person — тоже: город и так есть в address.
+        workLocation: { '@id': PLACE_ID },
         sameAs: SOCIALS.filter((s) => s.sameAs).map((s) => s.href),
     };
 }
@@ -50,13 +53,13 @@ export function locationSchema() {
             'Тренировки по самбо, боевому самбо и ударной технике в Туле: ' +
             'группы и персональные занятия для детей, подростков и взрослых.',
         url: `${SITE_URL}/`,
-        sport: 'Самбо',
+        // sport у SportsActivityLocation schema.org не допускает (только у
+        // SportsEvent/SportsOrganization) — вид спорта назван в description.
         telephone: PHONE,
         priceRange: PRICE_RANGE,
         currenciesAccepted: 'RUB',
         address: postalAddress(),
         areaServed: { '@type': 'City', name: CITY },
-        coach: { '@id': COACH_ID },
         openingHoursSpecification: OPENING_HOURS.map((h) => ({
             '@type': 'OpeningHoursSpecification',
             dayOfWeek: h.dayOfWeek.map((d) => `https://schema.org/${d}`),
