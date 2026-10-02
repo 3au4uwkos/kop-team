@@ -186,7 +186,8 @@
     grid-template-columns: auto 1fr;
     grid-template-areas:
         'kicker kicker'
-        'name   text';
+        'name   text'
+        '.      link';
     column-gap: 40px;
     row-gap: 10px;
     align-items: center;
@@ -218,10 +219,41 @@
     color: rgba(247, 247, 248, 0.8);
 }
 
+/* Ссылка на магазин: строка в фирменном шрифте со стрелкой, цель
+   касания — не меньше --tap. */
+.partner__link {
+    grid-area: link;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: var(--tap);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+.partner__link svg {
+    flex: none;
+    color: var(--accent-red-on-ink);
+    transition: transform var(--dur-base) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .partner__link:hover svg { transform: translateX(6px); }
+}
+
 @media (max-width: 960px) {
     .partner {
         grid-template-columns: 1fr;
-        grid-template-areas: 'kicker' 'name' 'text';
+        grid-template-areas: 'kicker' 'name' 'text' 'link';
         padding: 24px 22px;
     }
 }

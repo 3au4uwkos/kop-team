@@ -10,6 +10,9 @@
 export const SITE_URL = 'https://kop-team.ru';
 export const CITY = 'Тула';
 export const COACH_NAME = 'Копейкин Павел Сергеевич';
+/** Те же ФИО в падежах — для текста, где имя стоит не в начале фразы. */
+export const COACH_NAME_DAT = 'Копейкину Павлу Сергеевичу';
+export const COACH_NAME_GEN = 'Копейкина Павла Сергеевича';
 export const COACH_NAME_SHORT = 'Копейкин П. С.';
 /** Клуб тренера — эмблема Kop.team в шапке, футере и OG. */
 export const BRAND = 'Kop.team';

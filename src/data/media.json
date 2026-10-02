@@ -229,7 +229,7 @@
     "height": 1387,
     "fallback": 480
   },
-  "legends/mvd-team": {
+  "legends/ilyin": {
     "widths": [
       400,
       720
@@ -272,6 +272,14 @@
     ],
     "width": 720,
     "height": 960,
+    "fallback": 400
+  },
+  "legends/ushakov": {
+    "widths": [
+      400
+    ],
+    "width": 400,
+    "height": 533,
     "fallback": 400
   },
   "legends/viktorov": {

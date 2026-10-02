@@ -82,9 +82,20 @@
 
 .legends__carousel::-webkit-scrollbar { display: none; }
 
+/* ---------- Карточка ----------
+   Подпись никогда не лежит на фото: кадр и текст — соседние блоки.
+   На телефоне фото сверху, панель с именем и достижениями под ним;
+   на компьютере (ниже, min-width: 961px) — фото слева, панель справа.
+   Высоту карточки на компьютере задаёт --card-h. */
+.legends {
+    --card-h: clamp(360px, 36vw, 480px);
+    --panel-w: clamp(260px, 21vw, 320px);
+}
+
 .legend-card {
-    flex: 0 0 clamp(240px, 28vw, 360px);
-    aspect-ratio: 3 / 4;
+    flex: 0 0 min(78vw, 320px);
+    display: flex;
+    flex-direction: column;
     position: relative;
     scroll-snap-align: start;
     overflow: hidden;
@@ -92,27 +103,48 @@
     transition: transform var(--dur-slow) var(--ease-out);
 }
 
+.legend-card__media {
+    flex: none;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+}
+
+.legend-card__media picture {
+    display: block;
+    height: 100%;
+}
+
 .legend-card__img {
-    position: absolute;
-    inset: 0;
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-/* Карточка без фото: звание крупным контурным шрифтом, как номера
-   секций направлений, красная полоса — акцент клуба. */
-.legend-card--text {
+/* Панель подписи: тёмная, с красным отсветом и полосой — как у карточек
+   без фото, чтобы вся лента была одного рисунка. */
+.legend-card__panel {
+    flex: 1 1 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 20px 20px 22px;
     container-type: inline-size;
     background:
-        radial-gradient(120% 80% at 100% 0%, rgba(228, 0, 43, 0.28) 0%, transparent 55%),
+        radial-gradient(120% 80% at 100% 0%, rgba(228, 0, 43, 0.22) 0%, transparent 55%),
         linear-gradient(160deg, #1d1d21 0%, var(--ink) 70%);
     border-top: 3px solid var(--accent-red);
+    color: var(--paper);
 }
+
+/* Карточка без фото: панель на всю карточку, сверху крупное звание. */
+.legend-card--text .legend-card__panel { overflow: hidden; }
 
 /* Водяной знак — эмблема клуба. Не фото: снимок чужой схватки
    за именем читался бы как фото самого спортсмена. */
-.legend-card--text::before {
+.legend-card--text .legend-card__panel::before {
     content: '';
     position: absolute;
     right: -22%;
@@ -122,16 +154,22 @@
     background: url('/assets/brand/kopteam-emblem-white.svg') center / contain no-repeat;
     opacity: 0.08;
     transform: rotate(-8deg);
+    pointer-events: none;
 }
 
+/* Крупное контурное звание — как номера секций направлений. На телефоне
+   у карточек с фото его нет: там звание и так написано под именем.
+   Стоит вне потока: длинный список достижений не выталкивает его
+   и сам не обрезается, а ложится поверх (звание — только декор). */
 .legend-card__rank {
     position: absolute;
+    top: 18px;
     left: 20px;
     right: 20px;
-    top: 18px;
+    pointer-events: none;
     font-family: var(--font-display);
     font-weight: 700;
-    /* От ширины карточки: «5×МС» и «КМС» помещаются при любой ширине. */
+    /* От ширины панели: «5×МС» и «КМС» помещаются при любой ширине. */
     font-size: 30cqw;
     line-height: 0.9;
     letter-spacing: -0.02em;
@@ -141,26 +179,18 @@
     white-space: nowrap;
 }
 
-/* Затемнение низа карточки — под имя и титул. */
-.legend-card__ph {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 40%, rgba(14, 14, 16, 0.92) 100%);
-}
+.legend-card--photo .legend-card__rank { display: none; }
 
 .legend-card__info {
-    position: absolute;
-    left: 24px;
-    right: 24px;
-    bottom: 24px;
-    color: var(--paper);
-    z-index: 2;
+    position: relative;
+    z-index: 1;
 }
 
 .legend-card__name {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 22px;
+    line-height: 1.15;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin-bottom: 6px;
@@ -170,8 +200,77 @@
 
 .legend-card__title {
     font-size: 13px;
-    color: rgba(247, 247, 248, 0.75);
+    font-weight: 600;
     line-height: 1.4;
+}
+
+/* Достижения — каждое отдельной строкой с красной чертой, как пункты
+   в карточках занятий. Тонкая линия отделяет их от звания. */
+.legend-card__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(247, 247, 248, 0.2);
+}
+
+.legend-card__list li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 13px;
+    line-height: 1.35;
+    color: rgba(247, 247, 248, 0.84);
+}
+
+.legend-card__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 8px;
+    height: 2px;
+    background: var(--accent-red);
+}
+
+/* Компьютер: карточка-«разворот» — фото слева во всю высоту, панель
+   справа. Карточка без фото — одна панель. */
+@media (min-width: 961px) {
+    .legend-card {
+        flex: 0 0 auto;
+        flex-direction: row;
+        height: var(--card-h);
+    }
+
+    .legend-card__media {
+        width: calc(var(--card-h) * 3 / 4);
+        height: 100%;
+    }
+
+    .legend-card__panel {
+        flex: 0 0 var(--panel-w);
+        border-top: 0;
+        border-left: 3px solid var(--accent-red);
+    }
+
+    .legend-card--text .legend-card__panel {
+        border-left: 0;
+        border-top: 3px solid var(--accent-red);
+    }
+
+    .legend-card--photo .legend-card__rank { display: block; }
+
+    /* Длинный список (5 пунктов и больше) — панель шире: строки короче
+       переносятся, и всё помещается по высоте даже на ноутбуке. */
+    .legend-card--long .legend-card__panel { flex-basis: calc(var(--panel-w) + 110px); }
+}
+
+/* Телефон: длинный список чуть плотнее, чтобы карточка не вырастала
+   выше экрана (все карточки ленты тянутся по самой высокой). */
+@media (max-width: 960px) {
+    .legend-card--long .legend-card__list { gap: 3px; }
+    .legend-card--long .legend-card__list li { font-size: 12px; line-height: 1.3; }
 }
 
 .legends__controls {
@@ -211,7 +310,6 @@
         gap: 24px;
         margin-bottom: 36px;
     }
-    .legend-card { flex-basis: min(78vw, 320px); }
 }
 
 /* ---------- Прокрутка колёсиком (компьютер) ----------
@@ -243,8 +341,18 @@
 }
 
 /* Карточка не выше, чем помещается на экране под заголовком. */
-.legends.is-pinned .legend-card {
-    flex-basis: min(clamp(240px, 28vw, 360px), calc((100svh - 380px) * 0.75));
+.legends.is-pinned {
+    --card-h: min(clamp(360px, 36vw, 480px), calc(100svh - 380px));
+}
+
+/* Совсем невысокий экран: контурное звание у карточек с фото уступает
+   место списку достижений. */
+@media (max-height: 720px) {
+    .legends.is-pinned .legend-card--photo .legend-card__rank { visibility: hidden; }
+}
+
+@media (max-height: 820px) {
+    .legends.is-pinned .legend-card--long .legend-card__rank { visibility: hidden; }
 }
 
 .legends.is-pinned .legends__controls { display: none; }

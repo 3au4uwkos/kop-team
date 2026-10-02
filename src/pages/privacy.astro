@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import Crumbs from '../components/Crumbs.astro';
 import { breadcrumbSchema } from '../data/schema';
-import { SOCIALS, META_FOOTNOTE, COACH_NAME, PHONE_HUMAN } from '../data/site';
+import { SOCIALS, META_FOOTNOTE, COACH_NAME_DAT, PHONE_HUMAN } from '../data/site';
 import '../styles/page.css';
 
 const crumbs = [
@@ -29,7 +29,7 @@ const crumbs = [
         <div class="prose">
             <h2>Кто владелец сайта</h2>
             <p>
-                Сайт kop-team.ru принадлежит тренеру по самбо {COACH_NAME}
+                Сайт kop-team.ru принадлежит тренеру по самбо {COACH_NAME_DAT}
                 (город Тула) и служит информационной визитной карточкой.
                 <!-- TODO(владелец): после получения статуса и ИНН — добавить сюда
                      реквизиты, как на /contacts/. -->

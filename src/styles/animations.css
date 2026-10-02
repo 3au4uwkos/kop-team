@@ -21,7 +21,7 @@
 .reveal[data-delay="3"] { transition-delay: calc(var(--dur-stagger) * 3); }
 .reveal[data-delay="4"] { transition-delay: calc(var(--dur-stagger) * 4); }
 
-/* Бегущий штрих у подписи «Листай вниз» (hero) */
+/* Бегущий штрих у подписи «Листайте вниз» (hero) */
 @keyframes scroll-line {
     0%        { transform: translateX(-100%); }
     60%, 100% { transform: translateX(100%); }

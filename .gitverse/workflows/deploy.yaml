@@ -139,3 +139,12 @@ jobs:
 
       - name: Print deploy URL
         run: echo "page_url = ${{ steps.deployment.outputs.page_url }}"
+
+      # deploy-pages отвечает голым «404 Not Found», когда «Страницы»
+      # в репозитории не включены, — поясняем, что с этим делать.
+      - name: Explain deploy failure
+        if: failure() && steps.deployment.outcome == 'failure'
+        run: |
+          echo "::error::Если выше «failed to create deployment: 404» — в репозитории не включены Страницы."
+          echo "::error::GitVerse → kop-team → Настройки → Страницы: включить, Источник = «Воркфлоу», сохранить."
+          echo "::error::Затем CI/CD → «GitVerse Pages» → запустить заново. Коммитить ничего не нужно."

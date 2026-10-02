@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import Crumbs from '../components/Crumbs.astro';
 import { breadcrumbSchema } from '../data/schema';
-import { COACH_NAME } from '../data/site';
+import { COACH_NAME_GEN } from '../data/site';
 import '../styles/page.css';
 
 const crumbs = [
@@ -30,7 +30,7 @@ const crumbs = [
             <h2>Назначение сайта</h2>
             <p>
                 Сайт kop-team.ru — информационная визитная карточка тренера
-                по самбо {COACH_NAME}. Он рассказывает о направлениях подготовки,
+                по самбо {COACH_NAME_GEN}. Он рассказывает о направлениях подготовки,
                 форматах занятий и способах связаться с тренером. Никаких услуг
                 непосредственно через сайт не оказывается и не оплачивается.
             </p>
